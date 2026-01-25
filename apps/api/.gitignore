@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# OS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs
+logs/
+*.log
+lerna-debug.log
+
+# Test coverage
+coverage/
+.nyc_output/
+jest.coverage.json
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+postgres_data/
+
+# Misc
+.cache/
+dist/
+*.local

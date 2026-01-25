@@ -1,0 +1,160 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { BulkUpdateUserDto } from './dto/bulk-update-user.dto';
+import { UsersService } from './users.service';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { PoliciesGuard } from 'src/common/guards/policies-guard.guard';
+import { CheckPolicies } from 'src/common/decorators/check-policies.decorator';
+import { AppAbility } from '../casl/casl-ability.factory';
+import { ACTION_ENUM } from '../casl/constants/action.constant';
+import { User } from './entities/user.entity';
+
+@ApiTags('Users')
+@ApiBearerAuth()
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Post()
+  @ApiOperation({
+    summary: 'Create a user',
+    description: 'Create a new user.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The user has been successfully created.',
+    type: User,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Create, User))
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.create(createUserDto);
+  }
+
+  @Get()
+  @ApiOperation({
+    summary: 'Get all users',
+    description: 'Get all users.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Return all users.',
+    type: [User],
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Read, User))
+  async findAll(
+    @Query('filters') filters?: string,
+    @Query('search') search?: string,
+  ) {
+    return await this.usersService.findAll({ filters, search });
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Get a user',
+    description: 'Get a user by id.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Return a user.',
+    type: User,
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Read, User))
+  async findOne(@Param('id') id: string) {
+    return await this.usersService.findOne(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Update a user',
+    description: 'Update a user by id.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully updated.',
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Update, User))
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.usersService.update(id, updateUserDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete a user',
+    description: 'Delete a user by id.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully deleted.',
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Delete, User))
+  async remove(@Param('id') id: string) {
+    return await this.usersService.remove(id);
+  }
+
+  @Patch()
+  @ApiOperation({
+    summary: 'Update bulk users',
+    description: 'Update bulk users.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Bulk users have been successfully updated.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Update, User))
+  async updateBulk(@Body() bulkUpdateDto: BulkUpdateUserDto) {
+    return await this.usersService.updateBulk(
+      bulkUpdateDto.ids,
+      bulkUpdateDto.data,
+    );
+  }
+
+  @Delete()
+  @ApiOperation({
+    summary: 'Delete bulk users',
+    description: 'Delete bulk users.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Bulk users have been successfully deleted.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Delete, User))
+  async deleteBulk(@Body() ids: string[]) {
+    return await this.usersService.deleteBulk(ids);
+  }
+}

@@ -1,0 +1,95 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  username: String!
+  email: String
+  display_name: String!
+  avatar: String!
+  department: String!
+  phone: String!
+  manager: String!
+  auth_source: String!
+  external_id: String
+  password: String
+  is_active: Boolean!
+  last_login_at: DateTime
+  is_licensed: Boolean!
+  metadata: JSON
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type AuthResponse {
+  access_token: String!
+}
+
+type Query {
+  users: [User!]!
+  user(id: String!): User
+}
+
+type Mutation {
+  signIn(signInDto: SignInDto!): AuthResponse!
+  createUser(createUserInput: CreateUserDto!): User!
+  updateUser(id: String!, updateUserInput: UpdateUserDto!): User!
+  deleteUser(id: String!): Boolean!
+}
+
+input SignInDto {
+  username: String!
+  password: String!
+}
+
+input CreateUserDto {
+  first_name: String!
+  last_name: String!
+  username: String!
+  email: String
+  avatar: String
+  phone: String
+  manager: String
+  auth_source: String! = "ldap"
+  department: String
+  external_id: String
+  password: String
+  is_active: Boolean! = true
+  is_licensed: Boolean! = false
+  metadata: JSON
+  roles: [String!]
+  permissions: [String!]
+  groups: [String!]
+}
+
+input UpdateUserDto {
+  first_name: String
+  last_name: String
+  username: String
+  email: String
+  phone: String
+  manager: String
+  auth_source: String
+  department: String
+  external_id: String
+  password: String
+  is_active: Boolean
+  is_licensed: Boolean
+  metadata: JSON
+  roles: [String!]
+  permissions: [String!]
+  groups: [String!]
+}
