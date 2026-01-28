@@ -77,11 +77,11 @@ export async function apiFetch<T>(
   //   }
   // }
 
-  // console.log(`${API_PATH}${path}`, {
-  //   ...init,
-  //   headers,
-  //   credentials: 'include', // Include cookies (access token + refresh token)
-  // })
+  console.log(`${API_PATH}${path}`, {
+    ...init,
+    headers,
+    credentials: 'include', // Include cookies (access token + refresh token)
+  })
 
   // Make the request
   const res = await fetch(`${API_PATH}${path}`, {
@@ -100,84 +100,84 @@ export async function apiFetch<T>(
   }
 
   // Handle errors
-  if (!res.ok) {
-    // Handle 401 Unauthorized - Try to refresh token
-    if (res.status === 401 && !init._retry && !path.includes('logout')) {
-      if (!path.includes('refresh')) {
-        try {
-          // Attempt token refresh
-          // Use raw fetch to access response headers (Set-Cookie)
-          const refreshRes = await fetch(
-            `${API_PATH}${API_ENDPOINTS.AUTH.REFRESH}`,
-            {
-              method: 'POST',
-              headers,
-              credentials: 'include',
-            },
-          )
+  // if (!res.ok) {
+  //   // Handle 401 Unauthorized - Try to refresh token
+  //   if (res.status === 401 && !init._retry && !path.includes('logout')) {
+  //     if (!path.includes('refresh')) {
+  //       try {
+  //         // Attempt token refresh
+  //         // Use raw fetch to access response headers (Set-Cookie)
+  //         const refreshRes = await fetch(
+  //           `${API_PATH}${API_ENDPOINTS.AUTH.REFRESH}`,
+  //           {
+  //             method: 'POST',
+  //             headers,
+  //             credentials: 'include',
+  //           },
+  //         )
 
-          if (!refreshRes.ok) {
-            throw new Error('Refresh failed')
-          }
+  //         if (!refreshRes.ok) {
+  //           throw new Error('Refresh failed')
+  //         }
 
-          // Handle Server-Side Cookie Propagation
-          // if (isServer()) {
-          //   // Extract Set-Cookie header(s)
-          //   const setCookie =
-          //     (refreshRes.headers as any).getSetCookie?.() ||
-          //     refreshRes.headers.get('set-cookie')
+  //         // Handle Server-Side Cookie Propagation
+  //         // if (isServer()) {
+  //         //   // Extract Set-Cookie header(s)
+  //         //   const setCookie =
+  //         //     (refreshRes.headers as any).getSetCookie?.() ||
+  //         //     refreshRes.headers.get('set-cookie')
 
-          //   if (setCookie) {
-          //     const cookies = Array.isArray(setCookie)
-          //       ? setCookie
-          //       : [setCookie as string]
+  //         //   if (setCookie) {
+  //         //     const cookies = Array.isArray(setCookie)
+  //         //       ? setCookie
+  //         //       : [setCookie as string]
 
-          //     // Format cookie string for the retry request
-          //     const cookieHeader = cookies
-          //       .map((c: string) => c.split(';')[0])
-          //       .join('; ')
+  //         //     // Format cookie string for the retry request
+  //         //     const cookieHeader = cookies
+  //         //       .map((c: string) => c.split(';')[0])
+  //         //       .join('; ')
 
-          //     if (cookieHeader) {
-          //       // Retry with new cookies
-          //       const retryHeaders = new Headers(init.headers)
-          //       retryHeaders.set('Cookie', cookieHeader)
+  //         //     if (cookieHeader) {
+  //         //       // Retry with new cookies
+  //         //       const retryHeaders = new Headers(init.headers)
+  //         //       retryHeaders.set('Cookie', cookieHeader)
 
-          //       return apiFetch<T>(path, {
-          //         ...init,
-          //         headers: retryHeaders,
-          //         _retry: true,
-          //       })
-          //     }
-          //   }
-          // }
+  //         //       return apiFetch<T>(path, {
+  //         //         ...init,
+  //         //         headers: retryHeaders,
+  //         //         _retry: true,
+  //         //       })
+  //         //     }
+  //         //   }
+  //         // }
 
-          // Client-side: Browser updates cookie jar automatically
-          return apiFetch<T>(path, { ...init, _retry: true })
-        } catch (refreshError) {
-          // Refresh failed - throw session expired error
-          throw new ApiError({
-            success: false,
-            message: 'Session expired',
-            code: 'UNAUTHORIZED',
-            statusCode: 401,
-          })
-        }
-      }
-    }
+  //         // Client-side: Browser updates cookie jar automatically
+  //         return apiFetch<T>(path, { ...init, _retry: true })
+  //       } catch (refreshError) {
+  //         // Refresh failed - throw session expired error
+  //         throw new ApiError({
+  //           success: false,
+  //           message: 'Session expired',
+  //           code: 'UNAUTHORIZED',
+  //           statusCode: 401,
+  //         })
+  //       }
+  //     }
+  //   }
 
-    // Check if response matches ApiErrorResponse structure
-    if (
-      body &&
-      typeof body === 'object' &&
-      'success' in body &&
-      !body.success
-    ) {
-      throw new ApiError(body as ApiErrorResponse)
-    }
+  //   // Check if response matches ApiErrorResponse structure
+  //   if (
+  //     body &&
+  //     typeof body === 'object' &&
+  //     'success' in body &&
+  //     !body.success
+  //   ) {
+  //     throw new ApiError(body as ApiErrorResponse)
+  //   }
 
-    // Fallback error
-    throw new Error(body?.message || `Request failed (${res.status})`)
-  }
+  //   // Fallback error
+  //   throw new Error(body?.message || `Request failed (${res.status})`)
+  // }
 
   return body as ApiResponse<T>
 }

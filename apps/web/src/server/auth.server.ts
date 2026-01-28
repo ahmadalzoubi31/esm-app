@@ -4,6 +4,7 @@ import { LoginSchema } from '@/schemas/auth.schema'
 
 export const getProfileFn = createServerFn().handler(async () => {
   const res = await api.auth.getProfile()
+  console.log('🚀 ~ res:', res)
 
   return res.data
 })

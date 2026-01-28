@@ -12,23 +12,23 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_core')({
   component: RouteComponent,
-  loader: async () => {
-    try {
-      const user = await getProfileFn()
-      return { user }
-    } catch (error) {
-      // If fetching user fails, redirect to login
-      throw redirect({ to: '/login' })
-    }
-  },
+  // loader: async () => {
+  //   try {
+  //     const user = await getProfileFn()
+  //     return { user }
+  //   } catch (error) {
+  //     // If fetching user fails, redirect to login
+  //     throw redirect({ to: '/login' })
+  //   }
+  // },
 })
 
 function RouteComponent() {
-  const { user } = Route.useLoaderData()
+  // const { user } = Route.useLoaderData()
 
   return (
     <SidebarProvider>
-      <AppSidebar user={user as AuthUser} />
+      <AppSidebar user={{} as AuthUser} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2">
           <div className="flex items-center gap-2 px-4">
