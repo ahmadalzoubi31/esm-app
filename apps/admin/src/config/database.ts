@@ -1,4 +1,4 @@
-import { defineConfig } from '@mikro-orm/postgresql';
+import { defineConfig } from '@mikro-orm/sqlite';
 import { Migrator } from '@mikro-orm/migrations';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
@@ -7,7 +7,7 @@ import { registerAs } from '@nestjs/config';
 export const systemDatabaseConfig = registerAs('systemDatabase', () =>
   defineConfig({
     highlighter: new SqlHighlighter(),
-    clientUrl: process.env.SYSTEM_DATABASE_URL,
+    dbName: 'system.db',
     entities: ['./dist/src/system/**/*.entity.js'],
     entitiesTs: ['./src/system/**/*.entity.ts'],
     metadataProvider: TsMorphMetadataProvider,

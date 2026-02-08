@@ -20,7 +20,6 @@ import { hash } from 'argon2';
 import { randomUUID } from 'crypto';
 
 @Entity({ tableName: 'users' })
-@Index({ properties: ['username'], options: { unique: true } })
 export class User {
   @PrimaryKey({ type: 'uuid' })
   id: string = randomUUID();

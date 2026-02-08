@@ -13,7 +13,6 @@ import { Group } from '../../groups/entities/group.entity';
 import { randomUUID } from 'crypto';
 
 @Entity({ tableName: 'roles' })
-@Index({ properties: ['key'], options: { unique: true } })
 export class Role {
   @PrimaryKey({ type: 'uuid' })
   id: string = randomUUID();
