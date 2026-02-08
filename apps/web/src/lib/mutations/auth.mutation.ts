@@ -57,14 +57,16 @@ export function useLogoutMutation() {
 export function useRefreshTokensMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async () => await api.auth.refreshTokens({}),
+    mutationKey: authKeys.refreshTokens(),
+    mutationFn: async () => await api.auth.refreshTokens(),
     onSuccess: () => {
       // Token is now in cookie, just update cached profile
       queryClient.invalidateQueries({ queryKey: authKeys.profile() })
     },
-    onError: () => {
+    onError: (e) => {
       // Silent failure - set state to unauthenticated
       // Route guards will handle the redirect
+      console.error({ e })
     },
   })
 }

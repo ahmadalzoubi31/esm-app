@@ -33,7 +33,7 @@ export class ServicesController {
     description: 'Find all services',
   })
   findAll() {
-    return this.servicesService.findAll({});
+    return this.servicesService.findAll();
   }
 
   @Get(':id')

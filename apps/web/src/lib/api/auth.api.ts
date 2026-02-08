@@ -45,9 +45,12 @@ export const authApi = {
   /**
    * Get current user profile
    */
-  getProfile: async (): Promise<ApiResponse<AuthUser>> => {
+  getProfile: async (
+    init: RequestInit = {},
+  ): Promise<ApiResponse<AuthUser>> => {
     return await apiFetch<AuthUser>(API_ENDPOINTS.AUTH.PROFILE, {
       method: 'GET',
+      ...init,
     })
   },
 

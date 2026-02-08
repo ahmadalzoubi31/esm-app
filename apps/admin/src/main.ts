@@ -7,18 +7,17 @@ import { ResponseInterceptor } from './common/interceptors/response.interceptor'
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import requestID from 'express-request-id';
-import cookieParser from 'cookie-parser';
 import { Logger } from '@nestjs/common';
+// import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger(bootstrap.name);
-
   // ## request id ##
   app.use(requestID());
 
   // ## cookie parser ##
-  app.use(cookieParser());
+  // app.use(cookieParser());
 
   // ## cors ##
   app.enableCors({
@@ -56,7 +55,7 @@ async function bootstrap() {
   setupSwagger(app);
 
   // ## listen ##
-  await app.listen(process.env.PORT ?? 3030);
+  await app.listen(process.env.PORT ?? 3035);
   logger.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

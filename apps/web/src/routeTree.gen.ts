@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SessionTimeoutRouteImport } from './routes/session-timeout'
 import { Route as CoreRouteRouteImport } from './routes/_core/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -21,6 +22,11 @@ import { Route as CoreUsersCreateRouteImport } from './routes/_core/users/create
 import { Route as CoreUsersUserIdRouteImport } from './routes/_core/users/$userId'
 import { Route as CoreSettingsLdapIndexRouteImport } from './routes/_core/settings/ldap/index'
 
+const SessionTimeoutRoute = SessionTimeoutRouteImport.update({
+  id: '/session-timeout',
+  path: '/session-timeout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoreRouteRoute = CoreRouteRouteImport.update({
   id: '/_core',
   getParentRoute: () => rootRouteImport,
@@ -77,6 +83,7 @@ const CoreSettingsLdapIndexRoute = CoreSettingsLdapIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/session-timeout': typeof SessionTimeoutRoute
   '/users/$userId': typeof CoreUsersUserIdRoute
   '/users/create': typeof CoreUsersCreateRoute
   '/login/': typeof AuthLoginIndexRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/session-timeout': typeof SessionTimeoutRoute
   '/users/$userId': typeof CoreUsersUserIdRoute
   '/users/create': typeof CoreUsersCreateRoute
   '/login': typeof AuthLoginIndexRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_core': typeof CoreRouteRouteWithChildren
+  '/session-timeout': typeof SessionTimeoutRoute
   '/_core/users/$userId': typeof CoreUsersUserIdRoute
   '/_core/users/create': typeof CoreUsersCreateRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/session-timeout'
     | '/users/$userId'
     | '/users/create'
     | '/login/'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/session-timeout'
     | '/users/$userId'
     | '/users/create'
     | '/login'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/_core'
+    | '/session-timeout'
     | '/_core/users/$userId'
     | '/_core/users/create'
     | '/_auth/login/'
@@ -153,10 +165,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   CoreRouteRoute: typeof CoreRouteRouteWithChildren
+  SessionTimeoutRoute: typeof SessionTimeoutRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/session-timeout': {
+      id: '/session-timeout'
+      path: '/session-timeout'
+      fullPath: '/session-timeout'
+      preLoaderRoute: typeof SessionTimeoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_core': {
       id: '/_core'
       path: ''
@@ -277,6 +297,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   CoreRouteRoute: CoreRouteRouteWithChildren,
+  SessionTimeoutRoute: SessionTimeoutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

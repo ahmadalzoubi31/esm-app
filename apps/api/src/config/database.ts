@@ -6,13 +6,12 @@ import { SeedManager } from '@mikro-orm/seeder';
 import { registerAs } from '@nestjs/config';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import { ServiceSubscriber } from '../esm/catalog/services/subscribers/service.subscriber';
+import 'dotenv/config';
 
 export const databaseConfig = registerAs('database', () =>
   defineConfig({
     highlighter: new SqlHighlighter(),
-    clientUrl:
-      process.env.DATABASE_URL ||
-      'postgresql://postgres.cjunkhxcenvybixlumgt:5ZAgoMPZxSrhG5So@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres',
+    clientUrl: process.env.DATABASE_URL,
     // folder-based discovery setup, using common filename suffix
     entities: ['./dist/**/*.entity.js'],
     entitiesTs: ['./src/**/*.entity.ts'],
