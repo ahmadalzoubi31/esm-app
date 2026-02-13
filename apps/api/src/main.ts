@@ -9,6 +9,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import requestID from 'express-request-id';
 import cookieParser from 'cookie-parser';
 import { Logger } from '@nestjs/common';
+import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,7 +30,7 @@ async function bootstrap() {
   // ## prefix ##
   app.setGlobalPrefix('api');
 
-  // ## versionsing ##
+  // ## versioning ##
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',

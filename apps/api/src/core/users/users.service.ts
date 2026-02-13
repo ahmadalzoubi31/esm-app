@@ -23,7 +23,10 @@ export class UsersService {
     const { roles, permissions, groups, ...userDataToCreate } = dto;
 
     // 3: Create user with non-collection fields
-    const user = this.userRepository.create(userDataToCreate);
+    const user = this.userRepository.create({
+      ...userDataToCreate,
+      tenantId: 'system',
+    });
 
     // 4: Handle roles collection
     if (roles && roles.length > 0) {
@@ -74,32 +77,45 @@ export class UsersService {
     return await this.userRepository.find(query, {
       populate: ['roles', 'roles.permissions', 'permissions', 'groups'],
       limit: search ? 20 : undefined,
+      filters: { tenant: true },
     });
   }
 
   async findOne(id: string): Promise<User | null> {
     return await this.userRepository.findOne(
       { id },
-      { populate: ['roles', 'roles.permissions', 'permissions', 'groups'] },
+      {
+        populate: ['roles', 'roles.permissions', 'permissions', 'groups'],
+        filters: { tenant: false },
+      },
     );
   }
 
   async findOneByUsername(username: string): Promise<User | null> {
     return await this.userRepository.findOne(
       { username },
-      { populate: ['roles', 'roles.permissions', 'permissions', 'groups'] },
+      {
+        populate: ['roles', 'roles.permissions', 'permissions', 'groups'],
+        filters: { tenant: false },
+      },
     );
   }
 
   async findOneByUsernameForAuth(username: string): Promise<User | null> {
-    return await this.userRepository.findOne({ username });
+    return await this.userRepository.findOne(
+      { username },
+      { filters: { tenant: false } },
+    );
   }
 
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     // 1: Find user
     const user = await this.userRepository.findOneOrFail(
       { id },
-      { populate: ['roles', 'permissions', 'groups'] },
+      {
+        populate: ['roles', 'permissions', 'groups'],
+        filters: { tenant: false },
+      },
     );
 
     // 2: Get EntityManager

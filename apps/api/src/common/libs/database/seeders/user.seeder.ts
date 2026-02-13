@@ -9,19 +9,24 @@ export class UserSeeder extends Seeder {
     const repo = em.getRepository(User);
 
     // 2. Check if the user already exists
-    const exists = await repo.findOne({
-      username: 'system',
-    });
+    const exists = await repo.findOne(
+      {
+        username: 'system',
+      },
+      { filters: { tenant: false } },
+    );
 
     // 3. If the user exists, return
-    if (exists) return;
+    if (exists) {
+      console.log('✔ User already exist, skipping seed.');
+      return;
+    }
 
     // 4. Hash the password
     // already hashed by mikro-orm subscribe
 
     // 5. Create the user (auto-persists)
     em.create(User, {
-      id: crypto.randomUUID(),
       first_name: 'System',
       last_name: 'Admin',
       display_name: 'System Admin',
@@ -31,6 +36,7 @@ export class UserSeeder extends Seeder {
       auth_source: 'local',
       is_active: true,
       is_licensed: true,
+      tenantId: '6da67552-faeb-4507-9f58-0161803afca8',
     });
 
     await em.flush();

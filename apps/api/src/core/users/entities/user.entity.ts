@@ -18,12 +18,10 @@ import { Service } from '../../../esm/catalog/services/entities/service.entity';
 import GraphQLJSON from 'graphql-type-json';
 import { hash } from 'argon2';
 import { randomUUID } from 'crypto';
+import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
 @Entity({ tableName: 'users' })
-export class User {
-  @PrimaryKey({ type: 'uuid' })
-  id: string = randomUUID();
-
+export class User extends TenantBaseEntity {
   @Property()
   first_name!: string;
 
@@ -101,12 +99,6 @@ export class User {
 
   @OneToMany(() => Service, (service) => service.ownerUser)
   services = new Collection<Service>(this);
-
-  @Property({ onCreate: () => new Date() })
-  createdAt?: Date;
-
-  @Property({ onCreate: () => new Date(), onUpdate: () => new Date() })
-  updatedAt?: Date;
 
   @BeforeCreate()
   @BeforeUpdate()
