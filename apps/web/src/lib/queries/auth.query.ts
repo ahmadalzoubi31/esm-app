@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
+import { getProfileFn } from '@/server/auth.server'
 
 export const authKeys = {
   all: ['auth'] as const,
@@ -7,12 +7,12 @@ export const authKeys = {
   refreshTokens: () => [...authKeys.all, 'refresh-tokens'] as const,
 }
 
+export const profileQueryOptions = queryOptions({
+  queryKey: authKeys.profile(),
+  queryFn: () => getProfileFn(),
+  staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+})
+
 export function useProfileQuery() {
-  return useQuery({
-    queryKey: authKeys.profile(),
-    queryFn: async () => await api.auth.getProfile(),
-    select: (data) => data.data,
-    retry: false, // Don't retry on auth failures
-    staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
-  })
+  return useSuspenseQuery(profileQueryOptions)
 }

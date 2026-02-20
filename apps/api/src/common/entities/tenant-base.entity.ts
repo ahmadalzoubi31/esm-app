@@ -1,18 +1,23 @@
 // tenant-base.entity.ts
-import { Property, PrimaryKey, Filter } from '@mikro-orm/core';
+import { ManyToOne, Property, PrimaryKey, Filter } from '@mikro-orm/core';
 import { randomUUID } from 'crypto';
+import { Tenant } from '../../tenants/entities/tenant.entity';
 
 @Filter({
   name: 'tenant',
-  cond: (args) => ({ tenantId: args.tenantId }),
+  cond: (args) => (args.bypass ? {} : { tenant_id: args.tenantId }),
   default: true, // Enabled by default!
 })
 export abstract class TenantBaseEntity {
   @PrimaryKey()
   id: string = randomUUID();
 
-  @Property({ index: true }) // Indexing is CRITICAL for performance in Option 3
-  tenantId!: string;
+  @ManyToOne(() => Tenant, {
+    index: true,
+    nullable: false,
+    fieldNames: ['tenant_id'],
+  })
+  tenant!: Tenant;
 
   @Property({
     type: 'datetime',

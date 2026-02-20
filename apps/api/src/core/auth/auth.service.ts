@@ -73,7 +73,8 @@ export class AuthService {
       avatar: user.avatar,
       roles,
       groups: user.groups.getItems(),
-      tenantId: user.tenantId,
+      tenantId: user.tenant.id,
+      tenantName: user.tenant.name,
     };
 
     // 4. Generate access token with the JWT Payload
@@ -236,7 +237,8 @@ export class AuthService {
       avatar: user.avatar,
       roles,
       groups: user.groups.getItems(),
-      tenantId: user.tenantId,
+      tenantId: user.tenant.id,
+      tenantName: user.tenant.name,
     };
 
     // 8: Generate Access Token with the payload

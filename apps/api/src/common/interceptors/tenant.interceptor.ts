@@ -6,28 +6,50 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { EntityManager } from '@mikro-orm/postgresql';
+import { EntityManager } from '@mikro-orm/core';
+import { Reflector } from '@nestjs/core';
 
+@Injectable()
 export class TenantInterceptor implements NestInterceptor {
-  constructor(private readonly em: EntityManager) {}
+  constructor(
+    private readonly em: EntityManager,
+    private readonly reflector: Reflector,
+  ) {}
 
   async intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Promise<Observable<any>> {
+    // Check if the route is public
+    const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    // Skip tenant filtering for public routes
+    if (isPublic) {
+      return next.handle();
+    }
+
+    // Get HTTP context from request
     const request = context.switchToHttp().getRequest();
+
+    // Get user and tenant ID from request
     const user = request.user;
-    const tenantId = user?.tenantId;
 
-    console.log({
-      user,
-      tenantId,
-    });
+    // TODO: if user is system then skip tenant filtering
+    if (user?.tenantId === '6da67552-faeb-4507-9f58-0161803afca8') {
+      this.em.setFilterParams('tenant', { bypass: true });
+      return next.handle();
+    }
 
-    if (user && !tenantId) {
-      // Authenticated but missing tenantId (Old Token)
+    // Get tenant ID from request headers or user object
+    const tenantId = user?.tenantId || request.headers['x-tenant-id'];
+
+    if (!tenantId) {
+      // Missing tenant context
       throw new UnauthorizedException(
-        'Tenant context is missing. Please log in again.',
+        'Tenant context is missing. Please log in again or provide x-tenant-id header.',
       );
     }
 
@@ -37,7 +59,16 @@ export class TenantInterceptor implements NestInterceptor {
       tenantId || '00000000-0000-0000-0000-000000000000';
 
     // 1. Set Postgres RLS variable (Safe to set even if dummy)
-    await this.em.execute(`SET app.current_tenant = '${effectiveTenantId}'`);
+    try {
+      await this.em
+        .getConnection()
+        .execute('SELECT set_config(?, ?, false)', [
+          'app.current_tenant',
+          effectiveTenantId,
+        ]);
+    } catch (error) {
+      console.error('Failed to set RLS variable:', error);
+    }
 
     // 2. Enable MikroORM Filter
     this.em.setFilterParams('tenant', { tenantId: effectiveTenantId });

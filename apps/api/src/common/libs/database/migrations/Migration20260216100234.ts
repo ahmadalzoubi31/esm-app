@@ -1,6 +1,6 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20260209115541 extends Migration {
+export class Migration20260216100234 extends Migration {
 
   override async up(): Promise<void> {
     this.addSql(`create table "business_lines" ("id" uuid not null, "key" varchar(255) not null, "name" varchar(255) not null, "description" varchar(255) null, "active" boolean not null default true, "created_at" timestamptz not null, "updated_at" timestamptz not null, constraint "business_lines_pkey" primary key ("id"));`);
@@ -23,7 +23,9 @@ export class Migration20260209115541 extends Migration {
 
     this.addSql(`create table "service_form_schemas" ("id" uuid not null, "service_card_id" varchar(255) not null, "card_id" uuid not null, "json_schema" jsonb not null, "ui_schema" jsonb null, "data_sources" jsonb null, "is_active" boolean not null default true, constraint "service_form_schemas_pkey" primary key ("id"));`);
 
-    this.addSql(`create table "tenant" ("id" varchar(255) not null, "name" varchar(255) not null, "slug" varchar(255) not null, "preferences" jsonb not null default '{}', "created_at" timestamptz not null default CURRENT_TIMESTAMP, "updated_at" timestamptz not null default CURRENT_TIMESTAMP, constraint "tenant_pkey" primary key ("id"));`);
+    this.addSql(`create table "tenants" ("id" varchar(255) not null, "name" varchar(255) not null, "slug" varchar(255) not null, "preferences" jsonb not null default '{}', "created_at" timestamptz null default CURRENT_TIMESTAMP, "updated_at" timestamptz null default CURRENT_TIMESTAMP, constraint "tenants_pkey" primary key ("id"));`);
+    this.addSql(`alter table "tenants" add constraint "tenants_name_unique" unique ("name");`);
+    this.addSql(`alter table "tenants" add constraint "tenants_slug_unique" unique ("slug");`);
 
     this.addSql(`create table "users" ("id" varchar(255) not null, "tenant_id" varchar(255) not null, "created_at" timestamptz null default CURRENT_TIMESTAMP, "updated_at" timestamptz null default CURRENT_TIMESTAMP, "first_name" varchar(255) not null, "last_name" varchar(255) not null, "username" varchar(80) not null, "email" varchar(255) null, "display_name" varchar(150) null, "avatar" varchar(255) null, "department" varchar(255) null, "phone" varchar(255) null, "manager" varchar(255) null, "auth_source" text check ("auth_source" in ('local', 'ldap')) not null, "external_id" varchar(255) null, "password" varchar(255) null, "is_active" boolean not null default false, "last_login_at" timestamptz null, "is_licensed" boolean not null default false, "metadata" jsonb null, constraint "users_pkey" primary key ("id"));`);
     this.addSql(`create index "users_tenant_id_index" on "users" ("tenant_id");`);
@@ -54,6 +56,8 @@ export class Migration20260209115541 extends Migration {
     this.addSql(`alter table "service_categories" add constraint "service_categories_parent_id_foreign" foreign key ("parent_id") references "service_categories" ("id") on update cascade on delete set null;`);
 
     this.addSql(`alter table "service_form_schemas" add constraint "service_form_schemas_card_id_foreign" foreign key ("card_id") references "service_cards" ("id") on update cascade;`);
+
+    this.addSql(`alter table "users" add constraint "users_tenant_id_foreign" foreign key ("tenant_id") references "tenants" ("id") on update cascade;`);
 
     this.addSql(`alter table "services" add constraint "services_ownerUserId_foreign" foreign key ("ownerUserId") references "users" ("id") on update cascade on delete set null;`);
 

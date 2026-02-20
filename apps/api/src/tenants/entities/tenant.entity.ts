@@ -1,7 +1,7 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { randomUUID } from 'crypto';
 
-@Entity()
+@Entity({ tableName: 'tenants' })
 export class Tenant {
   @PrimaryKey()
   id: string = randomUUID();

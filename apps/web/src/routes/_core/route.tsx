@@ -5,20 +5,14 @@ import {
 } from '@/components/ui/sidebar'
 import AppBreadcrumb from '@/components/web/common/app-breadcrumb'
 import { AppSidebar } from '@/components/web/common/app-sidebar'
-import { getProfileFn } from '@/server/auth.server'
-import { AuthUser } from '@/types'
+import { profileQueryOptions } from '@/lib/queries/auth.query'
 import { Separator } from '@radix-ui/react-separator'
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_core')({
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(profileQueryOptions),
   component: RouteComponent,
-  loader: async ({ context }: any) => {
-    console.log('🚀 ~ Route ~ context:', context)
-    if (!context.user) {
-      throw redirect({ to: '/login' })
-    }
-    return context.user as AuthUser
-  },
 })
 
 function RouteComponent() {
@@ -26,7 +20,7 @@ function RouteComponent() {
 
   return (
     <SidebarProvider>
-      <AppSidebar user={user} />
+      <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2">
           <div className="flex items-center gap-2 px-4">

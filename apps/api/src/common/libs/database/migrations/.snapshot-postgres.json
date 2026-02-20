@@ -910,7 +910,7 @@
           "mappedType": "datetime"
         }
       },
-      "name": "tenant",
+      "name": "tenants",
       "schema": "public",
       "indexes": [
         {
@@ -918,7 +918,7 @@
             "name"
           ],
           "composite": false,
-          "keyName": "tenant_name_unique",
+          "keyName": "tenants_name_unique",
           "constraint": true,
           "primary": false,
           "unique": true
@@ -928,13 +928,13 @@
             "slug"
           ],
           "composite": false,
-          "keyName": "tenant_slug_unique",
+          "keyName": "tenants_slug_unique",
           "constraint": true,
           "primary": false,
           "unique": true
         },
         {
-          "keyName": "tenant_pkey",
+          "keyName": "tenants_pkey",
           "columnNames": [
             "id"
           ],
@@ -1200,7 +1200,20 @@
         }
       ],
       "checks": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "users_tenant_id_foreign": {
+          "constraintName": "users_tenant_id_foreign",
+          "columnNames": [
+            "tenant_id"
+          ],
+          "localTableName": "public.users",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.tenants",
+          "updateRule": "cascade"
+        }
+      },
       "nativeEnums": {}
     },
     {

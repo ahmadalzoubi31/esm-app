@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreateTenantsDto {
+export class CreateTenantDto {
   @IsString()
   @IsNotEmpty()
   name: string;

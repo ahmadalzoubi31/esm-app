@@ -7,8 +7,8 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateTenantsDto } from './dto/create-tenants.dto';
-import { UpdateTenantsDto } from './dto/update-tenants.dto';
+import { CreateTenantDto } from './dto/create-tenant.dto';
+import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { TenantsService } from './tenants.service';
 
 @Controller('tenants')
@@ -16,8 +16,8 @@ export class TenantsController {
   constructor(private readonly tenantsService: TenantsService) {}
 
   @Post()
-  create(@Body() createTenantsDto: CreateTenantsDto) {
-    return this.tenantsService.create(createTenantsDto);
+  create(@Body() createTenantDto: CreateTenantDto) {
+    return this.tenantsService.create(createTenantDto);
   }
 
   @Get()
@@ -31,8 +31,8 @@ export class TenantsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTenantsDto: UpdateTenantsDto) {
-    return this.tenantsService.update(id, updateTenantsDto);
+  update(@Param('id') id: string, @Body() updateTenantDto: UpdateTenantDto) {
+    return this.tenantsService.update(id, updateTenantDto);
   }
 
   @Delete(':id')

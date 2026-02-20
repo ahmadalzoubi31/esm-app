@@ -1,11 +1,17 @@
 import { createServerFn } from '@tanstack/react-start'
+import { getRequest } from '@tanstack/react-start/server'
 import { api } from '@/lib/api'
 import { LoginSchema } from '@/schemas/auth.schema'
 
 export const getProfileFn = createServerFn().handler(async () => {
-  const res = await api.auth.getProfile()
-  console.log('🚀 ~ res:', res)
+  const request = getRequest()
+  const cookie = request?.headers.get('cookie') || ''
 
+  const res = await api.auth.getProfile({
+    headers: {
+      Cookie: cookie,
+    },
+  })
   return res.data
 })
 

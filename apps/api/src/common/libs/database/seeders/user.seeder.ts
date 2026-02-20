@@ -2,6 +2,8 @@ import { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
 import { hash } from 'argon2';
 import { User } from '../../../../core/users/entities/user.entity';
+import { Tenant } from '../../../../tenants/entities/tenant.entity';
+import { Role } from '../../../../core/roles/entities/role.entity';
 
 export class UserSeeder extends Seeder {
   async run(em: EntityManager, context?: any): Promise<void> {
@@ -22,8 +24,15 @@ export class UserSeeder extends Seeder {
       return;
     }
 
-    // 4. Hash the password
-    // already hashed by mikro-orm subscribe
+    // 4. Get the System Tenant
+    const tenant = await em.findOneOrFail(Tenant, {
+      id: '6da67552-faeb-4507-9f58-0161803afca8',
+    });
+
+    // 5. get the system admin role
+    const systemAdminRole = await em.findOneOrFail(Role, {
+      name: 'System Administrator',
+    });
 
     // 5. Create the user (auto-persists)
     em.create(User, {
@@ -36,7 +45,8 @@ export class UserSeeder extends Seeder {
       auth_source: 'local',
       is_active: true,
       is_licensed: true,
-      tenantId: '6da67552-faeb-4507-9f58-0161803afca8',
+      roles: [systemAdminRole],
+      tenant,
     });
 
     await em.flush();

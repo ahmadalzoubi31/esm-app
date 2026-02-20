@@ -7,6 +7,7 @@ import { User } from './entities/user.entity';
 import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
 import { Group } from '../groups/entities/group.entity';
+import { Tenant } from 'src/tenants/entities/tenant.entity';
 
 @Injectable()
 export class UsersService {
@@ -22,13 +23,19 @@ export class UsersService {
     // 2: Extract collection fields from DTO
     const { roles, permissions, groups, ...userDataToCreate } = dto;
 
-    // 3: Create user with non-collection fields
+    // 3: Get Tenant ID from Filter
+    const tenantFilter = em.getFilterParams('tenant');
+
+    // 3.1: Get Tenant Reference
+    const tenantRef = em.getReference(Tenant, tenantFilter.tenant_id);
+
+    // 4: Create user with non-collection fields
     const user = this.userRepository.create({
       ...userDataToCreate,
-      tenantId: 'system',
+      tenant: tenantRef,
     });
 
-    // 4: Handle roles collection
+    // 5: Handle roles collection
     if (roles && roles.length > 0) {
       const roleRefs = roles.map((roleId) => em.getReference(Role, roleId));
       user.roles.set(roleRefs);
@@ -57,7 +64,6 @@ export class UsersService {
 
   async findAll({
     where = {},
-    filters,
     search,
   }: {
     where?: any;

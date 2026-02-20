@@ -27,7 +27,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { AuthUser } from '@/types'
+import { Suspense } from 'react'
 
 const nav_items = {
   user: {
@@ -169,7 +169,7 @@ const nav_items = {
   ],
 }
 
-export function AppSidebar({ user }: { user: AuthUser }) {
+export function AppSidebar() {
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
@@ -195,7 +195,9 @@ export function AppSidebar({ user }: { user: AuthUser }) {
         <NavSecondary items={nav_items.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <NavUser />
+        </Suspense>
       </SidebarFooter>
     </Sidebar>
   )
