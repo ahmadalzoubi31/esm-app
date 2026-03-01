@@ -209,31 +209,35 @@ export function TableCellViewer({ item }: { item: User }) {
 
             <Separator />
 
-            {/* Metadata Placeholder */}
-            {item.metadata && Object.keys(item.metadata).length > 0 && (
-              <>
-                <section className="space-y-3">
-                  <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
-                    <DatabaseIcon className="h-4 w-4 text-muted-foreground" />
-                    Metadata
-                  </h4>
-                  <div className="grid grid-cols-3 gap-4 rounded-lg border p-3 bg-muted/30">
-                    {Object.entries(item.metadata).map(([key, value]) => (
-                      <DetailItem
-                        key={key}
-                        label={key.charAt(0).toUpperCase() + key.slice(1)}
-                        value={
-                          typeof value === 'object'
-                            ? JSON.stringify(value)
-                            : value
-                        }
-                      />
-                    ))}
+            {/* Metadata */}
+            <section className="space-y-3">
+              <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
+                <DatabaseIcon className="h-4 w-4 text-muted-foreground" />
+                Metadata
+              </h4>
+              <div className="grid grid-cols-3 gap-x-4 gap-y-4 rounded-lg border p-3 bg-muted/30 min-h-[60px]">
+                {item.metadata && Object.keys(item.metadata).length > 0 ? (
+                  Object.entries(item.metadata).map(([key, value]) => (
+                    <DetailItem
+                      key={key}
+                      label={key.charAt(0).toUpperCase() + key.slice(1)}
+                      value={
+                        typeof value === 'object'
+                          ? JSON.stringify(value)
+                          : String(value)
+                      }
+                      className="col-span-1"
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-3 flex items-center">
+                    <span className="text-xs text-muted-foreground italic">
+                      No metadata available.
+                    </span>
                   </div>
-                </section>
-                <Separator />
-              </>
-            )}
+                )}
+              </div>
+            </section>
 
             <Separator />
 

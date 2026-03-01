@@ -2,21 +2,18 @@ import {
   HeadContent,
   Outlet,
   Scripts,
+  createRootRoute,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { queryClient } from '@/lib/query-client'
 
 import appCss from '../styles.css?url'
 
-export interface RouterContext {
-  queryClient: QueryClient
-}
-
-export const Route = createRootRouteWithContext<RouterContext>()({
+export const Route = createRootRoute({
   head: () => ({
     meta: [
       {

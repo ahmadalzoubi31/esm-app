@@ -14,7 +14,13 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { User as UserIcon, Info, Check, ChevronsUpDown } from 'lucide-react'
+import {
+  User as UserIcon,
+  Info,
+  Check,
+  ChevronsUpDown,
+  Loader2,
+} from 'lucide-react'
 import {
   Command,
   CommandEmpty,
@@ -33,6 +39,7 @@ import { cn } from '@/lib/utils'
 import { useSearchUsersQuery } from '@/lib/queries/users.query'
 import { useState, useEffect } from 'react'
 import { AuthSource, FormInstance } from '@/types'
+import { usersApi } from '@/lib/api/users.api'
 import { z } from 'zod'
 import { UserSchema } from '@/schemas/user.schema'
 
@@ -44,6 +51,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
   const [openManager, setOpenManager] = useState(false)
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 300)
@@ -51,12 +59,31 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
   }, [search])
 
   const { data: usersResponse, isLoading: isLoadingUsers } =
-    useSearchUsersQuery(
-      { search: debouncedSearch },
-      { enabled: debouncedSearch.length >= 3 },
-    )
+    useSearchUsersQuery({ search: debouncedSearch, limit: '5' })
 
-  const users = usersResponse || []
+  const searchedUsers = usersResponse || []
+
+  // Always ensure the currently selected manager is in the list, even if it doesn't match the current 5 search results
+  const [selectedManager, setSelectedManager] = useState<any>(null)
+
+  useEffect(() => {
+    // Attempt to hydrate selected manager from search results if missing
+    if (form.state.values.manager && !selectedManager) {
+      const match = searchedUsers.find(
+        (u) => u.username === form.state.values.manager,
+      )
+      if (match) setSelectedManager(match)
+    }
+  }, [searchedUsers, form.state.values.manager, selectedManager])
+
+  // Combine search results and potentially the selected manager
+  const users = [
+    ...searchedUsers,
+    ...(selectedManager &&
+    !searchedUsers.find((u) => u.username === selectedManager.username)
+      ? [selectedManager]
+      : []),
+  ]
 
   return (
     <Card>
@@ -161,6 +188,63 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              )
+            }}
+          />
+
+          {/* Avatar */}
+          <form.Field
+            name="avatar"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Avatar</FieldLabel>
+                  <div className="flex items-center gap-4">
+                    {isUploading ? (
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted">
+                        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                      </div>
+                    ) : field.state.value ? (
+                      <img
+                        src={field.state.value}
+                        alt="Avatar preview"
+                        className="h-10 w-10 shrink-0 rounded-full object-cover"
+                      />
+                    ) : null}
+                    <div className="flex-1 flex items-center gap-2">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        id={field.name}
+                        name={field.name}
+                        disabled={isUploading}
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0]
+                          if (file) {
+                            try {
+                              setIsUploading(true)
+                              const {
+                                data: { url },
+                              } = await usersApi.uploadAvatar(file)
+                              field.handleChange(url)
+                            } catch (error) {
+                              console.error('Failed to upload avatar', error)
+                            } finally {
+                              setIsUploading(false)
+                            }
+                          } else {
+                            field.handleChange('')
+                          }
+                        }}
+                        className="cursor-pointer file:cursor-pointer"
+                        aria-invalid={isInvalid}
+                      />
+                    </div>
+                  </div>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
               )
@@ -283,7 +367,16 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
               return (
                 <Field data-invalid={isInvalid} className="flex flex-col">
                   <FieldLabel>Manager</FieldLabel>
-                  <Popover open={openManager} onOpenChange={setOpenManager}>
+                  <Popover
+                    open={openManager}
+                    onOpenChange={(isOpen) => {
+                      setOpenManager(isOpen)
+                      if (!isOpen) {
+                        field.handleBlur()
+                        setSearch('')
+                      }
+                    }}
+                  >
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -304,6 +397,9 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-[300px] p-0" align="start">
                       <Command shouldFilter={false}>
+                        <div className="flex border-b px-3 py-2 text-xs text-muted-foreground bg-muted/30">
+                          Type at least 3 characters...
+                        </div>
                         <CommandInput
                           placeholder="Search manager..."
                           value={search}
@@ -311,8 +407,8 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                         />
                         <CommandList>
                           <CommandEmpty>
-                            {search.length < 3
-                              ? 'Type at least 3 characters...'
+                            {search.length > 0 && search.length < 3
+                              ? 'Keep typing...'
                               : isLoadingUsers
                                 ? 'Searching...'
                                 : 'No user found.'}
@@ -325,7 +421,11 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                                   key={user.id}
                                   value={`${user.first_name} ${user.last_name} ${user.username}`}
                                   onSelect={() => {
-                                    field.handleChange(user.username)
+                                    field.handleChange(
+                                      field.state.value === user.username
+                                        ? ''
+                                        : user.username,
+                                    )
                                     setOpenManager(false)
                                   }}
                                 >
@@ -347,6 +447,54 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                     </PopoverContent>
                   </Popover>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              )
+            }}
+          />
+
+          {/* Manager Name */}
+          <form.Subscribe
+            selector={(state: any) => [state.values.manager]}
+            children={([managerUsername]: any) => {
+              const managerDetails = users.find(
+                (user) => user.username === managerUsername,
+              )
+
+              return (
+                <Field className="flex flex-col">
+                  <FieldLabel>Manager Name</FieldLabel>
+                  <Input
+                    disabled
+                    value={
+                      managerDetails
+                        ? `${managerDetails.first_name} ${managerDetails.last_name}`
+                        : ''
+                    }
+                    placeholder="Auto-filled"
+                    className="bg-muted"
+                  />
+                </Field>
+              )
+            }}
+          />
+
+          {/* Manager Email */}
+          <form.Subscribe
+            selector={(state: any) => [state.values.manager]}
+            children={([managerUsername]: any) => {
+              const managerDetails = users.find(
+                (user) => user.username === managerUsername,
+              )
+
+              return (
+                <Field className="flex flex-col">
+                  <FieldLabel>Manager Email</FieldLabel>
+                  <Input
+                    disabled
+                    value={managerDetails?.email || ''}
+                    placeholder="Auto-filled"
+                    className="bg-muted"
+                  />
                 </Field>
               )
             }}

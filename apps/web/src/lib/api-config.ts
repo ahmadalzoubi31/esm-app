@@ -31,6 +31,7 @@ export const API_ENDPOINTS = {
     DELETE: (id: string) => `/users/${id}`,
     BULK_UPDATE: '/users',
     BULK_DELETE: '/users',
+    UPLOAD_AVATAR: '/users/avatar/upload',
   },
   // Role endpoints
   ROLES: {

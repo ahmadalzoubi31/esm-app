@@ -25,7 +25,7 @@ export const usersApi = {
    * Get all users with optional filters
    */
   search: async (
-    params?: string | { filters?: string; search?: string },
+    params?: string | { filters?: string; search?: string; limit?: string },
   ): Promise<ApiResponse<User[]>> => {
     let url = API_ENDPOINTS.USERS.LIST
     const queryParams = new URLSearchParams()
@@ -35,6 +35,7 @@ export const usersApi = {
     } else if (params) {
       if (params.filters) queryParams.append('filters', params.filters)
       if (params.search) queryParams.append('search', params.search)
+      if (params.limit) queryParams.append('limit', params.limit)
     }
 
     const queryString = queryParams.toString()
@@ -103,6 +104,18 @@ export const usersApi = {
     return await apiFetch<void>(API_ENDPOINTS.USERS.BULK_DELETE, {
       method: 'DELETE',
       body: JSON.stringify(ids),
+    })
+  },
+
+  /**
+   * Upload user avatar image
+   */
+  uploadAvatar: async (file: File): Promise<ApiResponse<{ url: string }>> => {
+    const formData = new FormData()
+    formData.append('file', file)
+    return await apiFetch<{ url: string }>(API_ENDPOINTS.USERS.UPLOAD_AVATAR, {
+      method: 'POST',
+      body: formData,
     })
   },
 }

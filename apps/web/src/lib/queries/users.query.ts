@@ -1,9 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
-import { ApiResponse } from '@/types/api'
-import { useServerFn } from '@tanstack/react-start'
-import { getUserFn, getUsersFn, searchUsersFn } from '@/server/users.server'
 import { User } from '@/types'
+import { api } from '../api'
 
 export const userKeys = {
   all: ['users'] as const,
@@ -15,33 +12,36 @@ export const userKeys = {
 }
 
 export function useUsersQuery() {
-  const getUsers = useServerFn(getUsersFn)
-
   return useQuery<User[]>({
     queryKey: userKeys.list(),
-    queryFn: async () => await getUsers(),
+    queryFn: async () => {
+      const res = await api.users.findAll()
+      return res.data
+    },
   })
 }
 
 export function useUserQuery(id: string) {
-  const getUser = useServerFn(getUserFn)
-
-  return useQuery<User>({
+  return useQuery<User | null>({
     queryKey: userKeys.detail(id),
-    queryFn: async () => await getUser({ data: { id } }),
+    queryFn: async () => {
+      const res = await api.users.findOne(id)
+      return res.data
+    },
     enabled: !!id,
   })
 }
 
 export function useSearchUsersQuery(
-  params?: string | { filters?: string; search?: string },
+  params?: string | { filters?: string; search?: string; limit?: string },
   options?: any,
 ) {
-  const searchUsers = useServerFn(searchUsersFn)
-
   return useQuery<User[]>({
     queryKey: userKeys.list(params),
-    queryFn: async () => await searchUsers(),
+    queryFn: async () => {
+      const res = await api.users.search(params)
+      return res.data
+    },
     ...options,
   })
 }

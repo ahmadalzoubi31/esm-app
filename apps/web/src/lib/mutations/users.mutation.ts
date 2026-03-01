@@ -3,16 +3,14 @@ import { api } from '@/lib/api'
 import { toast } from 'sonner'
 import { userKeys } from '../queries/users.query'
 import { BulkUpdateUserDto, CreateUserDto, UpdateUserDto } from '@/types'
-import { createUserFn } from '@/server/users.server'
 
 export function useCreateUserMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationKey: userKeys.detail('create'),
     mutationFn: async (data: CreateUserDto) => {
-      console.log('🚀 ~ useCreateUserMutation ~ data:', data)
       // Send all data including roles and permissions in a single create call
-      const response = await createUserFn({ data })
+      const response = await api.users.create(data)
       return response
     },
     onSuccess: () => {

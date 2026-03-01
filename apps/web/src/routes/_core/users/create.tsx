@@ -18,7 +18,7 @@ import { UserPermissions } from '@/components/web/users/user-form/user-permissio
 import { UserMetadata } from '@/components/web/users/user-form/user-metadata'
 import { SideBarForm } from '@/components/web/users/user-form/sidebar-form'
 import { useCreateUserMutation } from '@/lib/mutations'
-import { UserSchema } from '@/schemas/user.schema'
+import { UserSchema, CreateUserSchema } from '@/schemas/user.schema'
 import { AuthSource } from '@/types/users'
 import z from 'zod'
 
@@ -28,7 +28,7 @@ export const Route = createFileRoute('/_core/users/create')({
 
 function CreateUserPage() {
   const navigate = useNavigate()
-  const createUserMutation = useCreateUserMutation()
+  const mutation = useCreateUserMutation()
 
   const form = useForm({
     defaultValues: {
@@ -51,10 +51,10 @@ function CreateUserPage() {
       metadata: {},
     } as z.infer<typeof UserSchema>,
     validators: {
-      onSubmit: UserSchema,
+      onSubmit: CreateUserSchema,
     },
     onSubmit: async ({ value }) => {
-      await createUserMutation.mutateAsync(value)
+      await mutation.mutateAsync(value)
       navigate({ to: '/users' })
     },
   })

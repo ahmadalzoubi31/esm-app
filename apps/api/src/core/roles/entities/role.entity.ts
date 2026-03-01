@@ -11,12 +11,10 @@ import { User } from '../../users/entities/user.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { Group } from '../../groups/entities/group.entity';
 import { randomUUID } from 'crypto';
+import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
 @Entity({ tableName: 'roles' })
-export class Role {
-  @PrimaryKey({ type: 'uuid' })
-  id: string = randomUUID();
-
+export class Role extends TenantBaseEntity {
   @Property({ unique: true })
   @Index()
   key!: string;

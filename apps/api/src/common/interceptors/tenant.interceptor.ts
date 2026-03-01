@@ -37,8 +37,19 @@ export class TenantInterceptor implements NestInterceptor {
     // Get user and tenant ID from request
     const user = request.user;
 
-    // TODO: if user is system then skip tenant filtering
-    if (user?.tenantId === '6da67552-faeb-4507-9f58-0161803afca8') {
+    // console.debug({
+    //   tenantId: user?.tenantId,
+    //   method: request.method,
+    //   result:
+    //     user?.tenantId === '6da67552-faeb-4507-9f58-0161803afca8' &&
+    //     request.method === 'GET',
+    // });
+
+    // TODO: if user tenantId is system then skip tenant filtering
+    if (
+      user?.tenantId === '6da67552-faeb-4507-9f58-0161803afca8' &&
+      request.method === 'GET'
+    ) {
       this.em.setFilterParams('tenant', { bypass: true });
       return next.handle();
     }
@@ -59,16 +70,16 @@ export class TenantInterceptor implements NestInterceptor {
       tenantId || '00000000-0000-0000-0000-000000000000';
 
     // 1. Set Postgres RLS variable (Safe to set even if dummy)
-    try {
-      await this.em
-        .getConnection()
-        .execute('SELECT set_config(?, ?, false)', [
-          'app.current_tenant',
-          effectiveTenantId,
-        ]);
-    } catch (error) {
-      console.error('Failed to set RLS variable:', error);
-    }
+    // try {
+    //   await this.em
+    //     .getConnection()
+    //     .execute('SELECT set_config(?, ?, false)', [
+    //       'app.current_tenant',
+    //       effectiveTenantId,
+    //     ]);
+    // } catch (error) {
+    //   console.error('Failed to set RLS variable:', error);
+    // }
 
     // 2. Enable MikroORM Filter
     this.em.setFilterParams('tenant', { tenantId: effectiveTenantId });

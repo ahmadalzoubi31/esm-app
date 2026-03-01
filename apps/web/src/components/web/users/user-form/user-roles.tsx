@@ -59,7 +59,7 @@ export function UserRoles({ form }: UserRolesProps) {
           <form.Field
             name="roles"
             children={(field) => {
-              const selectedRoleIds = (field.state.value || []) as string[]
+              const selectedRoles = (field.state.value || []) as string[]
 
               const handleSelect = (roleId: string) => {
                 const current = (field.state.value as string[]) || []
@@ -81,20 +81,20 @@ export function UserRoles({ form }: UserRolesProps) {
 
               // Filter out already selected roles from the dropdown list
               const availableRoles = roles.filter(
-                (role) => !selectedRoleIds.includes(role.id),
+                (role) => !selectedRoles.includes(role.id),
               )
 
               return (
                 <div className="space-y-4">
                   {/* Selected Roles Tags */}
-                  {selectedRoleIds.length > 0 && (
+                  {selectedRoles.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {selectedRoleIds.map((id) => {
-                        const role = roles.find((r) => r.id === id)
+                      {selectedRoles.map((selectedRole) => {
+                        const role = roles.find((r) => r.id === selectedRole)
                         if (!role) return null
                         return (
                           <Badge
-                            key={id}
+                            key={selectedRole}
                             variant="secondary"
                             className="pl-2 pr-1 py-1 flex items-center gap-1 text-sm"
                           >
@@ -104,7 +104,7 @@ export function UserRoles({ form }: UserRolesProps) {
                               variant="ghost"
                               size="icon"
                               className="h-4 w-4 rounded-full p-0 hover:bg-muted-foreground/20"
-                              onClick={() => handleRemove(id)}
+                              onClick={() => handleRemove(selectedRole)}
                             >
                               <X className="h-3 w-3" />
                               <span className="sr-only">Remove</span>
@@ -158,7 +158,7 @@ export function UserRoles({ form }: UserRolesProps) {
                                 <Check
                                   className={cn(
                                     'ml-auto h-4 w-4',
-                                    selectedRoleIds.includes(role.id)
+                                    selectedRoles.includes(role.id)
                                       ? 'opacity-100'
                                       : 'opacity-0',
                                   )}

@@ -1,8 +1,11 @@
 import { createMiddleware, createStart } from '@tanstack/react-start'
 
-import { api } from '@/lib/api'
-
 import { redirect } from '@tanstack/react-router'
+import { AuthUser } from './types'
+import { api } from './lib/api'
+import { useProfileQuery } from './lib/queries'
+import { useQuery } from '@tanstack/react-query'
+import { getProfileFn } from './server/auth.server'
 
 // ### Public paths
 const public_paths = [
@@ -23,21 +26,24 @@ const authMiddleware = createMiddleware().server(async ({ next, request }) => {
   }
 
   // 3: Get cookies of the request headers
-  const cookies = request.headers.get('cookie') || ''
+  const cookie = request.headers.get('cookie') || ''
 
   try {
     // 4: Get profile from the cookies
-    const { data } = await api.auth.getProfile({
-      headers: { cookie: cookies },
+    const res = await api.auth.getProfile({
+      headers: {
+        Cookie: cookie,
+      },
     })
+    const profile: AuthUser = res.data
 
     // 5: If profile is not found, redirect to login
-    if (!data) {
+    if (!profile) {
       throw redirect({ to: '/login' })
     }
 
-    // 6: Return next with user data
-    return next({ context: { user: data } })
+    // 6: Return next with user data:: can use the context inside the serverFN just or another middleware
+    return next({ context: { user: profile } })
   } catch (error: any) {
     // if unauthorized error,  show a new page like a session timeout if want to refresh click the button.
     if (error.statusCode === 401) {

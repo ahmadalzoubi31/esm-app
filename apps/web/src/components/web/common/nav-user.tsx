@@ -25,17 +25,16 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { signOutFn } from '@/server/auth.server'
 import { toast } from 'sonner'
-import { useProfileQuery } from '@/lib/queries'
+import { AuthUser } from '@/types'
+import { useLogoutMutation } from '@/lib/mutations/auth.mutation'
 
-export function NavUser() {
+export function NavUser({ user }: { user?: AuthUser }) {
   const { isMobile } = useSidebar()
-
-  const { data: user } = useProfileQuery()
+  const { mutateAsync: logout } = useLogoutMutation()
 
   const handleLogout = async () => {
-    const promise = signOutFn()
+    const promise = logout()
 
     toast.promise(promise, {
       loading: 'Logging out...',

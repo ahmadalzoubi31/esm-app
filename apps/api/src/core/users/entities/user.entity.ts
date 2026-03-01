@@ -15,9 +15,7 @@ import { Role } from '../../roles/entities/role.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { Group } from '../../groups/entities/group.entity';
 import { Service } from '../../../esm/catalog/services/entities/service.entity';
-import GraphQLJSON from 'graphql-type-json';
 import { hash } from 'argon2';
-import { randomUUID } from 'crypto';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
 @Entity({ tableName: 'users' })

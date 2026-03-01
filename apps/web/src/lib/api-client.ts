@@ -26,7 +26,9 @@ export async function apiFetch<T>(
 
   // Set content-type for JSON requests
   if (init.body && !headers.has('Content-Type')) {
-    headers.set('Content-Type', 'application/json')
+    if (!(init.body instanceof FormData)) {
+      headers.set('Content-Type', 'application/json')
+    }
   }
 
   // console.log(`${API_PATH}${path}`, {
@@ -67,5 +69,8 @@ export async function apiFetch<T>(
     throw new Error(body?.message || `Request failed (${res.status})`)
   }
 
-  return body as ApiResponse<T>
+  return {
+    ...body,
+    headers: res.headers,
+  } as ApiResponse<T>
 }

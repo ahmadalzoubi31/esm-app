@@ -23,12 +23,15 @@ export const getUserFn = createServerFn({ method: 'GET' })
     return res.data
   })
 
-export const searchUsersFn = createServerFn({ method: 'GET' }).handler(
-  async () => {
-    const res = await api.users.search()
+export const searchUsersFn = createServerFn({ method: 'GET' })
+  .inputValidator(
+    (data?: string | { filters?: string; search?: string; limit?: string }) =>
+      data,
+  )
+  .handler(async ({ data }) => {
+    const res = await api.users.search(data)
     return res.data
-  },
-)
+  })
 
 export const updateUserFn = createServerFn({ method: 'POST' })
   .inputValidator((data: { id: string; data: UpdateUserDto }) => data)

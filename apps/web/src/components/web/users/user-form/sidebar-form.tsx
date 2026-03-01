@@ -70,7 +70,15 @@ export function SideBarForm({ form }: SideBarFormProps) {
               <CardContent className="grid gap-4">
                 <div className="flex items-center gap-4 rounded-lg border bg-card p-3 shadow-sm">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <UserIcon className="h-5 w-5 text-primary" />
+                    {user.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt="Avatar preview"
+                        className="h-full w-full rounded-full object-cover"
+                      />
+                    ) : (
+                      <UserIcon className="h-5 w-5 text-primary" />
+                    )}
                   </div>
                   <div className="grid gap-0.5 overflow-hidden">
                     <h3 className="font-semibold leading-none truncate">

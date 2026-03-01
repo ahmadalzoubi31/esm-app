@@ -8,19 +8,15 @@ import {
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { useForm } from '@tanstack/react-form'
-import { toast } from 'sonner'
 import { LoginSchema } from '@/schemas/auth.schema'
-import { useTransition } from 'react'
 import { SubmissionButton } from '../../ui/submission-button'
-import { api } from '@/lib/api'
-import { useNavigate } from '@tanstack/react-router'
+import { useSignInMutation } from '@/lib/mutations/auth.mutation'
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const navigate = useNavigate()
-  const [isPending, startTransition] = useTransition()
+  const { mutate: signIn, isPending } = useSignInMutation()
   const form = useForm({
     defaultValues: {
       username: '',
@@ -29,19 +25,8 @@ export function LoginForm({
     validators: {
       onSubmit: LoginSchema,
     },
-    onSubmit: ({ value }) => {
-      startTransition(async () => {
-        const promise = api.auth.signIn(value)
-
-        toast.promise(promise, {
-          loading: 'Signing in...',
-          success: () => {
-            navigate({ to: '/' })
-            return 'Signed in successfully'
-          },
-          error: 'Failed to sign in',
-        })
-      })
+    onSubmit: async ({ value }) => {
+      signIn(value)
     },
   })
   return (

@@ -8,7 +8,10 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BulkUpdateUserDto } from './dto/bulk-update-user.dto';
@@ -47,6 +50,30 @@ export class UsersController {
   @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Create, User))
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
+  }
+
+  @Post('avatar/upload')
+  @ApiOperation({
+    summary: 'Upload avatar',
+    description: 'Upload an avatar image to storage and get the public URL.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'File uploaded successfully.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Create, User))
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadAvatar(@UploadedFile() file: Express.Multer.File) {
+    // 1: Check if file is uploaded
+    if (!file) {
+      throw new Error('File is required');
+    }
+    // 2: Upload file to Supabase storage
+    const url = await this.usersService.uploadAvatar(file);
+    // 3: Return public URL
+    return { url };
   }
 
   @Get()

@@ -52,9 +52,11 @@ export function useTableColumnPreferences({
       // 2. Then fetch from backend to sync/update
       try {
         const backendPrefs = {}
-        if (backendPrefs) {
-          // Merge with defaults to handle new columns
-          setColumnVisibility((prev) => ({ ...prev, ...backendPrefs }))
+        if (backendPrefs && Object.keys(backendPrefs).length > 0) {
+          // Wrap in setTimeout to avoid React state update during render cycle
+          setTimeout(() => {
+            setColumnVisibility((prev) => ({ ...prev, ...backendPrefs }))
+          }, 0)
 
           // Update localStorage with authoritative data
           if (storageKey) {

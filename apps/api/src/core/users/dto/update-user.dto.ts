@@ -33,6 +33,11 @@ export class UpdateUserDto {
   @Transform(({ value }) => (value === '' ? null : value))
   email?: string;
 
+  @ApiProperty({ example: 'avatar.png', required: false })
+  @IsString()
+  @IsOptional()
+  avatar?: string;
+
   @ApiProperty({ example: '1234567890', required: false })
   @IsString()
   @IsOptional()

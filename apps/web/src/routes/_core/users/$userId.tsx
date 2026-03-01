@@ -19,8 +19,9 @@ import { UserMetadata } from '@/components/web/users/user-form/user-metadata'
 import { SideBarForm } from '@/components/web/users/user-form/sidebar-form'
 import { useUserQuery } from '@/lib/queries/users.query'
 import { useUpdateUserMutation } from '@/lib/mutations/users.mutation'
-import { UserSchema } from '@/schemas/user.schema'
+import { UserSchema, UpdateUserSchema } from '@/schemas/user.schema'
 import { User } from '@/types'
+import z from 'zod'
 
 export const Route = createFileRoute('/_core/users/$userId')({
   component: EditUserPage,
@@ -88,22 +89,21 @@ function EditUserForm({
       external_id: user.external_id,
       is_active: user.is_active,
       is_licensed: user.is_licensed,
-      roles: user.roles,
-      permissions: user.permissions,
-      groups: user.groups,
+      roles: user.roles?.map((r) => r.id) || [],
+      permissions: user.permissions?.map((p) => p.id) || [],
+      groups: user.groups?.map((g) => g.id) || [],
       metadata: user.metadata,
-    },
+    } as z.infer<typeof UserSchema>,
     validators: {
-      onSubmit: UserSchema,
+      onSubmit: UpdateUserSchema,
     },
     onSubmit: async ({ value }) => {
-      try {
-        await mutation.mutateAsync({ id: userId, data: value })
-        navigate({ to: '/users' })
-      } catch (error) {
-        // Error is handled by the mutation
-        console.log(error)
+      const submitData = { ...value }
+      if (!submitData.password) {
+        delete submitData.password
       }
+      await mutation.mutateAsync({ id: userId, data: submitData })
+      navigate({ to: '/users' })
     },
   })
 

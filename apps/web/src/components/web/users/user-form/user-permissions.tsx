@@ -76,7 +76,6 @@ function UserPermissionsContent({
     queries: selectedRoleIds.map((roleId) => ({
       queryKey: roleKeys.permissions(roleId),
       queryFn: () => api.roles.findPermissions(roleId),
-      staleTime: 1000 * 60 * 5, // 5 minutes
     })) as UseQueryOptions<ApiResponse<Permission[]>>[],
   })
 

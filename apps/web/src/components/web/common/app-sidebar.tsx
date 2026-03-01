@@ -28,6 +28,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { Suspense } from 'react'
+import { AuthUser } from '@/types'
 
 const nav_items = {
   user: {
@@ -169,7 +170,7 @@ const nav_items = {
   ],
 }
 
-export function AppSidebar() {
+export function AppSidebar({ user }: { user?: AuthUser }) {
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
@@ -196,7 +197,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <Suspense fallback={<div>Loading...</div>}>
-          <NavUser />
+          <NavUser user={user} />
         </Suspense>
       </SidebarFooter>
     </Sidebar>

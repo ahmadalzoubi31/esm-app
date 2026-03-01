@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { useRouter, createFileRoute } from '@tanstack/react-router'
-import { api } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -21,12 +19,9 @@ export const Route = createFileRoute('/session-timeout')({
 function SessionTimeout() {
   const router = useRouter()
   const refreshToken = useRefreshTokensMutation()
-  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const handleRefresh = async () => {
     try {
-      setIsRefreshing(true)
-      // await api.auth.refreshTokens()
       await refreshToken.mutateAsync()
 
       toast.success('Session refreshed successfully')
@@ -34,8 +29,6 @@ function SessionTimeout() {
     } catch (err) {
       toast.error('Failed to refresh session. Please log in again.')
       router.navigate({ to: '/login' })
-    } finally {
-      setIsRefreshing(false)
     }
   }
 
@@ -63,11 +56,11 @@ function SessionTimeout() {
         <CardContent className="grid gap-4">
           <Button
             onClick={handleRefresh}
-            disabled={isRefreshing}
+            disabled={refreshToken.isPending}
             className="w-full"
             size="lg"
           >
-            {isRefreshing ? (
+            {refreshToken.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Refreshing...

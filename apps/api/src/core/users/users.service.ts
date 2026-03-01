@@ -27,7 +27,7 @@ export class UsersService {
     const tenantFilter = em.getFilterParams('tenant');
 
     // 3.1: Get Tenant Reference
-    const tenantRef = em.getReference(Tenant, tenantFilter.tenant_id);
+    const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
     // 4: Create user with non-collection fields
     const user = this.userRepository.create({
@@ -60,6 +60,41 @@ export class UsersService {
     // 7: Save user and return
     await em.persist(user).flush();
     return user;
+  }
+
+  async uploadAvatar(file: Express.Multer.File): Promise<string> {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error(
+        'Supabase configuration is missing in environment variables',
+      );
+    }
+
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const fileExt = file.originalname.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+    const filePath = `avatars/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file.buffer, {
+        contentType: file.mimetype,
+        upsert: false,
+      });
+
+    if (error) {
+      throw new Error(`Failed to upload avatar: ${error.message}`);
+    }
+
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('avatars').getPublicUrl(filePath);
+
+    return publicUrl;
   }
 
   async findAll({

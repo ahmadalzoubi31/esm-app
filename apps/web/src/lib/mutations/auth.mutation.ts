@@ -1,109 +1,140 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { api } from '@/lib/api'
-import type { ResetPasswordDto, SignInDto } from '@/types'
 import { toast } from 'sonner'
 import { useRouter } from '@tanstack/react-router'
 import { authKeys } from '../queries/auth.query'
 import { sessionKeys } from '../queries/session.query'
+import {
+  signInFn,
+  resetPasswordFn,
+  cleanupOldTokensFn,
+} from '@/server/auth.server'
+import type { ResetPasswordDto } from '@/types'
+import { LoginSchema } from '@/schemas/auth.schema'
+import z from 'zod'
+import { queryClient } from '../query-client'
+import { api } from '../api'
 
+/**
+ * Hook for signing in a user
+ */
 export function useSignInMutation() {
   const router = useRouter()
-  const queryClient = useQueryClient()
+
   return useMutation({
-    mutationFn: async (dto: SignInDto) => await api.auth.signIn(dto),
+    mutationFn: (dto: z.infer<typeof LoginSchema>) => signInFn({ data: dto }),
     onSuccess: async () => {
-      // Fetch the user profile (access token is now in cookie)
-      try {
-        const profileResponse = await api.auth.getProfile()
-        // Cache the profile data
-        queryClient.setQueryData(authKeys.profile(), profileResponse)
-      } catch (error) {
-        console.error('Failed to fetch profile after login:', error)
-      }
+      // Invalidate profile query to fetch new user data
+      await queryClient.invalidateQueries({ queryKey: authKeys.profile() })
 
       toast.success('Logged in successfully')
 
       // Check if there's a redirect URL in the search params
-      const searchParams = new URLSearchParams(window.location.search)
+      const searchParams = new URL(window.location.href).searchParams
       const redirectUrl = searchParams.get('redirect')
 
       // Navigate to the redirect URL or default to dashboard
-      router.navigate({ to: redirectUrl || '/dashboard' })
+      await router.navigate({ to: redirectUrl || '/dashboard' })
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Login error:', error)
       toast.error('Failed to log in: Invalid credentials')
     },
   })
 }
 
+/**
+ * Hook for logging out the current session
+ */
 export function useLogoutMutation() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async () => await api.auth.logout(),
-    onSuccess: () => {
-      // Clear cached data (cookies are cleared by server)
-      queryClient.setQueryData(authKeys.profile(), null)
-      queryClient.removeQueries({ queryKey: authKeys.all })
+  const router = useRouter()
 
-      // Force full page reload to ensure cookies are cleared
-      window.location.href = '/login'
+  return useMutation({
+    mutationKey: authKeys.logout(),
+    mutationFn: () => api.auth.logout(),
+    onSuccess: async () => {
+      // Clear all auth and session related data
+      queryClient.removeQueries({ queryKey: authKeys.all })
+      queryClient.removeQueries({ queryKey: sessionKeys.all })
+
+      toast.success('Logged out successfully')
+
+      // Navigate to login page
+      await router.navigate({ to: '/login' })
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Logout error:', error)
       toast.error('Failed to log out')
     },
   })
 }
 
+/**
+ * Hook for refreshing authentication tokens
+ */
 export function useRefreshTokensMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationKey: authKeys.refreshTokens(),
-    mutationFn: async () => await api.auth.refreshTokens(),
+    mutationFn: () => api.auth.refreshTokens(),
     onSuccess: () => {
-      // Token is now in cookie, just update cached profile
+      // Profile data might have changed with new token info
       queryClient.invalidateQueries({ queryKey: authKeys.profile() })
     },
-    onError: (e) => {
-      // Silent failure - set state to unauthenticated
-      // Route guards will handle the redirect
-      console.error({ e })
+    onError: (error) => {
+      // Silent failure - route guards will handle the redirect if session is truly dead
+      console.error('Token refresh failed:', error.message)
     },
   })
 }
 
+/**
+ * Hook for resetting user password
+ */
 export function useResetPasswordMutation() {
   return useMutation({
-    mutationFn: (data: ResetPasswordDto) => api.auth.resetPassword(data),
-  })
-}
-
-export function useCleanupTokensMutation() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: () => api.auth.cleanupOldTokens(),
+    mutationFn: (data: ResetPasswordDto) => resetPasswordFn({ data }),
     onSuccess: () => {
-      toast.success('Old revoked tokens cleaned up successfully')
-      // Clear cached data (cookies are cleared by server)
-      queryClient.setQueryData(authKeys.profile(), null)
-      queryClient.removeQueries({ queryKey: authKeys.all })
+      toast.success('Password reset link sent to your email')
+    },
+    onError: () => {
+      toast.error('Failed to request password reset')
     },
   })
 }
 
-export function useLogoutAllMutation() {
-  const queryClient = useQueryClient()
+/**
+ * Hook for cleaning up old/revoked tokens
+ */
+export function useCleanupTokensMutation() {
   return useMutation({
-    mutationFn: async () => await api.auth.logoutAll(),
+    mutationFn: () => cleanupOldTokensFn(),
     onSuccess: () => {
-      // Clear cached data (cookies are cleared by server)
-      queryClient.setQueryData(authKeys.profile(), null)
+      toast.success('Old tokens cleaned up successfully')
+      // Refresh cache to reflect changes if necessary
+      queryClient.invalidateQueries({ queryKey: authKeys.all })
+    },
+    onError: () => {
+      toast.error('Failed to cleanup old tokens')
+    },
+  })
+}
+
+/**
+ * Hook for signing out of all devices
+ */
+export function useLogoutAllMutation() {
+  const router = useRouter()
+
+  return useMutation({
+    mutationFn: () => api.auth.logoutAll(),
+    onSuccess: async () => {
+      // Thoroughly clear all cached data
       queryClient.removeQueries({ queryKey: authKeys.all })
       queryClient.removeQueries({ queryKey: sessionKeys.all })
 
       toast.success('Signed out of all devices')
 
-      // Force full page reload to ensure cookies are cleared
-      window.location.href = '/login'
+      // Navigate to login page
+      await router.navigate({ to: '/login' })
     },
     onError: () => {
       toast.error('Failed to sign out of all devices')
