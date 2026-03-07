@@ -26,6 +26,7 @@
       "argon2",
       "esbuild",
       "msw",
+      "sharp",
       "sqlite3",
       "unrs-resolver"
     ]
