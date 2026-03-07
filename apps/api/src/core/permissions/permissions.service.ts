@@ -146,6 +146,7 @@ export class PermissionsService {
       { id: userId },
       {
         populate: ['permissions'],
+        filters: { tenant: false },
       },
     );
     if (!user) {
@@ -177,6 +178,7 @@ export class PermissionsService {
       { id: userId },
       {
         populate: ['permissions'],
+        filters: { tenant: false },
       },
     );
     if (!user) {

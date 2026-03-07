@@ -6,16 +6,17 @@ import {
   Collection,
   Index,
   BeforeCreate,
+  Unique,
 } from '@mikro-orm/core';
 import { User } from '../../users/entities/user.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { Group } from '../../groups/entities/group.entity';
-import { randomUUID } from 'crypto';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
 @Entity({ tableName: 'roles' })
+@Unique({ properties: ['key', 'tenant'] })
 export class Role extends TenantBaseEntity {
-  @Property({ unique: true })
+  @Property()
   @Index()
   key!: string;
 
@@ -26,10 +27,10 @@ export class Role extends TenantBaseEntity {
   description?: string;
 
   @Property({ default: 0 })
-  permissionCount: number = 0;
+  permissionCount?: number = 0;
 
   @Property({ default: 0 })
-  userCount: number = 0;
+  userCount?: number = 0;
 
   @ManyToMany(() => User, (user) => user.roles, {
     owner: true,
@@ -54,12 +55,6 @@ export class Role extends TenantBaseEntity {
     inverseJoinColumn: 'permission_id',
   })
   permissions = new Collection<Permission>(this);
-
-  @Property({ onCreate: () => new Date() })
-  createdAt: Date = new Date();
-
-  @Property({ onCreate: () => new Date(), onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
 
   @BeforeCreate()
   beforeInsert() {

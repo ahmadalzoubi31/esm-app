@@ -1,12 +1,11 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
-import { hash } from 'argon2';
 import { User } from '../../../../core/users/entities/user.entity';
 import { Tenant } from '../../../../tenants/entities/tenant.entity';
 import { Role } from '../../../../core/roles/entities/role.entity';
 
 export class UserSeeder extends Seeder {
-  async run(em: EntityManager, context?: any): Promise<void> {
+  async run(em: EntityManager): Promise<void> {
     // 1. Get the repository
     const repo = em.getRepository(User);
 
@@ -30,9 +29,13 @@ export class UserSeeder extends Seeder {
     });
 
     // 5. get the system admin role
-    const systemAdminRole = await em.findOneOrFail(Role, {
-      name: 'System Administrator',
-    });
+    const systemAdminRole = await em.findOneOrFail(
+      Role,
+      {
+        name: 'System Administrator',
+      },
+      { filters: { tenant: false } },
+    );
 
     // 5. Create the user (auto-persists)
     em.create(User, {

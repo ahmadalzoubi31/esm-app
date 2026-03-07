@@ -12,12 +12,10 @@ import { User } from '../../users/entities/user.entity';
 import { Role } from '../../roles/entities/role.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { randomUUID } from 'crypto';
+import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
 @Entity({ tableName: 'groups' })
-export class Group {
-  @PrimaryKey({ type: 'uuid' })
-  id: string = randomUUID();
-
+export class Group extends TenantBaseEntity {
   @Property({ length: 120 })
   name!: string;
 
@@ -49,10 +47,4 @@ export class Group {
     inverseJoinColumn: 'userId',
   })
   users = new Collection<User>(this);
-
-  @Property({ onCreate: () => new Date() })
-  createdAt: Date = new Date();
-
-  @Property({ onCreate: () => new Date(), onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
 }

@@ -6,12 +6,10 @@ import {
   PrimaryKey,
 } from '@mikro-orm/core';
 import { randomUUID } from 'crypto';
+import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
 @Entity({ tableName: 'business_lines' })
-export class BusinessLine {
-  @PrimaryKey({ type: 'uuid' })
-  id: string = randomUUID();
-
+export class BusinessLine extends TenantBaseEntity {
   @Property()
   key!: string;
 
@@ -23,12 +21,6 @@ export class BusinessLine {
 
   @Property({ default: true })
   active: boolean = true;
-
-  @Property({ onCreate: () => new Date() })
-  createdAt: Date = new Date();
-
-  @Property({ onCreate: () => new Date(), onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
 
   @BeforeCreate()
   @BeforeUpdate()

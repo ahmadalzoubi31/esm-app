@@ -89,11 +89,8 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @UseGuards(PoliciesGuard)
   @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Read, User))
-  async findAll(
-    @Query('filters') filters?: string,
-    @Query('search') search?: string,
-  ) {
-    return await this.usersService.findAll({ filters, search });
+  async findAll(@Query('search') search?: string) {
+    return await this.usersService.findAll({ search });
   }
 
   @Get(':id')

@@ -25,6 +25,7 @@
       "@swc/core",
       "argon2",
       "esbuild",
+      "msw",
       "sqlite3",
       "unrs-resolver"
     ]

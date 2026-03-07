@@ -47,6 +47,11 @@ export class CaslAbilityFactory {
       const subject = this.resolveSubject(perm.subject);
       const conditions = this.parseConditions(perm.conditions, user);
 
+      console.log(
+        '🚀 ~ CaslAbilityFactory ~ createForUser ~ conditions:',
+        conditions,
+      );
+
       if (conditions) {
         console.log({ conditions });
         can(action, subject, undefined, conditions);

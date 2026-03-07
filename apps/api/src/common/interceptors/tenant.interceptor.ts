@@ -27,6 +27,7 @@ export class TenantInterceptor implements NestInterceptor {
     ]);
 
     // Skip tenant filtering for public routes
+    console.log('🚀 ~ TenantInterceptor ~ intercept ~ isPublic:', isPublic);
     if (isPublic) {
       return next.handle();
     }
@@ -37,19 +38,20 @@ export class TenantInterceptor implements NestInterceptor {
     // Get user and tenant ID from request
     const user = request.user;
 
-    // console.debug({
-    //   tenantId: user?.tenantId,
-    //   method: request.method,
-    //   result:
-    //     user?.tenantId === '6da67552-faeb-4507-9f58-0161803afca8' &&
-    //     request.method === 'GET',
-    // });
+    console.debug({
+      tenantId: user?.tenantId,
+      method: request.method,
+      result:
+        user?.tenantId === '6da67552-faeb-4507-9f58-0161803afca8' &&
+        request.method === 'GET',
+    });
 
     // TODO: if user tenantId is system then skip tenant filtering
     if (
       user?.tenantId === '6da67552-faeb-4507-9f58-0161803afca8' &&
       request.method === 'GET'
     ) {
+      console.log('Skipping tenant filtering for system tenant');
       this.em.setFilterParams('tenant', { bypass: true });
       return next.handle();
     }

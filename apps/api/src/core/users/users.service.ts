@@ -102,23 +102,26 @@ export class UsersService {
     search,
   }: {
     where?: any;
-    filters?: string;
     search?: string;
   }): Promise<User[]> {
     const query = { ...where };
+    console.log('🚀 ~ UsersService ~ findAll ~ query:', query);
 
     if (search) {
       query['$or'] = [
         { first_name: { $ilike: `%${search}%` } },
         { last_name: { $ilike: `%${search}%` } },
         { username: { $ilike: `%${search}%` } },
+        { email: { $ilike: `%${search}%` } },
       ];
     }
+
+    console.log('🚀 ~ UsersService ~ findAll ~ search:', search);
 
     return await this.userRepository.find(query, {
       populate: ['roles', 'roles.permissions', 'permissions', 'groups'],
       limit: search ? 20 : undefined,
-      filters: { tenant: true },
+      filters: { tenant: false },
     });
   }
 

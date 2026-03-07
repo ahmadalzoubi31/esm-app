@@ -11,6 +11,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Permission } from '../permissions/entities/permission.entity';
 import { PermissionsService } from '../permissions/permissions.service';
 import { UsersService } from '../users/users.service';
+import { Tenant } from 'src/tenants/entities/tenant.entity';
 
 @Injectable()
 export class RolesService {
@@ -22,16 +23,23 @@ export class RolesService {
   ) {}
 
   async create(createRoleDto: CreateRoleDto): Promise<Role> {
-    // 1. Create role
+    // 1: Get EntityManager
+    const em = this.roleRepository.getEntityManager();
+
+    // 2: Get Tenant ID from Filter
+    const tenantFilter = em.getFilterParams('tenant');
+
+    // 3: Get Tenant Reference
+    const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
+
+    // 3: Create role
     const role = this.roleRepository.create({
+      key: '', // auto generate on DB level
       ...createRoleDto,
-      key: createRoleDto.name.toLowerCase().replace(/\s/g, '-'),
-      permissionCount: 0,
-      userCount: 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      tenant: tenantRef,
     });
-    // 2. Save role and return it
+
+    // 4. Save role and return it
     await this.roleRepository.getEntityManager().persist(role).flush();
     return role;
   }
@@ -39,15 +47,22 @@ export class RolesService {
   async findAll({ where }: { where?: any }): Promise<Role[]> {
     return await this.roleRepository.find(where || {}, {
       populate: ['permissions'],
+      filters: { tenant: false },
     });
   }
 
   async findOne(id: string): Promise<Role | null> {
-    return await this.roleRepository.findOne({ id });
+    return await this.roleRepository.findOne(
+      { id },
+      { filters: { tenant: false } },
+    );
   }
 
   async update(id: string, dto: UpdateRoleDto): Promise<Role> {
-    const role = await this.roleRepository.findOneOrFail({ id });
+    const role = await this.roleRepository.findOneOrFail(
+      { id },
+      { filters: { tenant: false } },
+    );
     this.roleRepository.assign(role, dto);
     await this.roleRepository.getEntityManager().flush();
     return role;
@@ -58,7 +73,9 @@ export class RolesService {
   }
 
   async findPermissions(id: string): Promise<Permission[]> {
-    return await this.permissionsService.findAll({ where: { roles: { id } } });
+    return await this.permissionsService.findAll({
+      where: { roles: { id }, filters: { tenant: false } },
+    });
   }
 
   async assignPermissions(
@@ -68,7 +85,7 @@ export class RolesService {
     // 1. Find Role from database
     const role = await this.roleRepository.findOne(
       { id: roleId },
-      { populate: ['permissions'] },
+      { populate: ['permissions'], filters: { tenant: false } },
     );
 
     // 2. Check if the role exists, if not throw error
@@ -78,7 +95,7 @@ export class RolesService {
 
     // 3. Find Permissions from database using permissionIds
     const permissions = await this.permissionsService.findAll({
-      where: { id: { $in: permissionIds } },
+      where: { id: { $in: permissionIds }, filters: { tenant: false } },
     });
 
     // 4. Check if all permissions exist, if not throw error
@@ -103,7 +120,7 @@ export class RolesService {
     // 1. Find Role from database
     const role = await this.roleRepository.findOne(
       { id: roleId },
-      { populate: ['permissions'] },
+      { populate: ['permissions'], filters: { tenant: false } },
     );
 
     // 2. Check if the role exists, if not throw error
@@ -132,7 +149,10 @@ export class RolesService {
     }
 
     // 2. Check roles existence
-    const roles = await this.roleRepository.find({ id: { $in: roleIds } });
+    const roles = await this.roleRepository.find(
+      { id: { $in: roleIds } },
+      { filters: { tenant: false } },
+    );
     if (roles.length !== roleIds.length) {
       throw new NotFoundException('One or more roles not found');
     }

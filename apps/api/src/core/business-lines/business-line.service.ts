@@ -4,6 +4,7 @@ import { UpdateBusinessLineDto } from './dto/update-business-line.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BusinessLine } from './entities/business-line.entity';
 import { EntityRepository, RequiredEntityData } from '@mikro-orm/core';
+import { Tenant } from '../../tenants/entities/tenant.entity';
 
 @Injectable()
 export class BusinessLineService {
@@ -15,12 +16,20 @@ export class BusinessLineService {
   async create(
     createBusinessLineDto: CreateBusinessLineDto,
   ): Promise<BusinessLine> {
+    // 1: Get EntityManager
+    const em = this.businessLineRepository.getEntityManager();
+
+    // 2: Get Tenant ID from Filter
+    const tenantFilter = em.getFilterParams('tenant');
+
+    // 3: Get Tenant Reference
+    const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
+
     // create business line
     const businessLine = this.businessLineRepository.create({
       ...createBusinessLineDto,
       active: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      tenant: tenantRef,
     });
     // save business line
     await this.businessLineRepository
@@ -31,20 +40,30 @@ export class BusinessLineService {
   }
 
   async findAll({ where }: { where?: any }): Promise<BusinessLine[]> {
-    return await this.businessLineRepository.find(where || {});
+    return await this.businessLineRepository.find(where || {}, {
+      filters: { tenant: false },
+    });
   }
 
   async findOne(id: string): Promise<BusinessLine | null> {
-    return await this.businessLineRepository.findOne({ id });
+    return await this.businessLineRepository.findOne(
+      { id },
+      {
+        filters: { tenant: false },
+      },
+    );
   }
 
   async update(
     id: string,
     updateBusinessLineDto: UpdateBusinessLineDto,
   ): Promise<BusinessLine> {
-    const businessLine = await this.businessLineRepository.findOneOrFail({
-      id,
-    });
+    const businessLine = await this.businessLineRepository.findOneOrFail(
+      { id },
+      {
+        filters: { tenant: false },
+      },
+    );
     this.businessLineRepository.assign(businessLine, updateBusinessLineDto);
     await this.businessLineRepository.getEntityManager().flush();
     return businessLine;

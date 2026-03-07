@@ -2,6 +2,7 @@ import { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
 import { Role } from '../../../../core/roles/entities/role.entity';
 import { Permission } from '../../../../core/permissions/entities/permission.entity';
+import { Tenant } from '../../../../tenants/entities/tenant.entity';
 
 export class RoleSeeder extends Seeder {
   data = [
@@ -165,52 +166,69 @@ export class RoleSeeder extends Seeder {
   ];
 
   async run(em: EntityManager, context?: any): Promise<void> {
-    // 1. Get repositories
+    // 1: Get repositories
     const roleRepo = em.getRepository(Role);
     const permissionRepo = em.getRepository(Permission);
 
-    // 2. Check if any roles already exist
-    const existingRoles = await roleRepo.find({
-      key: { $in: this.data.map((d) => this.generateKey(d.name)) },
-    });
+    const tenantIds = [
+      '6da67552-faeb-4507-9f58-0161803afca8',
+      '5beb697a-d171-4716-8d79-cb3b42bb0d19',
+    ];
 
-    // 3. If roles exist, skip seeding
-    if (existingRoles.length > 0) {
-      console.log('✔ Roles already exist, skipping seed.');
-      return;
-    }
+    for (const tenantId of tenantIds) {
+      // 3: Get Tenant Reference
+      const tenantRef = em.getReference(Tenant, tenantId);
 
-    // 4. Seed each role with its permissions
-    for (const roleData of this.data) {
-      // 4.1. Find permissions by keys
-      const permissions = await permissionRepo.find({
-        key: { $in: roleData.permissions },
-      });
+      // 4: Check if any roles already exist for this tenant
+      const existingRoles = await roleRepo.find(
+        {
+          key: { $in: this.data.map((d) => this.generateKey(d.name)) },
+          tenant: tenantId,
+        },
+        { filters: { tenant: false } },
+      );
 
-      // 4.2. Warn if some permissions are missing
-      if (permissions.length !== roleData.permissions.length) {
-        const foundKeys = permissions.map((p) => p.key);
-        const missingKeys = roleData.permissions.filter(
-          (key) => !foundKeys.includes(key),
+      // 5: If roles exist, skip seeding for this tenant
+      if (existingRoles.length > 0) {
+        console.log(
+          `✔ Roles already exist for tenant ${tenantId}, skipping seed.`,
         );
-        console.warn(
-          `⚠ Warning: Role "${roleData.name}" is missing permissions: ${missingKeys.join(', ')}`,
-        );
+        continue;
       }
 
-      // 4.3. Create role
-      em.create(Role, {
-        id: crypto.randomUUID(),
-        name: roleData.name,
-        key: this.generateKey(roleData.name),
-        description: roleData.description,
-        permissions: permissions,
-        permissionCount: permissions.length,
-      } as any);
+      // 6. Seed each role with its permissions for this tenant
+      for (const roleData of this.data) {
+        // 6.1. Find permissions by keys
+        const permissions = await permissionRepo.find({
+          key: { $in: roleData.permissions },
+        });
 
-      console.log(
-        `✔ Created role: ${roleData.name} with ${permissions.length} permissions`,
-      );
+        // 6.2. Warn if some permissions are missing
+        if (permissions.length !== roleData.permissions.length) {
+          const foundKeys = permissions.map((p) => p.key);
+          const missingKeys = roleData.permissions.filter(
+            (key) => !foundKeys.includes(key),
+          );
+          console.warn(
+            `⚠ Warning: Role "${roleData.name}" is missing permissions: ${missingKeys.join(', ')}`,
+          );
+        }
+
+        // 6.3. Create role
+        roleRepo.create({
+          id: crypto.randomUUID(),
+          name: roleData.name,
+          key: this.generateKey(roleData.name),
+          description: roleData.description,
+          permissions: permissions,
+          permissionCount: permissions.length,
+          tenant: tenantRef,
+        });
+
+        console.log(
+          `✔ Created role: ${roleData.name} with ${permissions.length} permissions for tenant: ${tenantId}`,
+        );
+      }
     }
 
     await em.flush();
