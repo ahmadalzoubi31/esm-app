@@ -1,3 +1,4 @@
+import { BusinessLine } from './business-lines'
 import { User, Role, Permission } from './index'
 
 export interface Group {
@@ -6,7 +7,7 @@ export interface Group {
   type: string
   description?: string
   teamLeader?: User
-  businessLineKey?: string
+  businessLine: BusinessLine
   roles?: Role[]
   permissions?: Permission[]
   users?: User[]
@@ -19,7 +20,7 @@ export interface CreateGroupDto {
   type: string
   description?: string
   teamLeaderId?: string
-  businessLineKey?: string
+  businessLineId: string
   roles?: string[]
   permissions?: string[]
   users?: string[]

@@ -43,6 +43,14 @@ export const API_ENDPOINTS = {
     BULK_UPDATE: '/groups',
     BULK_DELETE: '/groups',
   },
+  // Business Line endpoints
+  BUSINESS_LINES: {
+    LIST: '/business-line',
+    DETAIL: (id: string) => `/business-line/${id}`,
+    CREATE: '/business-line',
+    UPDATE: (id: string) => `/business-line/${id}`,
+    DELETE: (id: string) => `/business-line/${id}`,
+  },
   // Role endpoints
   ROLES: {
     LIST: '/roles',

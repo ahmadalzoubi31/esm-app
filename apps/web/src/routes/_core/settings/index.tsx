@@ -1,5 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { BusinessLineSettings } from '@/components/web/settings/general/business-lines-settings'
 
 export const Route = createFileRoute('/_core/settings/')({
@@ -11,13 +17,15 @@ function GeneralSettingsPage() {
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
       <div className="flex items-center justify-between space-y-2">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">General Settings</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            General Settings
+          </h2>
           <p className="text-muted-foreground">
             Manage your application's general settings and configurations.
           </p>
         </div>
       </div>
-      
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4">
           <BusinessLineSettings />
@@ -33,12 +41,24 @@ function GeneralSettingsPage() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex justify-between border-b pb-2">
-                  <span className="text-sm font-medium text-muted-foreground">Version</span>
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Version
+                  </span>
                   <span className="text-sm font-medium">1.0.0</span>
                 </div>
                 <div className="flex justify-between border-b pb-2">
-                  <span className="text-sm font-medium text-muted-foreground">Environment</span>
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Environment
+                  </span>
                   <span className="text-sm font-medium">Production</span>
+                </div>
+                <div className="flex justify-between border-b pb-2">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Server Time
+                  </span>
+                  <span className="text-sm font-medium">
+                    {new Date().toLocaleTimeString()}
+                  </span>
                 </div>
               </div>
             </CardContent>

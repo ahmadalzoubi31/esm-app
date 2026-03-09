@@ -62,13 +62,30 @@ export function TableCellViewer({ item }: { item: Group }) {
               <div className="grid grid-cols-2 gap-4 rounded-lg border p-3 bg-muted/30">
                 <DetailItem label="Name" value={item.name} />
                 <DetailItem label="Type">
-                  <Badge variant="outline" className="capitalize h-5 px-1.5 text-[10px]">
+                  <Badge
+                    variant="outline"
+                    className="capitalize h-5 px-1.5 text-[10px]"
+                  >
                     {item.type}
                   </Badge>
                 </DetailItem>
-                <DetailItem className="col-span-2" label="Description" value={item.description} />
-                <DetailItem label="Team Leader" value={item.teamLeader?.display_name || item.teamLeader?.username || '-'} />
-                <DetailItem label="Business Line Key" value={item.businessLineKey || '-'} />
+                <DetailItem
+                  className="col-span-2"
+                  label="Description"
+                  value={item.description}
+                />
+                <DetailItem
+                  label="Team Leader"
+                  value={
+                    item.teamLeader?.display_name ||
+                    item.teamLeader?.username ||
+                    '-'
+                  }
+                />
+                <DetailItem
+                  label="Business Line"
+                  value={item.businessLine?.name || '-'}
+                />
               </div>
             </section>
 
@@ -82,12 +99,18 @@ export function TableCellViewer({ item }: { item: Group }) {
               <div className="rounded-lg border p-3 bg-muted/30 min-h-[60px] flex flex-wrap gap-2">
                 {item.users && item.users.length > 0 ? (
                   item.users.map((user) => (
-                    <Badge key={user.id} variant="secondary" className="h-5 px-1.5 text-[10px]">
+                    <Badge
+                      key={user.id}
+                      variant="secondary"
+                      className="h-5 px-1.5 text-[10px]"
+                    >
                       {user.display_name || user.username}
                     </Badge>
                   ))
                 ) : (
-                  <span className="text-xs text-muted-foreground italic">No members in this group.</span>
+                  <span className="text-xs text-muted-foreground italic">
+                    No members in this group.
+                  </span>
                 )}
               </div>
             </section>
@@ -102,12 +125,18 @@ export function TableCellViewer({ item }: { item: Group }) {
               <div className="rounded-lg border p-3 bg-muted/30 min-h-[60px] flex flex-wrap gap-2">
                 {item.roles && item.roles.length > 0 ? (
                   item.roles.map((role) => (
-                    <Badge key={role.id} variant="secondary" className="h-5 px-1.5 text-[10px]">
+                    <Badge
+                      key={role.id}
+                      variant="secondary"
+                      className="h-5 px-1.5 text-[10px]"
+                    >
                       {role.name}
                     </Badge>
                   ))
                 ) : (
-                  <span className="text-xs text-muted-foreground italic">No roles assigned.</span>
+                  <span className="text-xs text-muted-foreground italic">
+                    No roles assigned.
+                  </span>
                 )}
               </div>
             </section>
@@ -122,12 +151,18 @@ export function TableCellViewer({ item }: { item: Group }) {
               <div className="rounded-lg border p-3 bg-muted/30 min-h-[60px] flex flex-wrap gap-2">
                 {item.permissions && item.permissions.length > 0 ? (
                   item.permissions.map((permission) => (
-                    <Badge key={permission.id} variant="outline" className="h-5 px-1.5 text-[10px]">
+                    <Badge
+                      key={permission.id}
+                      variant="outline"
+                      className="h-5 px-1.5 text-[10px]"
+                    >
                       {permission.key}
                     </Badge>
                   ))
                 ) : (
-                  <span className="text-xs text-muted-foreground italic">No permissions assigned directly.</span>
+                  <span className="text-xs text-muted-foreground italic">
+                    No permissions assigned directly.
+                  </span>
                 )}
               </div>
             </section>
@@ -140,8 +175,14 @@ export function TableCellViewer({ item }: { item: Group }) {
                 System Data
               </h4>
               <div className="grid grid-cols-2 gap-4 text-xs">
-                <DetailItem label="Created At" value={formatDate(item.createdAt)} />
-                <DetailItem label="Updated At" value={formatDate(item.updatedAt)} />
+                <DetailItem
+                  label="Created At"
+                  value={formatDate(item.createdAt)}
+                />
+                <DetailItem
+                  label="Updated At"
+                  value={formatDate(item.updatedAt)}
+                />
               </div>
             </section>
           </div>

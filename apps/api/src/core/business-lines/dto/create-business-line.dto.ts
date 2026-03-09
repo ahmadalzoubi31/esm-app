@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateBusinessLineDto {
   @IsString()
@@ -10,4 +10,8 @@ export class CreateBusinessLineDto {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  active?: boolean;
 }

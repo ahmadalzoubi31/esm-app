@@ -39,6 +39,7 @@ function EditGroupPage() {
   }
 
   if (error || !group) {
+    console.log('Group error or empty:', { error, group })
     return (
       <div className="flex h-[50vh] w-full items-center justify-center flex-col gap-2">
         <div className="text-lg font-semibold">Group not found</div>
@@ -49,6 +50,8 @@ function EditGroupPage() {
       </div>
     )
   }
+
+  console.log('EditGroupPage loaded with group:', group)
 
   return (
     <EditGroupForm
@@ -77,7 +80,7 @@ function EditGroupForm({
       type: group.type,
       description: group.description,
       teamLeaderId: group.teamLeader?.id || '',
-      businessLineKey: group.businessLineKey,
+      businessLineId: group.businessLine?.id || '',
       roles: group.roles?.map((r) => r.id) || [],
       permissions: group.permissions?.map((p) => p.id) || [],
       users: group.users?.map((u) => u.id) || [],
@@ -122,22 +125,34 @@ function EditGroupForm({
             <div className="space-y-6 lg:col-span-3">
               <Tabs defaultValue="basic" className="w-full">
                 <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="basic" className="flex items-center gap-2">
+                  <TabsTrigger
+                    value="basic"
+                    className="flex items-center gap-2"
+                  >
                     <UsersIcon className="h-4 w-4" />
                     Basic Info
                   </TabsTrigger>
 
-                  <TabsTrigger value="roles" className="flex items-center gap-2">
+                  <TabsTrigger
+                    value="roles"
+                    className="flex items-center gap-2"
+                  >
                     <UserCog className="h-4 w-4" />
                     Roles
                   </TabsTrigger>
 
-                  <TabsTrigger value="permissions" className="flex items-center gap-2">
+                  <TabsTrigger
+                    value="permissions"
+                    className="flex items-center gap-2"
+                  >
                     <ShieldIcon className="h-4 w-4" />
                     Permissions
                   </TabsTrigger>
 
-                  <TabsTrigger value="users" className="flex items-center gap-2">
+                  <TabsTrigger
+                    value="users"
+                    className="flex items-center gap-2"
+                  >
                     <UsersIcon className="h-4 w-4" />
                     Members
                   </TabsTrigger>

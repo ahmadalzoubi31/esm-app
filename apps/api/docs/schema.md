@@ -68,7 +68,6 @@ erDiagram
         string description
         uuid teamLeaderId
         uuid businessLineId
-        string businessLineKey
         datetime createdAt
         datetime updatedAt
     }

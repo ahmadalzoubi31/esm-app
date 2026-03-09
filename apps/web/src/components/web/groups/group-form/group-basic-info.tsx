@@ -1,8 +1,4 @@
-import {
-  Field,
-  FieldError,
-  FieldLabel,
-} from '@/components/ui/field'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -40,6 +36,8 @@ import { useState, useEffect } from 'react'
 import { FormInstance } from '@/types'
 import { z } from 'zod'
 import { GroupSchema } from '@/schemas/group.schema'
+import { GroupTypeMenu } from '@/components/web/common/menus/group-type-menu'
+import { BusinessLineMenu } from '@/components/web/common/menus/business-line-menu'
 
 interface GroupBasicInfoProps {
   form: FormInstance<z.infer<typeof GroupSchema>>
@@ -72,8 +70,7 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
 
   const users = [
     ...searchedUsers,
-    ...(selectedLeader &&
-    !searchedUsers.find((u) => u.id === selectedLeader.id)
+    ...(selectedLeader && !searchedUsers.find((u) => u.id === selectedLeader.id)
       ? [selectedLeader]
       : []),
   ]
@@ -127,23 +124,12 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Type</FieldLabel>
-                  <Select
-                    onValueChange={(val) => field.handleChange(val)}
+                  <GroupTypeMenu
+                    id={field.name}
                     value={field.state.value}
-                  >
-                    <SelectTrigger
-                      id={field.name}
-                      aria-invalid={isInvalid}
-                    >
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="help-desk">Help Desk</SelectItem>
-                      <SelectItem value="tier-1">Tier 1</SelectItem>
-                      <SelectItem value="tier-2">Tier 2</SelectItem>
-                      <SelectItem value="vendor">Vendor</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    onChange={(val) => field.handleChange(val)}
+                    isInvalid={isInvalid}
+                  />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
               )
@@ -252,7 +238,8 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
                                         : 'opacity-0',
                                     )}
                                   />
-                                  {user.first_name} {user.last_name} ({user.username})
+                                  {user.first_name} {user.last_name} (
+                                  {user.username})
                                 </CommandItem>
                               ))}
                           </CommandGroup>
@@ -266,32 +253,21 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
             }}
           />
 
-          {/* Business Line Key */}
+          {/* Business Line ID */}
           <form.Field
-            name="businessLineKey"
+            name="businessLineId"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Business Line</FieldLabel>
-                  <Select
-                    onValueChange={(val) => field.handleChange(val)}
+                  <BusinessLineMenu
+                    id={field.name}
                     value={field.state.value}
-                  >
-                    <SelectTrigger
-                      id={field.name}
-                      aria-invalid={isInvalid}
-                    >
-                      <SelectValue placeholder="Select business line" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="IT">Information Technology (IT)</SelectItem>
-                      <SelectItem value="HR">Human Resources (HR)</SelectItem>
-                      <SelectItem value="FIN">Finance (FIN)</SelectItem>
-                      <SelectItem value="OPS">Operations (OPS)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    onChange={(val) => field.handleChange(val)}
+                    isInvalid={isInvalid}
+                  />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
               )

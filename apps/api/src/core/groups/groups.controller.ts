@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  NotFoundException,
 } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
@@ -62,10 +63,7 @@ export class GroupsController {
     ability.can(ACTION_ENUM.Manage, Group),
   )
   async findAll(@Req() req: any) {
-    // 1.  Get the user's ability
-    const where = caslToMikroOrm(req.ability, ACTION_ENUM.Manage, Group);
-    // 2. Return the results
-    return await this.groupsService.findAll({ where });
+    return await this.groupsService.findAll({});
   }
 
   @Get(':id')
@@ -89,7 +87,11 @@ export class GroupsController {
     const where = abilityConditions ? { ...abilityConditions, id } : { id };
 
     // 3. Return the results
-    return await this.groupsService.findAll({ where });
+    const groups = await this.groupsService.findAll({ where });
+    if (!groups || groups.length === 0) {
+      throw new NotFoundException('Group not found');
+    }
+    return groups[0];
   }
 
   @Patch(':id')

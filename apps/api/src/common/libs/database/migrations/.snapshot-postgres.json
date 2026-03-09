@@ -1724,16 +1724,6 @@
           "length": 255,
           "mappedType": "string"
         },
-        "business_line_key": {
-          "name": "business_line_key",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
-        },
         "businessLineId": {
           "name": "businessLineId",
           "type": "varchar(255)",

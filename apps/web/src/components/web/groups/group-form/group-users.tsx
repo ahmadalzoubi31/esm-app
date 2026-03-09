@@ -21,6 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
@@ -35,7 +36,10 @@ interface GroupUsersProps {
 
 export function GroupUsers({ form }: GroupUsersProps) {
   const [search, setSearch] = useState('')
-  const { data: usersResponse, isLoading } = useSearchUsersQuery({ search, limit: '20' })
+  const { data: usersResponse, isLoading } = useSearchUsersQuery({
+    search,
+    limit: '10',
+  })
   const users = usersResponse || []
   const [open, setOpen] = useState(false)
 
@@ -49,9 +53,7 @@ export function GroupUsers({ form }: GroupUsersProps) {
           <Users className="h-5 w-5" />
           Group Members
         </CardTitle>
-        <CardDescription>
-          Assign users to this group.
-        </CardDescription>
+        <CardDescription>Assign users to this group.</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading && !users.length ? (
@@ -99,14 +101,26 @@ export function GroupUsers({ form }: GroupUsersProps) {
                           <Badge
                             key={selectedUserId}
                             variant="secondary"
-                            className="pl-2 pr-1 py-1 flex items-center gap-1 text-sm"
+                            className="pl-1 pr-2 py-1 flex items-center gap-2 text-sm rounded-full bg-secondary overflow-hidden"
                           >
-                            {user ? user.username : selectedUserId.substring(0, 8)}
+                            <Avatar className="h-6 w-6 border-muted-foreground/20 border">
+                              <AvatarFallback className="text-[10px] bg-background">
+                                {user
+                                  ? (user.first_name?.[0] || '') +
+                                    (user.last_name?.[0] || '')
+                                  : 'U'}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="font-medium mr-1">
+                              {user
+                                ? `${user.first_name} ${user.last_name}`
+                                : selectedUserId.substring(0, 8)}
+                            </span>
                             <Button
                               type="button"
                               variant="ghost"
                               size="icon"
-                              className="h-4 w-4 rounded-full p-0 hover:bg-muted-foreground/20"
+                              className="h-4 w-4 rounded-full p-0 text-muted-foreground hover:bg-destructive/20 hover:text-destructive transition-colors shrink-0"
                               onClick={() => handleRemove(selectedUserId)}
                             >
                               <X className="h-3 w-3" />
@@ -118,10 +132,13 @@ export function GroupUsers({ form }: GroupUsersProps) {
                     </div>
                   )}
 
-                  <Popover open={open} onOpenChange={(isOpen) => {
-                    setOpen(isOpen)
-                    if (!isOpen) setSearch('')
-                  }}>
+                  <Popover
+                    open={open}
+                    onOpenChange={(isOpen) => {
+                      setOpen(isOpen)
+                      if (!isOpen) setSearch('')
+                    }}
+                  >
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -138,8 +155,8 @@ export function GroupUsers({ form }: GroupUsersProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-[400px] p-0" align="start">
                       <Command shouldFilter={false}>
-                        <CommandInput 
-                          placeholder="Search users..." 
+                        <CommandInput
+                          placeholder="Search users..."
                           value={search}
                           onValueChange={setSearch}
                         />
@@ -150,19 +167,28 @@ export function GroupUsers({ form }: GroupUsersProps) {
                               <CommandItem
                                 key={user.id}
                                 value={`${user.first_name} ${user.last_name} ${user.username}`}
+                                className="flex items-center gap-3 p-2 cursor-pointer"
                                 onSelect={() => {
                                   handleSelect(user.id)
                                 }}
                               >
-                                <div className="flex flex-col">
-                                  <span>{user.first_name} {user.last_name} ({user.username})</span>
+                                <Avatar className="h-8 w-8">
+                                  <AvatarFallback className="bg-primary/10 text-primary">
+                                    {(user.first_name?.[0] || '') +
+                                      (user.last_name?.[0] || '')}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col flex-1">
+                                  <span className="font-medium">
+                                    {user.first_name} {user.last_name}
+                                  </span>
                                   <span className="text-xs text-muted-foreground">
-                                    {user.email}
+                                    {user.email || user.username}
                                   </span>
                                 </div>
                                 <Check
                                   className={cn(
-                                    'ml-auto h-4 w-4',
+                                    'h-4 w-4 text-primary ml-auto',
                                     selectedUsers.includes(user.id)
                                       ? 'opacity-100'
                                       : 'opacity-0',

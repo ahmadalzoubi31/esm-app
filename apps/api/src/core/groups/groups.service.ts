@@ -53,7 +53,7 @@ export class GroupsService {
 
   async findAll({ where }: { where?: any }): Promise<Group[]> {
     return await this.groupRepository.find(where || {}, {
-      populate: ['roles', 'permissions', 'users', 'teamLeader'],
+      populate: ['roles', 'permissions', 'users', 'teamLeader', 'businessLine'],
       filters: { tenant: false },
     });
   }
@@ -62,7 +62,13 @@ export class GroupsService {
     return await this.groupRepository.findOne(
       { id },
       {
-        populate: ['roles', 'permissions', 'users', 'teamLeader'],
+        populate: [
+          'roles',
+          'permissions',
+          'users',
+          'teamLeader',
+          'businessLine',
+        ],
         filters: { tenant: false },
       },
     );
@@ -72,7 +78,13 @@ export class GroupsService {
     const group = await this.groupRepository.findOneOrFail(
       { id },
       {
-        populate: ['roles', 'permissions', 'users'],
+        populate: [
+          'roles',
+          'permissions',
+          'users',
+          'teamLeader',
+          'businessLine',
+        ],
         filters: { tenant: false },
       },
     );

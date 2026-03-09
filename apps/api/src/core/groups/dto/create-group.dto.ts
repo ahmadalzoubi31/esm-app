@@ -1,5 +1,5 @@
 import { GROUP_TYPE_ENUM } from '../constants/group-type.constant';
-import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateGroupDto {
@@ -23,13 +23,7 @@ export class CreateGroupDto {
 
   @ApiProperty({ example: 'Business Line ID' })
   @IsString()
-  @IsOptional()
-  businessLineId?: string;
-
-  @ApiProperty({ example: 'Business Line Key' })
-  @IsString()
-  @IsOptional()
-  businessLineKey?: string;
+  businessLineId: string;
 
   @ApiProperty({ example: ['uuid-1', 'uuid-2'] })
   @IsOptional()

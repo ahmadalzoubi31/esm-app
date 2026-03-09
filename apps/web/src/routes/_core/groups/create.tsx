@@ -2,12 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { useNavigate, createFileRoute } from '@tanstack/react-router'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import {
-  ShieldIcon,
-  UsersIcon,
-  UserCog,
-  ArrowLeft,
-} from 'lucide-react'
+import { ShieldIcon, UsersIcon, UserCog, ArrowLeft } from 'lucide-react'
 import { GroupBasicInfo } from '@/components/web/groups/group-form/group-basic-info'
 import { GroupRoles } from '@/components/web/groups/group-form/group-roles'
 import { GroupPermissions } from '@/components/web/groups/group-form/group-permissions'
@@ -24,14 +19,14 @@ export const Route = createFileRoute('/_core/groups/create')({
 function CreateGroupPage() {
   const navigate = useNavigate()
   const createGroupMutation = useCreateGroupMutation()
-  
+
   const form = useForm({
     defaultValues: {
       name: '',
       type: 'help-desk',
       description: '',
       teamLeaderId: '',
-      businessLineKey: '',
+      businessLineId: '',
       roles: [],
       permissions: [],
       users: [],
@@ -76,22 +71,34 @@ function CreateGroupPage() {
             <div className="space-y-6 lg:col-span-3">
               <Tabs defaultValue="basic" className="w-full">
                 <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="basic" className="flex items-center gap-2">
+                  <TabsTrigger
+                    value="basic"
+                    className="flex items-center gap-2"
+                  >
                     <UsersIcon className="h-4 w-4" />
                     Basic Info
                   </TabsTrigger>
 
-                  <TabsTrigger value="roles" className="flex items-center gap-2">
+                  <TabsTrigger
+                    value="roles"
+                    className="flex items-center gap-2"
+                  >
                     <UserCog className="h-4 w-4" />
                     Roles
                   </TabsTrigger>
 
-                  <TabsTrigger value="permissions" className="flex items-center gap-2">
+                  <TabsTrigger
+                    value="permissions"
+                    className="flex items-center gap-2"
+                  >
                     <ShieldIcon className="h-4 w-4" />
                     Permissions
                   </TabsTrigger>
 
-                  <TabsTrigger value="users" className="flex items-center gap-2">
+                  <TabsTrigger
+                    value="users"
+                    className="flex items-center gap-2"
+                  >
                     <UsersIcon className="h-4 w-4" />
                     Members
                   </TabsTrigger>

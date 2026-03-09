@@ -48,7 +48,7 @@ async function bootstrap() {
   );
 
   // ## Global Interceptors ##
-  // app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   // ## exception filter ##
