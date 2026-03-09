@@ -35,6 +35,9 @@ export function AppDataTablePagination<TData>({
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value))
+              if (typeof window !== 'undefined') {
+                localStorage.setItem('app-table-page-size', value)
+              }
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">

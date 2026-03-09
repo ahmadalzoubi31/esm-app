@@ -1,6 +1,7 @@
 export interface CreateRoleDto {
   name: string
   description?: string
+  permissionIds?: string[]
 }
 
 export interface UpdateRoleDto extends Partial<CreateRoleDto> {}

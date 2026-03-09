@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { formatDate } from '@/lib/format-date'
 import {
   UserIcon,
   MailIcon,
@@ -250,11 +251,11 @@ export function TableCellViewer({ item }: { item: User }) {
               <div className="grid grid-cols-3 gap-4 text-xs">
                 <DetailItem
                   label="Created At"
-                  value={new Date(item.createdAt).toLocaleString()}
+                  value={formatDate(item.createdAt)}
                 />
                 <DetailItem
                   label="Updated At"
-                  value={new Date(item.updatedAt).toLocaleString()}
+                  value={formatDate(item.updatedAt)}
                 />
                 <DetailItem
                   label="Last Login"

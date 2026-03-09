@@ -3,9 +3,9 @@ import { api } from '@/lib/api'
 import { toast } from 'sonner'
 import { userKeys } from '../queries/users.query'
 import { BulkUpdateUserDto, CreateUserDto, UpdateUserDto } from '@/types'
+import { queryClient } from '../query-client'
 
 export function useCreateUserMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationKey: userKeys.detail('create'),
     mutationFn: async (data: CreateUserDto) => {
@@ -24,7 +24,6 @@ export function useCreateUserMutation() {
 }
 
 export function useUpdateUserMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationKey: userKeys.detail('update'),
     mutationFn: async ({
@@ -50,7 +49,6 @@ export function useUpdateUserMutation() {
 }
 
 export function useDeleteUserMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id: string) => api.users.remove(id),
     onSuccess: () => {
@@ -64,7 +62,6 @@ export function useDeleteUserMutation() {
 }
 
 export function useUpdateBulkUsersMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: BulkUpdateUserDto) => api.users.updateBulk(data),
     onSuccess: () => {
@@ -78,7 +75,6 @@ export function useUpdateBulkUsersMutation() {
 }
 
 export function useDeleteBulkUsersMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (ids: string[]) => api.users.deleteBulk(ids),
     onSuccess: () => {

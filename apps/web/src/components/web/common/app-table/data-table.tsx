@@ -77,6 +77,13 @@ export function AppDataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
+    initialState: {
+      pagination: {
+        pageSize: typeof window !== 'undefined' && localStorage.getItem('app-table-page-size')
+          ? Number(localStorage.getItem('app-table-page-size'))
+          : 10,
+      },
+    },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,

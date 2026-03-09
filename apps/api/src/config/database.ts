@@ -19,7 +19,7 @@ export const databaseConfig = registerAs('database', () =>
     // check the documentation for their differences: https://mikro-orm.io/docs/metadata-providers
     metadataProvider: TsMorphMetadataProvider,
     // enable debug mode to log SQL queries and discovery information
-    debug: false,
+    debug: true,
     // Enable extensions
     extensions: [Migrator, EntityGenerator, SeedManager],
 

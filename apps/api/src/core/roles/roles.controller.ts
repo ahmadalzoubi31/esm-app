@@ -226,4 +226,21 @@ export class RolesController {
       assignRolesDto.roleIds,
     );
   }
+
+  @Delete()
+  @ApiOperation({
+    summary: 'Delete bulk roles',
+    description: 'Delete bulk roles.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Bulk roles have been successfully deleted.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Delete, Role))
+  async deleteBulk(@Body() ids: string[]) {
+    return await this.rolesService.deleteBulk(ids);
+  }
 }

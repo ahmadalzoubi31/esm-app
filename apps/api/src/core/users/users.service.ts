@@ -105,7 +105,6 @@ export class UsersService {
     search?: string;
   }): Promise<User[]> {
     const query = { ...where };
-    console.log('🚀 ~ UsersService ~ findAll ~ query:', query);
 
     if (search) {
       query['$or'] = [
@@ -116,12 +115,10 @@ export class UsersService {
       ];
     }
 
-    console.log('🚀 ~ UsersService ~ findAll ~ search:', search);
-
     return await this.userRepository.find(query, {
       populate: ['roles', 'roles.permissions', 'permissions', 'groups'],
       limit: search ? 20 : undefined,
-      filters: { tenant: false },
+      filters: { tenant: true },
     });
   }
 

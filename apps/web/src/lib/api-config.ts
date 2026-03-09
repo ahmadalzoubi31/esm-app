@@ -33,6 +33,16 @@ export const API_ENDPOINTS = {
     BULK_DELETE: '/users',
     UPLOAD_AVATAR: '/users/avatar/upload',
   },
+  // Group endpoints
+  GROUPS: {
+    LIST: '/groups',
+    DETAIL: (id: string) => `/groups/${id}`,
+    CREATE: '/groups',
+    UPDATE: (id: string) => `/groups/${id}`,
+    DELETE: (id: string) => `/groups/${id}`,
+    BULK_UPDATE: '/groups',
+    BULK_DELETE: '/groups',
+  },
   // Role endpoints
   ROLES: {
     LIST: '/roles',
@@ -40,6 +50,7 @@ export const API_ENDPOINTS = {
     CREATE: '/roles',
     UPDATE: (id: string) => `/roles/${id}`,
     DELETE: (id: string) => `/roles/${id}`,
+    BULK_DELETE: '/roles',
     // Permissions
     PERMISSIONS: (id: string) => `/roles/${id}/permissions`,
     // User assignment

@@ -5,10 +5,7 @@ import { Tenant } from '../../tenants/entities/tenant.entity';
 
 @Filter({
   name: 'tenant',
-  cond: () => ({ tenant_id: '6da67552-faeb-4507-9f58-0161803afca8' }),
-  // cond: (args) => (args.bypass ? {} : { tenant_id: args.tenantId }),
-  // default: true, // Enabled by default!
-  default: true,
+  cond: (args) => (args.bypass ? {} : { tenant: { id: args.tenantId } }),
 })
 export abstract class TenantBaseEntity {
   @PrimaryKey()

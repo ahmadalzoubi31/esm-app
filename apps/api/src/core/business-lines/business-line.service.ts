@@ -40,30 +40,18 @@ export class BusinessLineService {
   }
 
   async findAll({ where }: { where?: any }): Promise<BusinessLine[]> {
-    return await this.businessLineRepository.find(where || {}, {
-      filters: { tenant: false },
-    });
+    return await this.businessLineRepository.find(where || {});
   }
 
   async findOne(id: string): Promise<BusinessLine | null> {
-    return await this.businessLineRepository.findOne(
-      { id },
-      {
-        filters: { tenant: false },
-      },
-    );
+    return await this.businessLineRepository.findOne({ id });
   }
 
   async update(
     id: string,
     updateBusinessLineDto: UpdateBusinessLineDto,
   ): Promise<BusinessLine> {
-    const businessLine = await this.businessLineRepository.findOneOrFail(
-      { id },
-      {
-        filters: { tenant: false },
-      },
-    );
+    const businessLine = await this.businessLineRepository.findOneOrFail({ id });
     this.businessLineRepository.assign(businessLine, updateBusinessLineDto);
     await this.businessLineRepository.getEntityManager().flush();
     return businessLine;

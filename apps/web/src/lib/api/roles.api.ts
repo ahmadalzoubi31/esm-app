@@ -70,6 +70,16 @@ export const rolesApi = {
   },
 
   /**
+   * Delete multiple users at once
+   */
+  deleteBulk: async (ids: string[]): Promise<ApiResponse<void>> => {
+    return await apiFetch<void>(API_ENDPOINTS.ROLES.BULK_DELETE, {
+      method: 'DELETE',
+      body: JSON.stringify(ids),
+    })
+  },
+
+  /**
    * Get permissions of a role
    */
   findPermissions: async (id: string): Promise<ApiResponse<Permission[]>> => {

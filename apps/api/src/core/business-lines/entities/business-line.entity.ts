@@ -1,11 +1,4 @@
-import {
-  BeforeCreate,
-  BeforeUpdate,
-  Property,
-  Entity,
-  PrimaryKey,
-} from '@mikro-orm/core';
-import { randomUUID } from 'crypto';
+import { BeforeCreate, BeforeUpdate, Property, Entity } from '@mikro-orm/core';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
 @Entity({ tableName: 'business_lines' })

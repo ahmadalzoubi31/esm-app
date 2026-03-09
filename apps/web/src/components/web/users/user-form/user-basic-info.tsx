@@ -164,6 +164,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
                     autoComplete="off"
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -187,6 +188,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
@@ -299,6 +301,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
                           />
                         </FieldContent>
                         {isInvalid && (
@@ -327,6 +330,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
                     />
                   </FieldContent>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -349,7 +353,11 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '')
+                        field.handleChange(value)
+                      }}
+                      aria-invalid={isInvalid}
                     />
                   </FieldContent>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}

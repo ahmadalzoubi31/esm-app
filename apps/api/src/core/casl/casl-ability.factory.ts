@@ -11,19 +11,19 @@ import { BusinessLine } from '../business-lines/entities/business-line.entity';
 
 type Subjects =
   | InferSubjects<
-      | typeof User
-      | typeof Role
-      | typeof Permission
-      | typeof Group
-      | typeof BusinessLine
-    >
+    | typeof User
+    | typeof Role
+    | typeof Permission
+    | typeof Group
+    | typeof BusinessLine
+  >
   | 'all';
 
 export type AppAbility = MongoAbility<[ACTION_ENUM, Subjects]>;
 
 @Injectable()
 export class CaslAbilityFactory {
-  constructor(private readonly permissionsService: PermissionsService) {}
+  constructor(private readonly permissionsService: PermissionsService) { }
 
   async createForUser(user: {
     userId: string;
@@ -46,11 +46,6 @@ export class CaslAbilityFactory {
       const action = perm.action as ACTION_ENUM;
       const subject = this.resolveSubject(perm.subject);
       const conditions = this.parseConditions(perm.conditions, user);
-
-      console.log(
-        '🚀 ~ CaslAbilityFactory ~ createForUser ~ conditions:',
-        conditions,
-      );
 
       if (conditions) {
         console.log({ conditions });

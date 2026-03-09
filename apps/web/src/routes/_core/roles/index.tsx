@@ -51,8 +51,7 @@ function RouteComponent() {
         )}
         renderToolbarActions={() => (
           <Button variant="default" size="sm" asChild>
-            <Link to="/roles">
-              {/* <Link to="/roles/create"> */}
+              <Link to="/roles/create">
               <PlusIcon className="mr-2 h-4 w-4" />
               Add New
             </Link>

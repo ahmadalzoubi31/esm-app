@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
+import { formatDate } from '@/lib/format-date'
 import {
   LockIcon,
   TagIcon,
@@ -111,11 +112,11 @@ export function TableCellViewer({ item }: { item: Permission }) {
                 />
                 <DetailItem
                   label="Created At"
-                  value={new Date(item.createdAt).toLocaleString()}
+                  value={formatDate(item.createdAt)}
                 />
                 <DetailItem
                   label="Updated At"
-                  value={new Date(item.updatedAt).toLocaleString()}
+                  value={formatDate(item.updatedAt)}
                 />
               </div>
             </section>

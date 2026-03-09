@@ -55,7 +55,7 @@ const nav_items = {
         },
         {
           title: 'Groups',
-          url: '#',
+          url: '/groups',
         },
         {
           title: 'Departments',
@@ -112,7 +112,7 @@ const nav_items = {
       items: [
         {
           title: 'General',
-          url: '#',
+          url: '/settings',
         },
         {
           title: 'LDAP Management',

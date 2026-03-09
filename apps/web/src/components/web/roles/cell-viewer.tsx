@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Role } from '@/types'
 import { useRolePermissionsQuery } from '@/lib/queries'
+import { formatDate } from '@/lib/format-date'
 import {
   Drawer,
   DrawerClose,
@@ -138,11 +139,11 @@ export function TableCellViewer({ item }: { item: Role }) {
               <div className="grid grid-cols-2 gap-4 text-xs">
                 <DetailItem
                   label="Created At"
-                  value={new Date(item.createdAt).toLocaleString()}
+                  value={formatDate(item.createdAt)}
                 />
                 <DetailItem
                   label="Updated At"
-                  value={new Date(item.updatedAt).toLocaleString()}
+                  value={formatDate(item.updatedAt)}
                 />
               </div>
             </section>
@@ -152,7 +153,7 @@ export function TableCellViewer({ item }: { item: Role }) {
         <DrawerFooter className="border-t pt-4">
           <div className="flex gap-2">
             <Button className="flex-1" asChild>
-              <Link to={`/roles`} params={{ id: item.id }}>
+              <Link to={'/roles/$roleId'} params={{ roleId: item.id }}>
                 Edit Role
               </Link>
             </Button>

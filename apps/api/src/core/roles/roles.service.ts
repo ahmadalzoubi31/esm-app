@@ -23,6 +23,8 @@ export class RolesService {
   ) {}
 
   async create(createRoleDto: CreateRoleDto): Promise<Role> {
+    const { permissionIds, ...roleData } = createRoleDto;
+
     // 1: Get EntityManager
     const em = this.roleRepository.getEntityManager();
 
@@ -35,12 +37,18 @@ export class RolesService {
     // 3: Create role
     const role = this.roleRepository.create({
       key: '', // auto generate on DB level
-      ...createRoleDto,
+      ...roleData,
       tenant: tenantRef,
     });
 
-    // 4. Save role and return it
+    // 4. Save role
     await this.roleRepository.getEntityManager().persist(role).flush();
+
+    // 5. Assign permissions if present
+    if (permissionIds && permissionIds.length > 0) {
+      await this.assignPermissions(role.id as string, permissionIds);
+    }
+
     return role;
   }
 
@@ -74,7 +82,7 @@ export class RolesService {
 
   async findPermissions(id: string): Promise<Permission[]> {
     return await this.permissionsService.findAll({
-      where: { roles: { id }, filters: { tenant: false } },
+      where: { roles: { id } },
     });
   }
 
@@ -95,7 +103,7 @@ export class RolesService {
 
     // 3. Find Permissions from database using permissionIds
     const permissions = await this.permissionsService.findAll({
-      where: { id: { $in: permissionIds }, filters: { tenant: false } },
+      where: { id: { $in: permissionIds } },
     });
 
     // 4. Check if all permissions exist, if not throw error
@@ -159,7 +167,6 @@ export class RolesService {
 
     // 3. Assign roles to user
     await user.roles.loadItems();
-    roles.forEach((role) => user.roles.add(role));
 
     // 4. Save and return
     await this.roleRepository.getEntityManager().flush();
@@ -181,10 +188,13 @@ export class RolesService {
     const rolesToRemove = user.roles
       .getItems()
       .filter((r) => roleIds.includes(r.id));
-    rolesToRemove.forEach((role) => user.roles.remove(role));
 
     // 3. Save and return
     await this.roleRepository.getEntityManager().flush();
     return true;
+  }
+
+  async deleteBulk(ids: string[]): Promise<number> {
+    return await this.roleRepository.nativeDelete({ id: { $in: ids } });
   }
 }

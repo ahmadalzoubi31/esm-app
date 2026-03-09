@@ -13,7 +13,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { toast } from 'sonner'
 
 interface UsersTableSelectionActionsProps<TData> {
   table: Table<TData>
@@ -28,11 +27,7 @@ export function UsersTableSelectionActions<TData>({
   const handleDelete = async () => {
     const selectedRows = table.getSelectedRowModel().rows
     const ids = selectedRows.map((row) => row.original.id)
-    toast.promise(deleteBulkMutation.mutateAsync(ids), {
-      loading: 'Deleting users...',
-      success: 'Users deleted successfully',
-      error: 'Failed to delete users',
-    })
+    await deleteBulkMutation.mutateAsync(ids)
     table.resetRowSelection()
   }
 
@@ -49,16 +44,18 @@ export function UsersTableSelectionActions<TData>({
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete
-              <span className="font-medium">{selectedCount}</span> selected user
-              {selectedCount !== 1 ? 's' : ''} and remove their data from our
-              servers.
+              This action cannot be undone. This will permanently delete{' '}
+              <span className="font-medium text-destructive">
+                {selectedCount}
+              </span>{' '}
+              selected user{selectedCount !== 1 ? 's' : ''} and remove their
+              data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-red-600 text-destructive-foreground hover:bg-red-700"
               onClick={handleDelete}
             >
               Delete

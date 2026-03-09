@@ -28,11 +28,11 @@ export class Group extends TenantBaseEntity {
   @ManyToOne(() => User, { nullable: true, fieldName: 'teamLeaderId' })
   teamLeader?: User;
 
-  @Property()
-  businessLineKey!: string;
+  @Property({ nullable: true })
+  businessLineKey?: string;
 
-  @ManyToOne(() => BusinessLine, { fieldName: 'businessLineId' })
-  businessLine!: BusinessLine;
+  @ManyToOne(() => BusinessLine, { fieldName: 'businessLineId', nullable: true })
+  businessLine?: BusinessLine;
 
   @ManyToMany(() => Role, (role) => role.groups)
   roles = new Collection<Role>(this);

@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { VersioningType } from '@nestjs/common';
@@ -10,6 +10,7 @@ import requestID from 'express-request-id';
 import cookieParser from 'cookie-parser';
 import { Logger } from '@nestjs/common';
 import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
+import { EntityManager } from '@mikro-orm/core';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -47,7 +48,7 @@ async function bootstrap() {
   );
 
   // ## Global Interceptors ##
-  app.useGlobalInterceptors(new LoggingInterceptor());
+  // app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   // ## exception filter ##

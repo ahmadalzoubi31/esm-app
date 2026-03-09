@@ -13,8 +13,9 @@ import { databaseConfig, jwtConfig, serverConfig } from './config';
 import { CoreModule } from './core/core.module';
 import { EsmModule } from './esm/esm.module';
 import { TenantsModule } from './tenants/tenants.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
+import { EntityManager } from '@mikro-orm/core';
 
 @Module({
   imports: [
@@ -33,12 +34,11 @@ import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
     }),
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TenantInterceptor,
-    },
-  ],
+  providers: [AppService, {
+    provide: APP_INTERCEPTOR,
+    useClass: TenantInterceptor,
+  }],
 })
-export class AppModule {}
+export class AppModule {
+
+}

@@ -62,6 +62,12 @@ export async function apiFetch<T>(
       'success' in body &&
       !body.success
     ) {
+      // if the error code is 401
+      if (res.status === 401) {
+        // redirect to login page
+        window.location.href = '/session-timeout'
+      }
+
       throw new ApiError(body as ApiErrorResponse)
     }
 

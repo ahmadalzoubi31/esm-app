@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import type {
   CreateRoleDto,
@@ -8,9 +8,9 @@ import type {
 } from '@/types'
 import { toast } from 'sonner'
 import { roleKeys } from '../queries/roles.query'
+import { queryClient } from '../query-client'
 
 export function useCreateRoleMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: CreateRoleDto) => api.roles.create(data),
     onSuccess: () => {
@@ -24,7 +24,6 @@ export function useCreateRoleMutation() {
 }
 
 export function useUpdateRoleMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateRoleDto }) =>
       api.roles.update(id, data),
@@ -40,7 +39,6 @@ export function useUpdateRoleMutation() {
 }
 
 export function useDeleteRoleMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id: string) => api.roles.remove(id),
     onSuccess: () => {
@@ -54,7 +52,6 @@ export function useDeleteRoleMutation() {
 }
 
 export function useAssignPermissionsMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: AssignPermissionsDto }) =>
       api.roles.assignPermissions(id, data),
@@ -73,7 +70,6 @@ export function useAssignPermissionsMutation() {
 }
 
 export function useRemovePermissionsMutation() {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: AssignPermissionsDto }) =>
       api.roles.removePermissions(id, data),
@@ -115,6 +111,19 @@ export function useRemoveRolesFromUserMutation() {
     },
     onError: () => {
       toast.error('Failed to remove roles from user')
+    },
+  })
+}
+
+export function useDeleteBulkRolesMutation() {
+  return useMutation({
+    mutationFn: (ids: string[]) => api.roles.deleteBulk(ids),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: roleKeys.lists() })
+      toast.success('Roles deleted successfully')
+    },
+    onError: () => {
+      toast.error('Failed to delete users')
     },
   })
 }

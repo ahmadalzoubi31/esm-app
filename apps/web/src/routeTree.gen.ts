@@ -14,12 +14,18 @@ import { Route as CoreRouteRouteImport } from './routes/_core/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CoreUsersIndexRouteImport } from './routes/_core/users/index'
+import { Route as CoreSettingsIndexRouteImport } from './routes/_core/settings/index'
 import { Route as CoreRolesIndexRouteImport } from './routes/_core/roles/index'
 import { Route as CorePermissionsIndexRouteImport } from './routes/_core/permissions/index'
+import { Route as CoreGroupsIndexRouteImport } from './routes/_core/groups/index'
 import { Route as CoreDashboardIndexRouteImport } from './routes/_core/dashboard/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as CoreUsersCreateRouteImport } from './routes/_core/users/create'
 import { Route as CoreUsersUserIdRouteImport } from './routes/_core/users/$userId'
+import { Route as CoreRolesCreateRouteImport } from './routes/_core/roles/create'
+import { Route as CoreRolesRoleIdRouteImport } from './routes/_core/roles/$roleId'
+import { Route as CoreGroupsCreateRouteImport } from './routes/_core/groups/create'
+import { Route as CoreGroupsGroupIdRouteImport } from './routes/_core/groups/$groupId'
 import { Route as CoreSettingsLdapIndexRouteImport } from './routes/_core/settings/ldap/index'
 
 const SessionTimeoutRoute = SessionTimeoutRouteImport.update({
@@ -45,6 +51,11 @@ const CoreUsersIndexRoute = CoreUsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => CoreRouteRoute,
 } as any)
+const CoreSettingsIndexRoute = CoreSettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
 const CoreRolesIndexRoute = CoreRolesIndexRouteImport.update({
   id: '/roles/',
   path: '/roles/',
@@ -53,6 +64,11 @@ const CoreRolesIndexRoute = CoreRolesIndexRouteImport.update({
 const CorePermissionsIndexRoute = CorePermissionsIndexRouteImport.update({
   id: '/permissions/',
   path: '/permissions/',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
+const CoreGroupsIndexRoute = CoreGroupsIndexRouteImport.update({
+  id: '/groups/',
+  path: '/groups/',
   getParentRoute: () => CoreRouteRoute,
 } as any)
 const CoreDashboardIndexRoute = CoreDashboardIndexRouteImport.update({
@@ -75,6 +91,26 @@ const CoreUsersUserIdRoute = CoreUsersUserIdRouteImport.update({
   path: '/users/$userId',
   getParentRoute: () => CoreRouteRoute,
 } as any)
+const CoreRolesCreateRoute = CoreRolesCreateRouteImport.update({
+  id: '/roles/create',
+  path: '/roles/create',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
+const CoreRolesRoleIdRoute = CoreRolesRoleIdRouteImport.update({
+  id: '/roles/$roleId',
+  path: '/roles/$roleId',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
+const CoreGroupsCreateRoute = CoreGroupsCreateRouteImport.update({
+  id: '/groups/create',
+  path: '/groups/create',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
+const CoreGroupsGroupIdRoute = CoreGroupsGroupIdRouteImport.update({
+  id: '/groups/$groupId',
+  path: '/groups/$groupId',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
 const CoreSettingsLdapIndexRoute = CoreSettingsLdapIndexRouteImport.update({
   id: '/settings/ldap/',
   path: '/settings/ldap/',
@@ -84,24 +120,36 @@ const CoreSettingsLdapIndexRoute = CoreSettingsLdapIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/session-timeout': typeof SessionTimeoutRoute
+  '/groups/$groupId': typeof CoreGroupsGroupIdRoute
+  '/groups/create': typeof CoreGroupsCreateRoute
+  '/roles/$roleId': typeof CoreRolesRoleIdRoute
+  '/roles/create': typeof CoreRolesCreateRoute
   '/users/$userId': typeof CoreUsersUserIdRoute
   '/users/create': typeof CoreUsersCreateRoute
   '/login/': typeof AuthLoginIndexRoute
   '/dashboard/': typeof CoreDashboardIndexRoute
+  '/groups/': typeof CoreGroupsIndexRoute
   '/permissions/': typeof CorePermissionsIndexRoute
   '/roles/': typeof CoreRolesIndexRoute
+  '/settings/': typeof CoreSettingsIndexRoute
   '/users/': typeof CoreUsersIndexRoute
   '/settings/ldap/': typeof CoreSettingsLdapIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/session-timeout': typeof SessionTimeoutRoute
+  '/groups/$groupId': typeof CoreGroupsGroupIdRoute
+  '/groups/create': typeof CoreGroupsCreateRoute
+  '/roles/$roleId': typeof CoreRolesRoleIdRoute
+  '/roles/create': typeof CoreRolesCreateRoute
   '/users/$userId': typeof CoreUsersUserIdRoute
   '/users/create': typeof CoreUsersCreateRoute
   '/login': typeof AuthLoginIndexRoute
   '/dashboard': typeof CoreDashboardIndexRoute
+  '/groups': typeof CoreGroupsIndexRoute
   '/permissions': typeof CorePermissionsIndexRoute
   '/roles': typeof CoreRolesIndexRoute
+  '/settings': typeof CoreSettingsIndexRoute
   '/users': typeof CoreUsersIndexRoute
   '/settings/ldap': typeof CoreSettingsLdapIndexRoute
 }
@@ -111,12 +159,18 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_core': typeof CoreRouteRouteWithChildren
   '/session-timeout': typeof SessionTimeoutRoute
+  '/_core/groups/$groupId': typeof CoreGroupsGroupIdRoute
+  '/_core/groups/create': typeof CoreGroupsCreateRoute
+  '/_core/roles/$roleId': typeof CoreRolesRoleIdRoute
+  '/_core/roles/create': typeof CoreRolesCreateRoute
   '/_core/users/$userId': typeof CoreUsersUserIdRoute
   '/_core/users/create': typeof CoreUsersCreateRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_core/dashboard/': typeof CoreDashboardIndexRoute
+  '/_core/groups/': typeof CoreGroupsIndexRoute
   '/_core/permissions/': typeof CorePermissionsIndexRoute
   '/_core/roles/': typeof CoreRolesIndexRoute
+  '/_core/settings/': typeof CoreSettingsIndexRoute
   '/_core/users/': typeof CoreUsersIndexRoute
   '/_core/settings/ldap/': typeof CoreSettingsLdapIndexRoute
 }
@@ -125,24 +179,36 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/session-timeout'
+    | '/groups/$groupId'
+    | '/groups/create'
+    | '/roles/$roleId'
+    | '/roles/create'
     | '/users/$userId'
     | '/users/create'
     | '/login/'
     | '/dashboard/'
+    | '/groups/'
     | '/permissions/'
     | '/roles/'
+    | '/settings/'
     | '/users/'
     | '/settings/ldap/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/session-timeout'
+    | '/groups/$groupId'
+    | '/groups/create'
+    | '/roles/$roleId'
+    | '/roles/create'
     | '/users/$userId'
     | '/users/create'
     | '/login'
     | '/dashboard'
+    | '/groups'
     | '/permissions'
     | '/roles'
+    | '/settings'
     | '/users'
     | '/settings/ldap'
   id:
@@ -151,12 +217,18 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/_core'
     | '/session-timeout'
+    | '/_core/groups/$groupId'
+    | '/_core/groups/create'
+    | '/_core/roles/$roleId'
+    | '/_core/roles/create'
     | '/_core/users/$userId'
     | '/_core/users/create'
     | '/_auth/login/'
     | '/_core/dashboard/'
+    | '/_core/groups/'
     | '/_core/permissions/'
     | '/_core/roles/'
+    | '/_core/settings/'
     | '/_core/users/'
     | '/_core/settings/ldap/'
   fileRoutesById: FileRoutesById
@@ -205,6 +277,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoreUsersIndexRouteImport
       parentRoute: typeof CoreRouteRoute
     }
+    '/_core/settings/': {
+      id: '/_core/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof CoreSettingsIndexRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
     '/_core/roles/': {
       id: '/_core/roles/'
       path: '/roles'
@@ -217,6 +296,13 @@ declare module '@tanstack/react-router' {
       path: '/permissions'
       fullPath: '/permissions/'
       preLoaderRoute: typeof CorePermissionsIndexRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
+    '/_core/groups/': {
+      id: '/_core/groups/'
+      path: '/groups'
+      fullPath: '/groups/'
+      preLoaderRoute: typeof CoreGroupsIndexRouteImport
       parentRoute: typeof CoreRouteRoute
     }
     '/_core/dashboard/': {
@@ -247,6 +333,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoreUsersUserIdRouteImport
       parentRoute: typeof CoreRouteRoute
     }
+    '/_core/roles/create': {
+      id: '/_core/roles/create'
+      path: '/roles/create'
+      fullPath: '/roles/create'
+      preLoaderRoute: typeof CoreRolesCreateRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
+    '/_core/roles/$roleId': {
+      id: '/_core/roles/$roleId'
+      path: '/roles/$roleId'
+      fullPath: '/roles/$roleId'
+      preLoaderRoute: typeof CoreRolesRoleIdRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
+    '/_core/groups/create': {
+      id: '/_core/groups/create'
+      path: '/groups/create'
+      fullPath: '/groups/create'
+      preLoaderRoute: typeof CoreGroupsCreateRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
+    '/_core/groups/$groupId': {
+      id: '/_core/groups/$groupId'
+      path: '/groups/$groupId'
+      fullPath: '/groups/$groupId'
+      preLoaderRoute: typeof CoreGroupsGroupIdRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
     '/_core/settings/ldap/': {
       id: '/_core/settings/ldap/'
       path: '/settings/ldap'
@@ -270,21 +384,33 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface CoreRouteRouteChildren {
+  CoreGroupsGroupIdRoute: typeof CoreGroupsGroupIdRoute
+  CoreGroupsCreateRoute: typeof CoreGroupsCreateRoute
+  CoreRolesRoleIdRoute: typeof CoreRolesRoleIdRoute
+  CoreRolesCreateRoute: typeof CoreRolesCreateRoute
   CoreUsersUserIdRoute: typeof CoreUsersUserIdRoute
   CoreUsersCreateRoute: typeof CoreUsersCreateRoute
   CoreDashboardIndexRoute: typeof CoreDashboardIndexRoute
+  CoreGroupsIndexRoute: typeof CoreGroupsIndexRoute
   CorePermissionsIndexRoute: typeof CorePermissionsIndexRoute
   CoreRolesIndexRoute: typeof CoreRolesIndexRoute
+  CoreSettingsIndexRoute: typeof CoreSettingsIndexRoute
   CoreUsersIndexRoute: typeof CoreUsersIndexRoute
   CoreSettingsLdapIndexRoute: typeof CoreSettingsLdapIndexRoute
 }
 
 const CoreRouteRouteChildren: CoreRouteRouteChildren = {
+  CoreGroupsGroupIdRoute: CoreGroupsGroupIdRoute,
+  CoreGroupsCreateRoute: CoreGroupsCreateRoute,
+  CoreRolesRoleIdRoute: CoreRolesRoleIdRoute,
+  CoreRolesCreateRoute: CoreRolesCreateRoute,
   CoreUsersUserIdRoute: CoreUsersUserIdRoute,
   CoreUsersCreateRoute: CoreUsersCreateRoute,
   CoreDashboardIndexRoute: CoreDashboardIndexRoute,
+  CoreGroupsIndexRoute: CoreGroupsIndexRoute,
   CorePermissionsIndexRoute: CorePermissionsIndexRoute,
   CoreRolesIndexRoute: CoreRolesIndexRoute,
+  CoreSettingsIndexRoute: CoreSettingsIndexRoute,
   CoreUsersIndexRoute: CoreUsersIndexRoute,
   CoreSettingsLdapIndexRoute: CoreSettingsLdapIndexRoute,
 }

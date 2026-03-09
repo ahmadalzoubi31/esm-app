@@ -122,4 +122,23 @@ export class GroupsController {
   async remove(@Param('id') id: string) {
     return await this.groupsService.remove(id);
   }
+
+  @Delete()
+  @ApiOperation({
+    summary: 'Delete bulk groups',
+    description: 'Delete bulk groups.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Bulk users have been successfully deleted.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(ACTION_ENUM.Delete, Group),
+  )
+  async deleteBulk(@Body() ids: string[]) {
+    return await this.groupsService.deleteBulk(ids);
+  }
 }
