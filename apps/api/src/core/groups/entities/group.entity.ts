@@ -12,6 +12,7 @@ import { User } from '../../users/entities/user.entity';
 import { Role } from '../../roles/entities/role.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { randomUUID } from 'crypto';
+import { Department } from '../../departments/entities/department.entity';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
 @Entity({ tableName: 'groups' })
@@ -32,6 +33,9 @@ export class Group extends TenantBaseEntity {
     fieldName: 'businessLineId',
   })
   businessLine: BusinessLine;
+
+  @ManyToOne(() => Department, { nullable: true })
+  department?: Department;
 
   @ManyToMany(() => Role, (role) => role.groups)
   roles = new Collection<Role>(this);

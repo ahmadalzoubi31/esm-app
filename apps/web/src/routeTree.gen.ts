@@ -18,6 +18,7 @@ import { Route as CoreSettingsIndexRouteImport } from './routes/_core/settings/i
 import { Route as CoreRolesIndexRouteImport } from './routes/_core/roles/index'
 import { Route as CorePermissionsIndexRouteImport } from './routes/_core/permissions/index'
 import { Route as CoreGroupsIndexRouteImport } from './routes/_core/groups/index'
+import { Route as CoreDepartmentsIndexRouteImport } from './routes/_core/departments/index'
 import { Route as CoreDashboardIndexRouteImport } from './routes/_core/dashboard/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as CoreUsersCreateRouteImport } from './routes/_core/users/create'
@@ -26,6 +27,8 @@ import { Route as CoreRolesCreateRouteImport } from './routes/_core/roles/create
 import { Route as CoreRolesRoleIdRouteImport } from './routes/_core/roles/$roleId'
 import { Route as CoreGroupsCreateRouteImport } from './routes/_core/groups/create'
 import { Route as CoreGroupsGroupIdRouteImport } from './routes/_core/groups/$groupId'
+import { Route as CoreDepartmentsCreateRouteImport } from './routes/_core/departments/create'
+import { Route as CoreDepartmentsDepartmentIdRouteImport } from './routes/_core/departments/$departmentId'
 import { Route as CoreSettingsLdapIndexRouteImport } from './routes/_core/settings/ldap/index'
 
 const SessionTimeoutRoute = SessionTimeoutRouteImport.update({
@@ -71,6 +74,11 @@ const CoreGroupsIndexRoute = CoreGroupsIndexRouteImport.update({
   path: '/groups/',
   getParentRoute: () => CoreRouteRoute,
 } as any)
+const CoreDepartmentsIndexRoute = CoreDepartmentsIndexRouteImport.update({
+  id: '/departments/',
+  path: '/departments/',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
 const CoreDashboardIndexRoute = CoreDashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
@@ -111,6 +119,17 @@ const CoreGroupsGroupIdRoute = CoreGroupsGroupIdRouteImport.update({
   path: '/groups/$groupId',
   getParentRoute: () => CoreRouteRoute,
 } as any)
+const CoreDepartmentsCreateRoute = CoreDepartmentsCreateRouteImport.update({
+  id: '/departments/create',
+  path: '/departments/create',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
+const CoreDepartmentsDepartmentIdRoute =
+  CoreDepartmentsDepartmentIdRouteImport.update({
+    id: '/departments/$departmentId',
+    path: '/departments/$departmentId',
+    getParentRoute: () => CoreRouteRoute,
+  } as any)
 const CoreSettingsLdapIndexRoute = CoreSettingsLdapIndexRouteImport.update({
   id: '/settings/ldap/',
   path: '/settings/ldap/',
@@ -120,6 +139,8 @@ const CoreSettingsLdapIndexRoute = CoreSettingsLdapIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/session-timeout': typeof SessionTimeoutRoute
+  '/departments/$departmentId': typeof CoreDepartmentsDepartmentIdRoute
+  '/departments/create': typeof CoreDepartmentsCreateRoute
   '/groups/$groupId': typeof CoreGroupsGroupIdRoute
   '/groups/create': typeof CoreGroupsCreateRoute
   '/roles/$roleId': typeof CoreRolesRoleIdRoute
@@ -128,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/users/create': typeof CoreUsersCreateRoute
   '/login/': typeof AuthLoginIndexRoute
   '/dashboard/': typeof CoreDashboardIndexRoute
+  '/departments/': typeof CoreDepartmentsIndexRoute
   '/groups/': typeof CoreGroupsIndexRoute
   '/permissions/': typeof CorePermissionsIndexRoute
   '/roles/': typeof CoreRolesIndexRoute
@@ -138,6 +160,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/session-timeout': typeof SessionTimeoutRoute
+  '/departments/$departmentId': typeof CoreDepartmentsDepartmentIdRoute
+  '/departments/create': typeof CoreDepartmentsCreateRoute
   '/groups/$groupId': typeof CoreGroupsGroupIdRoute
   '/groups/create': typeof CoreGroupsCreateRoute
   '/roles/$roleId': typeof CoreRolesRoleIdRoute
@@ -146,6 +170,7 @@ export interface FileRoutesByTo {
   '/users/create': typeof CoreUsersCreateRoute
   '/login': typeof AuthLoginIndexRoute
   '/dashboard': typeof CoreDashboardIndexRoute
+  '/departments': typeof CoreDepartmentsIndexRoute
   '/groups': typeof CoreGroupsIndexRoute
   '/permissions': typeof CorePermissionsIndexRoute
   '/roles': typeof CoreRolesIndexRoute
@@ -159,6 +184,8 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_core': typeof CoreRouteRouteWithChildren
   '/session-timeout': typeof SessionTimeoutRoute
+  '/_core/departments/$departmentId': typeof CoreDepartmentsDepartmentIdRoute
+  '/_core/departments/create': typeof CoreDepartmentsCreateRoute
   '/_core/groups/$groupId': typeof CoreGroupsGroupIdRoute
   '/_core/groups/create': typeof CoreGroupsCreateRoute
   '/_core/roles/$roleId': typeof CoreRolesRoleIdRoute
@@ -167,6 +194,7 @@ export interface FileRoutesById {
   '/_core/users/create': typeof CoreUsersCreateRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_core/dashboard/': typeof CoreDashboardIndexRoute
+  '/_core/departments/': typeof CoreDepartmentsIndexRoute
   '/_core/groups/': typeof CoreGroupsIndexRoute
   '/_core/permissions/': typeof CorePermissionsIndexRoute
   '/_core/roles/': typeof CoreRolesIndexRoute
@@ -179,6 +207,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/session-timeout'
+    | '/departments/$departmentId'
+    | '/departments/create'
     | '/groups/$groupId'
     | '/groups/create'
     | '/roles/$roleId'
@@ -187,6 +217,7 @@ export interface FileRouteTypes {
     | '/users/create'
     | '/login/'
     | '/dashboard/'
+    | '/departments/'
     | '/groups/'
     | '/permissions/'
     | '/roles/'
@@ -197,6 +228,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/session-timeout'
+    | '/departments/$departmentId'
+    | '/departments/create'
     | '/groups/$groupId'
     | '/groups/create'
     | '/roles/$roleId'
@@ -205,6 +238,7 @@ export interface FileRouteTypes {
     | '/users/create'
     | '/login'
     | '/dashboard'
+    | '/departments'
     | '/groups'
     | '/permissions'
     | '/roles'
@@ -217,6 +251,8 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/_core'
     | '/session-timeout'
+    | '/_core/departments/$departmentId'
+    | '/_core/departments/create'
     | '/_core/groups/$groupId'
     | '/_core/groups/create'
     | '/_core/roles/$roleId'
@@ -225,6 +261,7 @@ export interface FileRouteTypes {
     | '/_core/users/create'
     | '/_auth/login/'
     | '/_core/dashboard/'
+    | '/_core/departments/'
     | '/_core/groups/'
     | '/_core/permissions/'
     | '/_core/roles/'
@@ -305,6 +342,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoreGroupsIndexRouteImport
       parentRoute: typeof CoreRouteRoute
     }
+    '/_core/departments/': {
+      id: '/_core/departments/'
+      path: '/departments'
+      fullPath: '/departments/'
+      preLoaderRoute: typeof CoreDepartmentsIndexRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
     '/_core/dashboard/': {
       id: '/_core/dashboard/'
       path: '/dashboard'
@@ -361,6 +405,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoreGroupsGroupIdRouteImport
       parentRoute: typeof CoreRouteRoute
     }
+    '/_core/departments/create': {
+      id: '/_core/departments/create'
+      path: '/departments/create'
+      fullPath: '/departments/create'
+      preLoaderRoute: typeof CoreDepartmentsCreateRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
+    '/_core/departments/$departmentId': {
+      id: '/_core/departments/$departmentId'
+      path: '/departments/$departmentId'
+      fullPath: '/departments/$departmentId'
+      preLoaderRoute: typeof CoreDepartmentsDepartmentIdRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
     '/_core/settings/ldap/': {
       id: '/_core/settings/ldap/'
       path: '/settings/ldap'
@@ -384,6 +442,8 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface CoreRouteRouteChildren {
+  CoreDepartmentsDepartmentIdRoute: typeof CoreDepartmentsDepartmentIdRoute
+  CoreDepartmentsCreateRoute: typeof CoreDepartmentsCreateRoute
   CoreGroupsGroupIdRoute: typeof CoreGroupsGroupIdRoute
   CoreGroupsCreateRoute: typeof CoreGroupsCreateRoute
   CoreRolesRoleIdRoute: typeof CoreRolesRoleIdRoute
@@ -391,6 +451,7 @@ interface CoreRouteRouteChildren {
   CoreUsersUserIdRoute: typeof CoreUsersUserIdRoute
   CoreUsersCreateRoute: typeof CoreUsersCreateRoute
   CoreDashboardIndexRoute: typeof CoreDashboardIndexRoute
+  CoreDepartmentsIndexRoute: typeof CoreDepartmentsIndexRoute
   CoreGroupsIndexRoute: typeof CoreGroupsIndexRoute
   CorePermissionsIndexRoute: typeof CorePermissionsIndexRoute
   CoreRolesIndexRoute: typeof CoreRolesIndexRoute
@@ -400,6 +461,8 @@ interface CoreRouteRouteChildren {
 }
 
 const CoreRouteRouteChildren: CoreRouteRouteChildren = {
+  CoreDepartmentsDepartmentIdRoute: CoreDepartmentsDepartmentIdRoute,
+  CoreDepartmentsCreateRoute: CoreDepartmentsCreateRoute,
   CoreGroupsGroupIdRoute: CoreGroupsGroupIdRoute,
   CoreGroupsCreateRoute: CoreGroupsCreateRoute,
   CoreRolesRoleIdRoute: CoreRolesRoleIdRoute,
@@ -407,6 +470,7 @@ const CoreRouteRouteChildren: CoreRouteRouteChildren = {
   CoreUsersUserIdRoute: CoreUsersUserIdRoute,
   CoreUsersCreateRoute: CoreUsersCreateRoute,
   CoreDashboardIndexRoute: CoreDashboardIndexRoute,
+  CoreDepartmentsIndexRoute: CoreDepartmentsIndexRoute,
   CoreGroupsIndexRoute: CoreGroupsIndexRoute,
   CorePermissionsIndexRoute: CorePermissionsIndexRoute,
   CoreRolesIndexRoute: CoreRolesIndexRoute,

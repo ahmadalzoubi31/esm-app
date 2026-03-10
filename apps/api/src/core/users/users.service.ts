@@ -124,6 +124,7 @@ export class UsersService {
         'groups.roles',
         'groups.roles.permissions',
         'groups.permissions',
+        'department',
       ],
       limit: search ? 20 : undefined,
       filters: { tenant: true },
@@ -142,6 +143,7 @@ export class UsersService {
           'groups.roles',
           'groups.roles.permissions',
           'groups.permissions',
+          'department',
         ],
         filters: { tenant: false },
       },
@@ -160,6 +162,7 @@ export class UsersService {
           'groups.roles',
           'groups.roles.permissions',
           'groups.permissions',
+          'department',
         ],
         filters: { tenant: false },
       },
@@ -178,7 +181,7 @@ export class UsersService {
     const user = await this.userRepository.findOneOrFail(
       { id },
       {
-        populate: ['roles', 'permissions', 'groups'],
+        populate: ['roles', 'permissions', 'groups', 'department'],
         filters: { tenant: false },
       },
     );

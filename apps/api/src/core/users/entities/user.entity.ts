@@ -4,6 +4,7 @@ import {
   Property,
   Index,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   Collection,
   BeforeCreate,
@@ -15,6 +16,7 @@ import { Role } from '../../roles/entities/role.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { Group } from '../../groups/entities/group.entity';
 import { Service } from '../../../esm/catalog/services/entities/service.entity';
+import { Department } from '../../departments/entities/department.entity';
 import { hash } from 'argon2';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
@@ -40,8 +42,8 @@ export class User extends TenantBaseEntity {
   @Property()
   avatar?: string;
 
-  @Property()
-  department?: string;
+  @ManyToOne(() => Department, { nullable: true })
+  department?: Department;
 
   @Property()
   phone?: string;

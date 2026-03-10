@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { RoleBasicInfo } from '@/components/web/roles/role-form/role-basic-info'
 import { RolePermissions } from '@/components/web/roles/role-form/role-permissions'
+import { SideBarForm } from '@/components/web/roles/role-form/sidebar-form'
 import {
   useUpdateRoleMutation,
   useAssignPermissionsMutation,
@@ -113,34 +114,13 @@ function EditRolePage() {
             form.handleSubmit()
           }}
         >
-          <div className="grid grid-cols-1 gap-6 mx-auto pb-4">
-            <RoleBasicInfo form={form} />
-            <RolePermissions form={form} />
-          </div>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-4 mx-auto pb-4">
+            <div className="space-y-6 lg:col-span-3">
+              <RoleBasicInfo form={form} />
+              <RolePermissions form={form} />
+            </div>
 
-          <div className="sticky bottom-0 z-50 flex justify-end border-t bg-background/80 py-4 backdrop-blur-sm">
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-              children={([canSubmit, isSubmitting]) => {
-                const isPending =
-                  updateMutation.isPending ||
-                  assignPermsMutation.isPending ||
-                  removePermsMutation.isPending
-
-                return (
-                  <Button type="submit" disabled={!canSubmit || isPending}>
-                    {isSubmitting || isPending ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Saving...
-                      </>
-                    ) : (
-                      'Save Changes'
-                    )}
-                  </Button>
-                )
-              }}
-            />
+            <SideBarForm form={form} />
           </div>
         </form>
       </div>

@@ -941,6 +941,133 @@
           "default": "CURRENT_TIMESTAMP",
           "mappedType": "datetime"
         },
+        "code": {
+          "name": "code",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 255,
+          "mappedType": "string"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 255,
+          "mappedType": "string"
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 255,
+          "mappedType": "string"
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "true",
+          "mappedType": "boolean"
+        }
+      },
+      "name": "departments",
+      "schema": "public",
+      "indexes": [
+        {
+          "columnNames": [
+            "tenant_id"
+          ],
+          "composite": false,
+          "keyName": "departments_tenant_id_index",
+          "constraint": false,
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "departments_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "departments_tenant_id_foreign": {
+          "constraintName": "departments_tenant_id_foreign",
+          "columnNames": [
+            "tenant_id"
+          ],
+          "localTableName": "public.departments",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.tenants",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      },
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 255,
+          "mappedType": "string"
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 255,
+          "mappedType": "string"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "default": "CURRENT_TIMESTAMP",
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "default": "CURRENT_TIMESTAMP",
+          "mappedType": "datetime"
+        },
         "key": {
           "name": "key",
           "type": "varchar(255)",
@@ -1128,8 +1255,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "department": {
-          "name": "department",
+        "department_id": {
+          "name": "department_id",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -1288,6 +1415,19 @@
           ],
           "referencedTableName": "public.tenants",
           "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "users_department_id_foreign": {
+          "constraintName": "users_department_id_foreign",
+          "columnNames": [
+            "department_id"
+          ],
+          "localTableName": "public.users",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.departments",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       },
@@ -1733,6 +1873,16 @@
           "nullable": false,
           "length": 255,
           "mappedType": "string"
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 255,
+          "mappedType": "string"
         }
       },
       "name": "groups",
@@ -1797,6 +1947,19 @@
             "id"
           ],
           "referencedTableName": "public.business_lines",
+          "updateRule": "cascade"
+        },
+        "groups_department_id_foreign": {
+          "constraintName": "groups_department_id_foreign",
+          "columnNames": [
+            "department_id"
+          ],
+          "localTableName": "public.groups",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.departments",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       },

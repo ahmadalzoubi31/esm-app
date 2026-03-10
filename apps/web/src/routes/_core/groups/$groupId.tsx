@@ -16,9 +16,8 @@ import { GroupUsers } from '@/components/web/groups/group-form/group-users'
 import { SideBarForm } from '@/components/web/groups/group-form/sidebar-form'
 import { useGroupQuery } from '@/lib/queries/groups.query'
 import { useUpdateGroupMutation } from '@/lib/mutations/groups.mutation'
-import { GroupSchema, UpdateGroupSchema } from '@/schemas/group.schema'
+import { UpdateGroupSchema } from '@/schemas/group.schema'
 import { Group } from '@/types'
-import z from 'zod'
 
 export const Route = createFileRoute('/_core/groups/$groupId')({
   component: EditGroupPage,
@@ -81,10 +80,11 @@ function EditGroupForm({
       description: group.description,
       teamLeaderId: group.teamLeader?.id || '',
       businessLineId: group.businessLine?.id || '',
+      departmentId: (group as any).department?.id || '',
       roles: group.roles?.map((r) => r.id) || [],
       permissions: group.permissions?.map((p) => p.id) || [],
       users: group.users?.map((u) => u.id) || [],
-    } as z.infer<typeof GroupSchema>,
+    } as any, // Quick type assertion due to partial vs full schema matching in zod
     validators: {
       onSubmit: UpdateGroupSchema,
     },

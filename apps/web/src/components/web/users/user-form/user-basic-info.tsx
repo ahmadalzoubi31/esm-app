@@ -42,6 +42,7 @@ import { AuthSource, FormInstance } from '@/types'
 import { usersApi } from '@/lib/api/users.api'
 import { z } from 'zod'
 import { UserSchema } from '@/schemas/user.schema'
+import { DepartmentMenu } from '@/components/web/common/menus/department-menu'
 
 interface UserBasicInfoProps {
   form: FormInstance<z.infer<typeof UserSchema>>
@@ -324,15 +325,12 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel>Department</FieldLabel>
-                  <FieldContent>
-                    <Input
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                    />
-                  </FieldContent>
+                  <DepartmentMenu
+                    id={field.name}
+                    value={field.state.value}
+                    onChange={(val) => field.handleChange(val)}
+                    isInvalid={isInvalid}
+                  />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
               )

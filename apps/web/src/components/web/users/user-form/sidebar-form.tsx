@@ -19,10 +19,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { AuthSource } from '@/types'
 import { FieldError } from '@/components/ui/field'
-
-interface SideBarFormProps {
-  form: any
-}
+import { SideBarFormProps } from '@/types/form'
 
 export function SideBarForm({ form }: SideBarFormProps) {
   return (

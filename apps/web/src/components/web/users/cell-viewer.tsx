@@ -69,10 +69,7 @@ export function TableCellViewer({ item }: { item: User }) {
           {item.display_name || item.username}
         </Button>
       </DrawerTrigger>
-      <DrawerContent
-        className="h-[95vh] sm:h-auto sm:max-w-xl"
-        data-vaul-no-drag
-      >
+      <DrawerContent className="h-[95vh] sm:h-auto sm:max-w-xl">
         <DrawerHeader className="gap-1 border-b pb-4">
           <div className="flex items-center gap-2">
             <Avatar className="h-10 w-10 border">
@@ -155,7 +152,7 @@ export function TableCellViewer({ item }: { item: User }) {
                 <DetailItem label="First Name" value={item.first_name} />
                 <DetailItem label="Last Name" value={item.last_name} />
                 <DetailItem label="Display Name" value={item.display_name} />
-                <DetailItem label="Department" value={item.department} />
+                <DetailItem label="Department" value={typeof item.department === 'object' && item.department !== null ? (item.department as any).name : item.department} />
                 <DetailItem label="Phone" value={item.phone} />
                 <DetailItem label="Manager" value={item.manager} />
               </div>

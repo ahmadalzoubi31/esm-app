@@ -6,6 +6,7 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { CaslModule } from './casl/casl.module';
 import { BusinessLineModule } from './business-lines/business-line.module';
 import { GroupsModule } from './groups/groups.module';
+import { DepartmentsModule } from './departments/departments.module';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { GroupsModule } from './groups/groups.module';
     PermissionsModule,
     CaslModule,
     BusinessLineModule,
-    GroupsModule,
+    DepartmentsModule,
   ],
 })
 export class CoreModule {}

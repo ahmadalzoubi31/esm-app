@@ -59,7 +59,7 @@ const nav_items = {
         },
         {
           title: 'Departments',
-          url: '#',
+          url: '/departments',
         },
         {
           title: 'Roles',

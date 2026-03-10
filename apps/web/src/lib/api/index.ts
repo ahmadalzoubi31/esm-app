@@ -11,6 +11,7 @@ import { permissionsApi } from './permissions.api'
 import { ldapApi } from './ldap.api'
 import { groupsApi } from './groups.api'
 import { businessLinesApi } from './business-lines.api'
+import { departmentsApi } from './departments.api'
 
 /**
  * Unified API client
@@ -23,8 +24,9 @@ export const api = {
   roles: rolesApi,
   permissions: permissionsApi,
   ldap: ldapApi,
-  groups: groupsApi,
+    groups: groupsApi,
   businessLines: businessLinesApi,
+  departments: departmentsApi,
 }
 
 // Re-export individual modules for direct imports if needed
@@ -36,6 +38,7 @@ export { permissionsApi } from './permissions.api'
 export { ldapApi } from './ldap.api'
 export { groupsApi } from './groups.api'
 export { businessLinesApi } from './business-lines.api'
+export { departmentsApi } from './departments.api'
 
 // Re-export the core client for advanced use cases
 export { apiFetch } from '../api-client'

@@ -1,13 +1,7 @@
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+
 import {
   Card,
   CardContent,
@@ -38,6 +32,7 @@ import { z } from 'zod'
 import { GroupSchema } from '@/schemas/group.schema'
 import { GroupTypeMenu } from '@/components/web/common/menus/group-type-menu'
 import { BusinessLineMenu } from '@/components/web/common/menus/business-line-menu'
+import { DepartmentMenu } from '@/components/web/common/menus/department-menu'
 
 interface GroupBasicInfoProps {
   form: FormInstance<z.infer<typeof GroupSchema>>
@@ -263,6 +258,27 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Business Line</FieldLabel>
                   <BusinessLineMenu
+                    id={field.name}
+                    value={field.state.value}
+                    onChange={(val) => field.handleChange(val)}
+                    isInvalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              )
+            }}
+          />
+
+          {/* Department ID */}
+          <form.Field
+            name="departmentId"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Department</FieldLabel>
+                  <DepartmentMenu
                     id={field.name}
                     value={field.state.value}
                     onChange={(val) => field.handleChange(val)}

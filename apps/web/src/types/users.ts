@@ -1,6 +1,7 @@
 import { Permission } from './permissions'
 import { Role } from './roles'
 import { Group } from './groups'
+import { Department } from './department'
 
 export const AuthSource = {
   LOCAL: 'local',
@@ -18,7 +19,7 @@ export interface User {
   display_name?: string
   avatar?: string
   auth_source: AuthSource
-  department?: string
+  department?: Department
   phone?: string
   manager?: string
   password?: string

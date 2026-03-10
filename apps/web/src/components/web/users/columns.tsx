@@ -93,9 +93,10 @@ export const columns: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => {
       const department = row.original.department
-      return department ? (
+      const displayDepartment = department?.name
+      return displayDepartment ? (
         <div className="flex items-center gap-2">
-          <span className="text-sm">{department}</span>
+          <span className="text-sm">{displayDepartment}</span>
         </div>
       ) : (
         <span className="text-muted-foreground text-sm italic">

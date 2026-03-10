@@ -27,6 +27,7 @@ function CreateGroupPage() {
       description: '',
       teamLeaderId: '',
       businessLineId: '',
+      departmentId: '',
       roles: [],
       permissions: [],
       users: [],

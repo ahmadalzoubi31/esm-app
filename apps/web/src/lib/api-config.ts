@@ -51,6 +51,15 @@ export const API_ENDPOINTS = {
     UPDATE: (id: string) => `/business-line/${id}`,
     DELETE: (id: string) => `/business-line/${id}`,
   },
+  // Department endpoints
+  DEPARTMENTS: {
+    LIST: '/departments',
+    DETAIL: (id: string) => `/departments/${id}`,
+    CREATE: '/departments',
+    UPDATE: (id: string) => `/departments/${id}`,
+    DELETE: (id: string) => `/departments/${id}`,
+    BULK_DELETE: '/departments',
+  },
   // Role endpoints
   ROLES: {
     LIST: '/roles',

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { GroupSchema } from '@/schemas/group.schema'
+import { DepartmentSchema } from '@/schemas/department.schema'
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
   CardDescription,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, UsersIcon, ShieldIcon, UserCogIcon } from 'lucide-react'
+import { Loader2, LayoutGridIcon, ShieldIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { FieldError } from '@/components/ui/field'
 import { SideBarFormProps } from '@/types/form'
@@ -26,7 +26,7 @@ export function SideBarForm({ form }: SideBarFormProps) {
         })}
       >
         {({ values, errors, isSubmitting, isValid }: any) => {
-          const group = values as z.infer<typeof GroupSchema>
+          const department = values as z.infer<typeof DepartmentSchema>
           const hasErrors = errors.length > 0 || !isValid
 
           return (
@@ -34,55 +34,41 @@ export function SideBarForm({ form }: SideBarFormProps) {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base font-medium">
-                    Group Preview
+                    Department Preview
                   </CardTitle>
+                  {department.active && (
+                    <Badge
+                      variant="outline"
+                      className="bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20"
+                    >
+                      Active
+                    </Badge>
+                  )}
+                  {!department.active && department.active !== undefined && (
+                    <Badge
+                      variant="outline"
+                      className="bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border-rose-500/20"
+                    >
+                      Inactive
+                    </Badge>
+                  )}
                 </div>
-                <CardDescription>Live preview of group details</CardDescription>
+                <CardDescription>
+                  Live preview of department details
+                </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div className="flex items-center gap-4 rounded-lg border bg-card p-3 shadow-sm">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <UsersIcon className="h-5 w-5 text-primary" />
+                    <LayoutGridIcon className="h-5 w-5 text-primary" />
                   </div>
                   <div className="grid gap-0.5 overflow-hidden">
                     <h3 className="font-semibold leading-none truncate">
-                      {group.name || 'New Group'}
+                      {department.name || 'New Department'}
                     </h3>
                     <p className="text-sm text-muted-foreground truncate">
-                      {group.type || 'Custom Type'}
+                      {department.description || 'No description'}
                     </p>
-                  </div>
-                </div>
-
-                <div className="grid gap-2 text-sm">
-                  <div className="flex items-center justify-between rounded-md border bg-card p-2.5">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <UserCogIcon className="h-4 w-4" />
-                      <span>Roles Attached</span>
-                    </div>
-                    <Badge variant="secondary" className="capitalize">
-                      {group.roles?.length || 0}
-                    </Badge>
-                  </div>
-
-                  <div className="flex items-center justify-between rounded-md border bg-card p-2.5">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <ShieldIcon className="h-4 w-4" />
-                      <span>Permissions</span>
-                    </div>
-                    <Badge variant="secondary" className="capitalize">
-                      {group.permissions?.length || 0}
-                    </Badge>
-                  </div>
-
-                  <div className="flex items-center justify-between rounded-md border bg-card p-2.5">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <UsersIcon className="h-4 w-4" />
-                      <span>Members</span>
-                    </div>
-                    <Badge variant="secondary" className="capitalize">
-                      {group.users?.length || 0}
-                    </Badge>
                   </div>
                 </div>
 

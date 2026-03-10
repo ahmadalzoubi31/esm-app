@@ -23,36 +23,39 @@ export class RolesService {
   ) {}
 
   async create(createRoleDto: CreateRoleDto): Promise<Role> {
+    // 1:   Destructure permissionIds from createRoleDto
     const { permissionIds, ...roleData } = createRoleDto;
 
-    // 1: Get EntityManager
+    // 2: Get EntityManager
     const em = this.roleRepository.getEntityManager();
 
-    // 2: Get Tenant ID from Filter
+    // 3: Get Tenant ID from Filter
     const tenantFilter = em.getFilterParams('tenant');
 
-    // 3: Get Tenant Reference
+    // 4: Get Tenant Reference
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
-    // 3: Create role
+    // 5: Create role
     const role = this.roleRepository.create({
       key: '', // auto generate on DB level
       ...roleData,
       tenant: tenantRef,
     });
 
-    // 4. Save role
+    // 6. Save role
     await this.roleRepository.getEntityManager().persist(role).flush();
 
-    // 5. Assign permissions if present
+    // 7. Assign permissions if present
     if (permissionIds && permissionIds.length > 0) {
       await this.assignPermissions(role.id as string, permissionIds);
     }
 
+    // 8: Return role
     return role;
   }
 
   async findAll({ where }: { where?: any }): Promise<Role[]> {
+    // 1: Find roles and populate permissions
     return await this.roleRepository.find(where || {}, {
       populate: ['permissions'],
       filters: { tenant: false },
@@ -60,27 +63,37 @@ export class RolesService {
   }
 
   async findOne(id: string): Promise<Role | null> {
+    // 1: Find role by id and populate permissions
     return await this.roleRepository.findOne(
       { id },
-      { filters: { tenant: false } },
+      { populate: ['permissions'], filters: { tenant: false } },
     );
   }
 
   async update(id: string, dto: UpdateRoleDto): Promise<Role> {
+    // 1: Find role by id
     const role = await this.roleRepository.findOneOrFail(
       { id },
-      { filters: { tenant: false } },
+      { populate: ['permissions'], filters: { tenant: false } },
     );
+
+    // 2: Update role
     this.roleRepository.assign(role, dto);
+
+    // 3: Save role
     await this.roleRepository.getEntityManager().flush();
+
+    // 4: Return role
     return role;
   }
 
   async remove(id: string): Promise<void> {
+    // 1: Remove role
     await this.roleRepository.nativeDelete({ id });
   }
 
   async findPermissions(id: string): Promise<Permission[]> {
+    // 1: Find permissions
     return await this.permissionsService.findAll({
       where: { roles: { id } },
     });

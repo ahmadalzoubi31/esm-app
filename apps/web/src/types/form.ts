@@ -25,3 +25,7 @@ export type FormInstance<TFormData> = ReactFormExtendedApi<
   any,
   any
 >
+
+export interface SideBarFormProps {
+  form: any
+}

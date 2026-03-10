@@ -21,6 +21,11 @@ export class CreateGroupDto {
   @IsOptional()
   teamLeaderId?: string;
 
+  @ApiProperty({ example: 'Department ID' })
+  @IsString()
+  @IsOptional()
+  departmentId?: string;
+
   @ApiProperty({ example: 'Business Line ID' })
   @IsString()
   businessLineId: string;
