@@ -116,7 +116,15 @@ export class UsersService {
     }
 
     return await this.userRepository.find(query, {
-      populate: ['roles', 'roles.permissions', 'permissions', 'groups'],
+      populate: [
+        'roles',
+        'roles.permissions',
+        'permissions',
+        'groups',
+        'groups.roles',
+        'groups.roles.permissions',
+        'groups.permissions',
+      ],
       limit: search ? 20 : undefined,
       filters: { tenant: true },
     });
@@ -126,7 +134,15 @@ export class UsersService {
     return await this.userRepository.findOne(
       { id },
       {
-        populate: ['roles', 'roles.permissions', 'permissions', 'groups'],
+        populate: [
+          'roles',
+          'roles.permissions',
+          'permissions',
+          'groups',
+          'groups.roles',
+          'groups.roles.permissions',
+          'groups.permissions',
+        ],
         filters: { tenant: false },
       },
     );
@@ -136,7 +152,15 @@ export class UsersService {
     return await this.userRepository.findOne(
       { username },
       {
-        populate: ['roles', 'roles.permissions', 'permissions', 'groups'],
+        populate: [
+          'roles',
+          'roles.permissions',
+          'permissions',
+          'groups',
+          'groups.roles',
+          'groups.roles.permissions',
+          'groups.permissions',
+        ],
         filters: { tenant: false },
       },
     );

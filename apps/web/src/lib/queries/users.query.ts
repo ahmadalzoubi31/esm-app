@@ -33,7 +33,14 @@ export function useUserQuery(id: string) {
 }
 
 export function useSearchUsersQuery(
-  params?: string | { filters?: string; search?: string; limit?: string },
+  params?:
+    | string
+    | {
+        filters?: string
+        search?: string
+        limit?: string
+        is_licensed?: boolean
+      },
   options?: any,
 ) {
   return useQuery<User[]>({

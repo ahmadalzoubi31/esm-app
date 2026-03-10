@@ -89,8 +89,15 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @UseGuards(PoliciesGuard)
   @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Read, User))
-  async findAll(@Query('search') search?: string) {
-    return await this.usersService.findAll({ search });
+  async findAll(
+    @Query('search') search?: string,
+    @Query('is_licensed') isLicensed?: boolean | string,
+  ) {
+    const where: any = {};
+    if (isLicensed !== undefined) {
+      where.is_licensed = isLicensed === 'true' || isLicensed === true;
+    }
+    return await this.usersService.findAll({ search, where });
   }
 
   @Get(':id')

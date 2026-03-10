@@ -31,6 +31,37 @@ import {
 export function TableCellViewer({ item }: { item: User }) {
   const isMobile = useIsMobile()
 
+  const directPermissions = item.permissions || []
+
+  const userRolePermissions =
+    item.roles?.flatMap((role: any) => role.permissions || []) || []
+  const groupRolePermissions =
+    item.groups?.flatMap(
+      (group: any) =>
+        group.roles?.flatMap((role: any) => role.permissions || []) || [],
+    ) || []
+  const groupDirectPermissions =
+    item.groups?.flatMap((group: any) => group.permissions || []) || []
+
+  const directKeys = new Set(directPermissions.map((p) => p.key))
+
+  const uniqueRoleInheritedMap = new Map()
+  userRolePermissions.forEach((p: any) => {
+    if (p && !directKeys.has(p.key)) {
+      uniqueRoleInheritedMap.set(p.key, p)
+    }
+  })
+  const inheritedFromRoles = Array.from(uniqueRoleInheritedMap.values())
+  const roleInheritedKeys = new Set(inheritedFromRoles.map((p: any) => p.key))
+
+  const uniqueGroupInheritedMap = new Map()
+  ;[...groupDirectPermissions, ...groupRolePermissions].forEach((p: any) => {
+    if (p && !directKeys.has(p.key) && !roleInheritedKeys.has(p.key)) {
+      uniqueGroupInheritedMap.set(p.key, p)
+    }
+  })
+  const inheritedFromGroups = Array.from(uniqueGroupInheritedMap.values())
+
   return (
     <Drawer direction={isMobile ? 'bottom' : 'right'}>
       <DrawerTrigger asChild>
@@ -38,7 +69,10 @@ export function TableCellViewer({ item }: { item: User }) {
           {item.display_name || item.username}
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="h-[95vh] sm:h-auto sm:max-w-xl">
+      <DrawerContent
+        className="h-[95vh] sm:h-auto sm:max-w-xl"
+        data-vaul-no-drag
+      >
         <DrawerHeader className="gap-1 border-b pb-4">
           <div className="flex items-center gap-2">
             <Avatar className="h-10 w-10 border">
@@ -156,26 +190,83 @@ export function TableCellViewer({ item }: { item: User }) {
 
             <Separator />
 
-            {/* Permissions Placeholder */}
+            {/* Direct Permissions */}
             <section className="space-y-3">
               <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <LockIcon className="h-4 w-4 text-muted-foreground" />
-                Permissions
+                Direct Permissions
               </h4>
               <div className="rounded-lg border p-3 bg-muted/30 min-h-[60px] flex flex-wrap gap-2">
-                {item.permissions && item.permissions.length > 0 ? (
-                  item.permissions.map((permission) => (
+                {directPermissions.length > 0 ? (
+                  directPermissions.map((permission) => (
                     <Badge
-                      key={permission.id}
+                      key={`direct-${permission.id}`}
                       variant="outline"
-                      className="h-5 px-1.5 text-[10px]"
+                      className="h-5 px-1.5 text-[10px] border-primary/20 text-primary"
+                      title="Direct Permission"
                     >
                       {permission.key}
                     </Badge>
                   ))
                 ) : (
                   <span className="text-xs text-muted-foreground italic">
-                    No permissions assigned directly.
+                    No direct permissions assigned.
+                  </span>
+                )}
+              </div>
+            </section>
+
+            <Separator />
+
+            {/* Inherited from Roles */}
+            <section className="space-y-3">
+              <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
+                <LockIcon className="h-4 w-4 text-muted-foreground" />
+                Inherited from Roles
+              </h4>
+              <div className="rounded-lg border p-3 bg-muted/30 min-h-[60px] flex flex-wrap gap-2">
+                {inheritedFromRoles.length > 0 ? (
+                  inheritedFromRoles.map((permission: any) => (
+                    <Badge
+                      key={`role-inherited-${permission.id}`}
+                      variant="outline"
+                      className="h-5 px-1.5 text-[10px] border-blue-500/20 text-blue-600 dark:text-blue-400"
+                      title="Inherited from Role"
+                    >
+                      {permission.key}
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-xs text-muted-foreground italic">
+                    No permissions inherited from roles.
+                  </span>
+                )}
+              </div>
+            </section>
+
+            <Separator />
+
+            {/* Inherited from Groups */}
+            <section className="space-y-3">
+              <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
+                <LockIcon className="h-4 w-4 text-muted-foreground" />
+                Inherited from Groups
+              </h4>
+              <div className="rounded-lg border p-3 bg-muted/30 min-h-[60px] flex flex-wrap gap-2">
+                {inheritedFromGroups.length > 0 ? (
+                  inheritedFromGroups.map((permission: any) => (
+                    <Badge
+                      key={`group-inherited-${permission.id}`}
+                      variant="outline"
+                      className="h-5 px-1.5 text-[10px] border-purple-500/20 text-purple-600 dark:text-purple-400"
+                      title="Inherited from Group"
+                    >
+                      {permission.key}
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-xs text-muted-foreground italic">
+                    No permissions inherited from groups.
                   </span>
                 )}
               </div>

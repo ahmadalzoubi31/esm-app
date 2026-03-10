@@ -6,6 +6,7 @@ import { AppDataTableColumnHeader } from '@/components/web/common/app-table'
 import { TableCellViewer } from './cell-viewer'
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react'
 import { User } from '@/types'
+import { formatDate } from '@/lib/format-date'
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -149,7 +150,7 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'is_active',
+    accessorKey: 'status',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Status" />
     ),
@@ -193,6 +194,42 @@ export const columns: ColumnDef<User>[] = [
     enableSorting: false,
     enableHiding: true,
   },
+  {
+    accessorKey: 'last_login_at',
+    header: ({ column }) => (
+      <AppDataTableColumnHeader column={column} title="Last Login At" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm">
+        {row.original.last_login_at && formatDate(row.original.last_login_at)}
+      </div>
+    ),
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'is_licensed',
+    header: ({ column }) => (
+      <AppDataTableColumnHeader column={column} title="Is Licensed" />
+    ),
+    cell: ({ row }) => {
+      const isLicensed = row.original.is_licensed
+      return (
+        <div className="w-32 text-base">
+          <Badge variant="outline" className="text-muted-foreground px-1.5">
+            {isLicensed ? (
+              <CheckCircleIcon className="fill-green-500 dark:fill-green-400" />
+            ) : (
+              <XCircleIcon className="fill-red-500 dark:fill-red-400" />
+            )}
+            {isLicensed ? 'Licensed' : 'Not Licensed'}
+          </Badge>
+        </div>
+      )
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
   // {
   //   accessorKey: 'createdByName',
   //   header: ({ column }) => (
@@ -219,14 +256,7 @@ export const columns: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-sm">
-        {new Date(row.original.createdAt).toLocaleString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        })}
+        {row.original.createdAt && formatDate(row.original.createdAt)}
       </div>
     ),
     enableSorting: true,
@@ -258,14 +288,7 @@ export const columns: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-sm">
-        {new Date(row.original.updatedAt).toLocaleString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        })}
+        {row.original.updatedAt && formatDate(row.original.updatedAt)}
       </div>
     ),
     enableSorting: true,

@@ -25,7 +25,14 @@ export const usersApi = {
    * Get all users with optional filters
    */
   search: async (
-    params?: string | { filters?: string; search?: string; limit?: string },
+    params?:
+      | string
+      | {
+          filters?: string
+          search?: string
+          limit?: string
+          is_licensed?: boolean
+        },
   ): Promise<ApiResponse<User[]>> => {
     let url = API_ENDPOINTS.USERS.LIST
     const queryParams = new URLSearchParams()
@@ -36,6 +43,8 @@ export const usersApi = {
       if (params.filters) queryParams.append('filters', params.filters)
       if (params.search) queryParams.append('search', params.search)
       if (params.limit) queryParams.append('limit', params.limit)
+      if (params.is_licensed !== undefined)
+        queryParams.append('is_licensed', String(params.is_licensed))
     }
 
     const queryString = queryParams.toString()

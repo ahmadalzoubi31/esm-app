@@ -44,7 +44,9 @@ export function AppDataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {typeof column.id === 'string'
+                  ? column.id.replace(/[_-]/g, ' ')
+                  : column.id}
               </DropdownMenuCheckboxItem>
             )
           })}

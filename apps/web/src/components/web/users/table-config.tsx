@@ -14,6 +14,8 @@ export const tableConfig: DataTableConfig<User> = {
     auth_source: true,
     is_active: true,
     external_id: false,
+    last_login_at: false,
+    is_licensed: false,
     permissions: false,
     createdAt: true,
     createdByName: false,
@@ -38,7 +40,7 @@ export const tableConfig: DataTableConfig<User> = {
       ] as const,
     },
     {
-      columnKey: 'is_active',
+      columnKey: 'status',
       title: 'Status',
       options: [
         { label: 'Active', value: 'true' },

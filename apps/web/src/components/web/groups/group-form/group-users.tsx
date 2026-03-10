@@ -39,6 +39,7 @@ export function GroupUsers({ form }: GroupUsersProps) {
   const { data: usersResponse, isLoading } = useSearchUsersQuery({
     search,
     limit: '10',
+    is_licensed: true,
   })
   const users = usersResponse || []
   const [open, setOpen] = useState(false)
@@ -86,7 +87,7 @@ export function GroupUsers({ form }: GroupUsersProps) {
               }
 
               const availableUsers = users.filter(
-                (user) => !selectedUsers.includes(user.id),
+                (user) => !selectedUsers.includes(user.id) && user.is_licensed,
               )
 
               return (
