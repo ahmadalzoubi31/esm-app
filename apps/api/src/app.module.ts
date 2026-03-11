@@ -16,6 +16,7 @@ import { TenantsModule } from './tenants/tenants.module';
 import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
 import { EntityManager } from '@mikro-orm/core';
+import { CasesModule } from './esm/cases/cases.module';
 
 @Module({
   imports: [
@@ -32,13 +33,15 @@ import { EntityManager } from '@mikro-orm/core';
         configService.get('database')!,
       inject: [ConfigService],
     }),
+    CasesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_INTERCEPTOR,
-    useClass: TenantInterceptor,
-  }],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TenantInterceptor,
+    },
+  ],
 })
-export class AppModule {
-
-}
+export class AppModule {}

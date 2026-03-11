@@ -97,9 +97,6 @@ export class User extends TenantBaseEntity {
   @ManyToMany(() => Group, (group) => group.users)
   groups = new Collection<Group>(this);
 
-  @OneToMany(() => Service, (service) => service.ownerUser)
-  services = new Collection<Service>(this);
-
   @BeforeCreate()
   @BeforeUpdate()
   async setPassword() {

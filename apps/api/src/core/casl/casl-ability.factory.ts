@@ -8,22 +8,28 @@ import { ACTION_ENUM } from 'src/core/casl/constants/action.constant';
 import { PermissionsService } from '../permissions/permissions.service';
 import { Group } from '../groups/entities/group.entity';
 import { BusinessLine } from '../business-lines/entities/business-line.entity';
+import { Case } from 'src/esm/cases/entities/case.entity';
+import { CaseAttachment } from 'src/esm/cases/entities/case-attachment.entity';
+import { CaseComment } from 'src/esm/cases/entities/case-comment.entity';
 
 type Subjects =
   | InferSubjects<
-    | typeof User
-    | typeof Role
-    | typeof Permission
-    | typeof Group
-    | typeof BusinessLine
-  >
+      | typeof User
+      | typeof Role
+      | typeof Permission
+      | typeof Group
+      | typeof BusinessLine
+      | typeof Case
+      | typeof CaseAttachment
+      | typeof CaseComment
+    >
   | 'all';
 
 export type AppAbility = MongoAbility<[ACTION_ENUM, Subjects]>;
 
 @Injectable()
 export class CaslAbilityFactory {
-  constructor(private readonly permissionsService: PermissionsService) { }
+  constructor(private readonly permissionsService: PermissionsService) {}
 
   async createForUser(user: {
     userId: string;
