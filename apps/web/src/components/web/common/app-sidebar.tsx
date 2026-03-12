@@ -96,12 +96,16 @@ const nav_items = {
       icon: BookOpen,
       items: [
         {
-          title: 'All Cases',
-          url: '#',
+          title: 'Cases',
+          url: '/cases',
         },
         {
-          title: 'Create Case',
-          url: '#',
+          title: 'Case Categories',
+          url: '/case-categories',
+        },
+        {
+          title: 'Case Subcategories',
+          url: '/case-subcategories',
         },
       ],
     },

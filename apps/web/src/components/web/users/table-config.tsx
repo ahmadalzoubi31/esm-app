@@ -18,9 +18,7 @@ export const tableConfig: DataTableConfig<User> = {
     is_licensed: false,
     permissions: false,
     createdAt: true,
-    createdByName: false,
     updatedAt: false,
-    updatedByName: false,
   },
 
   preferenceKey: 'users-table-columns',

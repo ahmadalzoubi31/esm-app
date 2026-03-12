@@ -17,6 +17,8 @@ import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
 import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
 import { EntityManager } from '@mikro-orm/core';
 import { CasesModule } from './esm/cases/cases.module';
+import { CaseCategoriesModule } from './esm/case-categories/case-categories.module';
+import { CaseSubcategoriesModule } from './esm/case-subcategories/case-subcategories.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { CasesModule } from './esm/cases/cases.module';
       inject: [ConfigService],
     }),
     CasesModule,
+    CaseCategoriesModule,
+    CaseSubcategoriesModule,
   ],
   controllers: [AppController],
   providers: [

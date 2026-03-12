@@ -12,6 +12,9 @@ import { ldapApi } from './ldap.api'
 import { groupsApi } from './groups.api'
 import { businessLinesApi } from './business-lines.api'
 import { departmentsApi } from './departments.api'
+import { casesApi } from './cases.api'
+import { caseCategoriesApi } from './case-categories.api'
+import { caseSubcategoriesApi } from './case-subcategories.api'
 
 /**
  * Unified API client
@@ -27,6 +30,9 @@ export const api = {
     groups: groupsApi,
   businessLines: businessLinesApi,
   departments: departmentsApi,
+  cases: casesApi,
+  caseCategories: caseCategoriesApi,
+  caseSubcategories: caseSubcategoriesApi,
 }
 
 // Re-export individual modules for direct imports if needed
@@ -39,6 +45,9 @@ export { ldapApi } from './ldap.api'
 export { groupsApi } from './groups.api'
 export { businessLinesApi } from './business-lines.api'
 export { departmentsApi } from './departments.api'
+export { casesApi } from './cases.api'
+export { caseCategoriesApi } from './case-categories.api'
+export { caseSubcategoriesApi } from './case-subcategories.api'
 
 // Re-export the core client for advanced use cases
 export { apiFetch } from '../api-client'

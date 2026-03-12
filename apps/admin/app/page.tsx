@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 async function getStats() {
   const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3030/api/v1";
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
   try {
     const [tenantsRes, usersRes] = await Promise.all([

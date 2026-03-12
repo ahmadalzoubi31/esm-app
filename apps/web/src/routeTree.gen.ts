@@ -10,9 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SessionTimeoutRouteImport } from './routes/session-timeout'
+import { Route as EsmRouteRouteImport } from './routes/_esm/route'
 import { Route as CoreRouteRouteImport } from './routes/_core/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EsmCasesIndexRouteImport } from './routes/_esm/cases/index'
+import { Route as EsmCaseSubcategoriesIndexRouteImport } from './routes/_esm/case-subcategories/index'
+import { Route as EsmCaseCategoriesIndexRouteImport } from './routes/_esm/case-categories/index'
 import { Route as CoreUsersIndexRouteImport } from './routes/_core/users/index'
 import { Route as CoreSettingsIndexRouteImport } from './routes/_core/settings/index'
 import { Route as CoreRolesIndexRouteImport } from './routes/_core/roles/index'
@@ -21,6 +25,11 @@ import { Route as CoreGroupsIndexRouteImport } from './routes/_core/groups/index
 import { Route as CoreDepartmentsIndexRouteImport } from './routes/_core/departments/index'
 import { Route as CoreDashboardIndexRouteImport } from './routes/_core/dashboard/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
+import { Route as EsmCasesCreateRouteImport } from './routes/_esm/cases/create'
+import { Route as EsmCaseSubcategoriesCreateRouteImport } from './routes/_esm/case-subcategories/create'
+import { Route as EsmCaseSubcategoriesSubcategoryIdRouteImport } from './routes/_esm/case-subcategories/$subcategoryId'
+import { Route as EsmCaseCategoriesCreateRouteImport } from './routes/_esm/case-categories/create'
+import { Route as EsmCaseCategoriesCategoryIdRouteImport } from './routes/_esm/case-categories/$categoryId'
 import { Route as CoreUsersCreateRouteImport } from './routes/_core/users/create'
 import { Route as CoreUsersUserIdRouteImport } from './routes/_core/users/$userId'
 import { Route as CoreRolesCreateRouteImport } from './routes/_core/roles/create'
@@ -29,11 +38,17 @@ import { Route as CoreGroupsCreateRouteImport } from './routes/_core/groups/crea
 import { Route as CoreGroupsGroupIdRouteImport } from './routes/_core/groups/$groupId'
 import { Route as CoreDepartmentsCreateRouteImport } from './routes/_core/departments/create'
 import { Route as CoreDepartmentsDepartmentIdRouteImport } from './routes/_core/departments/$departmentId'
+import { Route as EsmCasesCaseIdIndexRouteImport } from './routes/_esm/cases/$caseId/index'
 import { Route as CoreSettingsLdapIndexRouteImport } from './routes/_core/settings/ldap/index'
+import { Route as EsmCasesCaseIdEditIndexRouteImport } from './routes/_esm/cases/$caseId/edit/index'
 
 const SessionTimeoutRoute = SessionTimeoutRouteImport.update({
   id: '/session-timeout',
   path: '/session-timeout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EsmRouteRoute = EsmRouteRouteImport.update({
+  id: '/_esm',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoreRouteRoute = CoreRouteRouteImport.update({
@@ -48,6 +63,22 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const EsmCasesIndexRoute = EsmCasesIndexRouteImport.update({
+  id: '/cases/',
+  path: '/cases/',
+  getParentRoute: () => EsmRouteRoute,
+} as any)
+const EsmCaseSubcategoriesIndexRoute =
+  EsmCaseSubcategoriesIndexRouteImport.update({
+    id: '/case-subcategories/',
+    path: '/case-subcategories/',
+    getParentRoute: () => EsmRouteRoute,
+  } as any)
+const EsmCaseCategoriesIndexRoute = EsmCaseCategoriesIndexRouteImport.update({
+  id: '/case-categories/',
+  path: '/case-categories/',
+  getParentRoute: () => EsmRouteRoute,
 } as any)
 const CoreUsersIndexRoute = CoreUsersIndexRouteImport.update({
   id: '/users/',
@@ -89,6 +120,34 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const EsmCasesCreateRoute = EsmCasesCreateRouteImport.update({
+  id: '/cases/create',
+  path: '/cases/create',
+  getParentRoute: () => EsmRouteRoute,
+} as any)
+const EsmCaseSubcategoriesCreateRoute =
+  EsmCaseSubcategoriesCreateRouteImport.update({
+    id: '/case-subcategories/create',
+    path: '/case-subcategories/create',
+    getParentRoute: () => EsmRouteRoute,
+  } as any)
+const EsmCaseSubcategoriesSubcategoryIdRoute =
+  EsmCaseSubcategoriesSubcategoryIdRouteImport.update({
+    id: '/case-subcategories/$subcategoryId',
+    path: '/case-subcategories/$subcategoryId',
+    getParentRoute: () => EsmRouteRoute,
+  } as any)
+const EsmCaseCategoriesCreateRoute = EsmCaseCategoriesCreateRouteImport.update({
+  id: '/case-categories/create',
+  path: '/case-categories/create',
+  getParentRoute: () => EsmRouteRoute,
+} as any)
+const EsmCaseCategoriesCategoryIdRoute =
+  EsmCaseCategoriesCategoryIdRouteImport.update({
+    id: '/case-categories/$categoryId',
+    path: '/case-categories/$categoryId',
+    getParentRoute: () => EsmRouteRoute,
+  } as any)
 const CoreUsersCreateRoute = CoreUsersCreateRouteImport.update({
   id: '/users/create',
   path: '/users/create',
@@ -130,10 +189,20 @@ const CoreDepartmentsDepartmentIdRoute =
     path: '/departments/$departmentId',
     getParentRoute: () => CoreRouteRoute,
   } as any)
+const EsmCasesCaseIdIndexRoute = EsmCasesCaseIdIndexRouteImport.update({
+  id: '/cases/$caseId/',
+  path: '/cases/$caseId/',
+  getParentRoute: () => EsmRouteRoute,
+} as any)
 const CoreSettingsLdapIndexRoute = CoreSettingsLdapIndexRouteImport.update({
   id: '/settings/ldap/',
   path: '/settings/ldap/',
   getParentRoute: () => CoreRouteRoute,
+} as any)
+const EsmCasesCaseIdEditIndexRoute = EsmCasesCaseIdEditIndexRouteImport.update({
+  id: '/cases/$caseId/edit/',
+  path: '/cases/$caseId/edit/',
+  getParentRoute: () => EsmRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -147,6 +216,11 @@ export interface FileRoutesByFullPath {
   '/roles/create': typeof CoreRolesCreateRoute
   '/users/$userId': typeof CoreUsersUserIdRoute
   '/users/create': typeof CoreUsersCreateRoute
+  '/case-categories/$categoryId': typeof EsmCaseCategoriesCategoryIdRoute
+  '/case-categories/create': typeof EsmCaseCategoriesCreateRoute
+  '/case-subcategories/$subcategoryId': typeof EsmCaseSubcategoriesSubcategoryIdRoute
+  '/case-subcategories/create': typeof EsmCaseSubcategoriesCreateRoute
+  '/cases/create': typeof EsmCasesCreateRoute
   '/login/': typeof AuthLoginIndexRoute
   '/dashboard/': typeof CoreDashboardIndexRoute
   '/departments/': typeof CoreDepartmentsIndexRoute
@@ -155,7 +229,12 @@ export interface FileRoutesByFullPath {
   '/roles/': typeof CoreRolesIndexRoute
   '/settings/': typeof CoreSettingsIndexRoute
   '/users/': typeof CoreUsersIndexRoute
+  '/case-categories/': typeof EsmCaseCategoriesIndexRoute
+  '/case-subcategories/': typeof EsmCaseSubcategoriesIndexRoute
+  '/cases/': typeof EsmCasesIndexRoute
   '/settings/ldap/': typeof CoreSettingsLdapIndexRoute
+  '/cases/$caseId/': typeof EsmCasesCaseIdIndexRoute
+  '/cases/$caseId/edit/': typeof EsmCasesCaseIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -168,6 +247,11 @@ export interface FileRoutesByTo {
   '/roles/create': typeof CoreRolesCreateRoute
   '/users/$userId': typeof CoreUsersUserIdRoute
   '/users/create': typeof CoreUsersCreateRoute
+  '/case-categories/$categoryId': typeof EsmCaseCategoriesCategoryIdRoute
+  '/case-categories/create': typeof EsmCaseCategoriesCreateRoute
+  '/case-subcategories/$subcategoryId': typeof EsmCaseSubcategoriesSubcategoryIdRoute
+  '/case-subcategories/create': typeof EsmCaseSubcategoriesCreateRoute
+  '/cases/create': typeof EsmCasesCreateRoute
   '/login': typeof AuthLoginIndexRoute
   '/dashboard': typeof CoreDashboardIndexRoute
   '/departments': typeof CoreDepartmentsIndexRoute
@@ -176,13 +260,19 @@ export interface FileRoutesByTo {
   '/roles': typeof CoreRolesIndexRoute
   '/settings': typeof CoreSettingsIndexRoute
   '/users': typeof CoreUsersIndexRoute
+  '/case-categories': typeof EsmCaseCategoriesIndexRoute
+  '/case-subcategories': typeof EsmCaseSubcategoriesIndexRoute
+  '/cases': typeof EsmCasesIndexRoute
   '/settings/ldap': typeof CoreSettingsLdapIndexRoute
+  '/cases/$caseId': typeof EsmCasesCaseIdIndexRoute
+  '/cases/$caseId/edit': typeof EsmCasesCaseIdEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_core': typeof CoreRouteRouteWithChildren
+  '/_esm': typeof EsmRouteRouteWithChildren
   '/session-timeout': typeof SessionTimeoutRoute
   '/_core/departments/$departmentId': typeof CoreDepartmentsDepartmentIdRoute
   '/_core/departments/create': typeof CoreDepartmentsCreateRoute
@@ -192,6 +282,11 @@ export interface FileRoutesById {
   '/_core/roles/create': typeof CoreRolesCreateRoute
   '/_core/users/$userId': typeof CoreUsersUserIdRoute
   '/_core/users/create': typeof CoreUsersCreateRoute
+  '/_esm/case-categories/$categoryId': typeof EsmCaseCategoriesCategoryIdRoute
+  '/_esm/case-categories/create': typeof EsmCaseCategoriesCreateRoute
+  '/_esm/case-subcategories/$subcategoryId': typeof EsmCaseSubcategoriesSubcategoryIdRoute
+  '/_esm/case-subcategories/create': typeof EsmCaseSubcategoriesCreateRoute
+  '/_esm/cases/create': typeof EsmCasesCreateRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_core/dashboard/': typeof CoreDashboardIndexRoute
   '/_core/departments/': typeof CoreDepartmentsIndexRoute
@@ -200,7 +295,12 @@ export interface FileRoutesById {
   '/_core/roles/': typeof CoreRolesIndexRoute
   '/_core/settings/': typeof CoreSettingsIndexRoute
   '/_core/users/': typeof CoreUsersIndexRoute
+  '/_esm/case-categories/': typeof EsmCaseCategoriesIndexRoute
+  '/_esm/case-subcategories/': typeof EsmCaseSubcategoriesIndexRoute
+  '/_esm/cases/': typeof EsmCasesIndexRoute
   '/_core/settings/ldap/': typeof CoreSettingsLdapIndexRoute
+  '/_esm/cases/$caseId/': typeof EsmCasesCaseIdIndexRoute
+  '/_esm/cases/$caseId/edit/': typeof EsmCasesCaseIdEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -215,6 +315,11 @@ export interface FileRouteTypes {
     | '/roles/create'
     | '/users/$userId'
     | '/users/create'
+    | '/case-categories/$categoryId'
+    | '/case-categories/create'
+    | '/case-subcategories/$subcategoryId'
+    | '/case-subcategories/create'
+    | '/cases/create'
     | '/login/'
     | '/dashboard/'
     | '/departments/'
@@ -223,7 +328,12 @@ export interface FileRouteTypes {
     | '/roles/'
     | '/settings/'
     | '/users/'
+    | '/case-categories/'
+    | '/case-subcategories/'
+    | '/cases/'
     | '/settings/ldap/'
+    | '/cases/$caseId/'
+    | '/cases/$caseId/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -236,6 +346,11 @@ export interface FileRouteTypes {
     | '/roles/create'
     | '/users/$userId'
     | '/users/create'
+    | '/case-categories/$categoryId'
+    | '/case-categories/create'
+    | '/case-subcategories/$subcategoryId'
+    | '/case-subcategories/create'
+    | '/cases/create'
     | '/login'
     | '/dashboard'
     | '/departments'
@@ -244,12 +359,18 @@ export interface FileRouteTypes {
     | '/roles'
     | '/settings'
     | '/users'
+    | '/case-categories'
+    | '/case-subcategories'
+    | '/cases'
     | '/settings/ldap'
+    | '/cases/$caseId'
+    | '/cases/$caseId/edit'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_core'
+    | '/_esm'
     | '/session-timeout'
     | '/_core/departments/$departmentId'
     | '/_core/departments/create'
@@ -259,6 +380,11 @@ export interface FileRouteTypes {
     | '/_core/roles/create'
     | '/_core/users/$userId'
     | '/_core/users/create'
+    | '/_esm/case-categories/$categoryId'
+    | '/_esm/case-categories/create'
+    | '/_esm/case-subcategories/$subcategoryId'
+    | '/_esm/case-subcategories/create'
+    | '/_esm/cases/create'
     | '/_auth/login/'
     | '/_core/dashboard/'
     | '/_core/departments/'
@@ -267,13 +393,19 @@ export interface FileRouteTypes {
     | '/_core/roles/'
     | '/_core/settings/'
     | '/_core/users/'
+    | '/_esm/case-categories/'
+    | '/_esm/case-subcategories/'
+    | '/_esm/cases/'
     | '/_core/settings/ldap/'
+    | '/_esm/cases/$caseId/'
+    | '/_esm/cases/$caseId/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   CoreRouteRoute: typeof CoreRouteRouteWithChildren
+  EsmRouteRoute: typeof EsmRouteRouteWithChildren
   SessionTimeoutRoute: typeof SessionTimeoutRoute
 }
 
@@ -284,6 +416,13 @@ declare module '@tanstack/react-router' {
       path: '/session-timeout'
       fullPath: '/session-timeout'
       preLoaderRoute: typeof SessionTimeoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_esm': {
+      id: '/_esm'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof EsmRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_core': {
@@ -306,6 +445,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_esm/cases/': {
+      id: '/_esm/cases/'
+      path: '/cases'
+      fullPath: '/cases/'
+      preLoaderRoute: typeof EsmCasesIndexRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/case-subcategories/': {
+      id: '/_esm/case-subcategories/'
+      path: '/case-subcategories'
+      fullPath: '/case-subcategories/'
+      preLoaderRoute: typeof EsmCaseSubcategoriesIndexRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/case-categories/': {
+      id: '/_esm/case-categories/'
+      path: '/case-categories'
+      fullPath: '/case-categories/'
+      preLoaderRoute: typeof EsmCaseCategoriesIndexRouteImport
+      parentRoute: typeof EsmRouteRoute
     }
     '/_core/users/': {
       id: '/_core/users/'
@@ -363,6 +523,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_esm/cases/create': {
+      id: '/_esm/cases/create'
+      path: '/cases/create'
+      fullPath: '/cases/create'
+      preLoaderRoute: typeof EsmCasesCreateRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/case-subcategories/create': {
+      id: '/_esm/case-subcategories/create'
+      path: '/case-subcategories/create'
+      fullPath: '/case-subcategories/create'
+      preLoaderRoute: typeof EsmCaseSubcategoriesCreateRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/case-subcategories/$subcategoryId': {
+      id: '/_esm/case-subcategories/$subcategoryId'
+      path: '/case-subcategories/$subcategoryId'
+      fullPath: '/case-subcategories/$subcategoryId'
+      preLoaderRoute: typeof EsmCaseSubcategoriesSubcategoryIdRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/case-categories/create': {
+      id: '/_esm/case-categories/create'
+      path: '/case-categories/create'
+      fullPath: '/case-categories/create'
+      preLoaderRoute: typeof EsmCaseCategoriesCreateRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/case-categories/$categoryId': {
+      id: '/_esm/case-categories/$categoryId'
+      path: '/case-categories/$categoryId'
+      fullPath: '/case-categories/$categoryId'
+      preLoaderRoute: typeof EsmCaseCategoriesCategoryIdRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
     '/_core/users/create': {
       id: '/_core/users/create'
       path: '/users/create'
@@ -419,12 +614,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoreDepartmentsDepartmentIdRouteImport
       parentRoute: typeof CoreRouteRoute
     }
+    '/_esm/cases/$caseId/': {
+      id: '/_esm/cases/$caseId/'
+      path: '/cases/$caseId'
+      fullPath: '/cases/$caseId/'
+      preLoaderRoute: typeof EsmCasesCaseIdIndexRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
     '/_core/settings/ldap/': {
       id: '/_core/settings/ldap/'
       path: '/settings/ldap'
       fullPath: '/settings/ldap/'
       preLoaderRoute: typeof CoreSettingsLdapIndexRouteImport
       parentRoute: typeof CoreRouteRoute
+    }
+    '/_esm/cases/$caseId/edit/': {
+      id: '/_esm/cases/$caseId/edit/'
+      path: '/cases/$caseId/edit'
+      fullPath: '/cases/$caseId/edit/'
+      preLoaderRoute: typeof EsmCasesCaseIdEditIndexRouteImport
+      parentRoute: typeof EsmRouteRoute
     }
   }
 }
@@ -483,10 +692,42 @@ const CoreRouteRouteWithChildren = CoreRouteRoute._addFileChildren(
   CoreRouteRouteChildren,
 )
 
+interface EsmRouteRouteChildren {
+  EsmCaseCategoriesCategoryIdRoute: typeof EsmCaseCategoriesCategoryIdRoute
+  EsmCaseCategoriesCreateRoute: typeof EsmCaseCategoriesCreateRoute
+  EsmCaseSubcategoriesSubcategoryIdRoute: typeof EsmCaseSubcategoriesSubcategoryIdRoute
+  EsmCaseSubcategoriesCreateRoute: typeof EsmCaseSubcategoriesCreateRoute
+  EsmCasesCreateRoute: typeof EsmCasesCreateRoute
+  EsmCaseCategoriesIndexRoute: typeof EsmCaseCategoriesIndexRoute
+  EsmCaseSubcategoriesIndexRoute: typeof EsmCaseSubcategoriesIndexRoute
+  EsmCasesIndexRoute: typeof EsmCasesIndexRoute
+  EsmCasesCaseIdIndexRoute: typeof EsmCasesCaseIdIndexRoute
+  EsmCasesCaseIdEditIndexRoute: typeof EsmCasesCaseIdEditIndexRoute
+}
+
+const EsmRouteRouteChildren: EsmRouteRouteChildren = {
+  EsmCaseCategoriesCategoryIdRoute: EsmCaseCategoriesCategoryIdRoute,
+  EsmCaseCategoriesCreateRoute: EsmCaseCategoriesCreateRoute,
+  EsmCaseSubcategoriesSubcategoryIdRoute:
+    EsmCaseSubcategoriesSubcategoryIdRoute,
+  EsmCaseSubcategoriesCreateRoute: EsmCaseSubcategoriesCreateRoute,
+  EsmCasesCreateRoute: EsmCasesCreateRoute,
+  EsmCaseCategoriesIndexRoute: EsmCaseCategoriesIndexRoute,
+  EsmCaseSubcategoriesIndexRoute: EsmCaseSubcategoriesIndexRoute,
+  EsmCasesIndexRoute: EsmCasesIndexRoute,
+  EsmCasesCaseIdIndexRoute: EsmCasesCaseIdIndexRoute,
+  EsmCasesCaseIdEditIndexRoute: EsmCasesCaseIdEditIndexRoute,
+}
+
+const EsmRouteRouteWithChildren = EsmRouteRoute._addFileChildren(
+  EsmRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   CoreRouteRoute: CoreRouteRouteWithChildren,
+  EsmRouteRoute: EsmRouteRouteWithChildren,
   SessionTimeoutRoute: SessionTimeoutRoute,
 }
 export const routeTree = rootRouteImport

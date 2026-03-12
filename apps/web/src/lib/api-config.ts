@@ -60,6 +60,33 @@ export const API_ENDPOINTS = {
     DELETE: (id: string) => `/departments/${id}`,
     BULK_DELETE: '/departments',
   },
+  // Case Categories endpoints
+  CASE_CATEGORIES: {
+    LIST: '/case-categories',
+    DETAIL: (id: string) => `/case-categories/${id}`,
+    CREATE: '/case-categories',
+    UPDATE: (id: string) => `/case-categories/${id}`,
+    DELETE: (id: string) => `/case-categories/${id}`,
+    BULK_DELETE: '/case-categories',
+  },
+  // Case Subcategories endpoints
+  CASE_SUBCATEGORIES: {
+    LIST: '/case-subcategories',
+    DETAIL: (id: string) => `/case-subcategories/${id}`,
+    CREATE: '/case-subcategories',
+    UPDATE: (id: string) => `/case-subcategories/${id}`,
+    DELETE: (id: string) => `/case-subcategories/${id}`,
+    BULK_DELETE: '/case-subcategories',
+  },
+  // Cases endpoints
+  CASES: {
+    LIST: '/cases',
+    DETAIL: (id: string) => `/cases/${id}`,
+    CREATE: '/cases',
+    UPDATE: (id: string) => `/cases/${id}`,
+    DELETE: (id: string) => `/cases/${id}`,
+    BULK_DELETE: '/cases',
+  },
   // Role endpoints
   ROLES: {
     LIST: '/roles',

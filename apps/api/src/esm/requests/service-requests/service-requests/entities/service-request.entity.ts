@@ -36,7 +36,7 @@ export class ServiceRequest {
   currentStatus:
     | 'SUBMITTED'
     | 'IN_PROGRESS'
-    | 'WAITING_FOR_USER'
+    | 'WAITING_FOR_APPROVAL'
     | 'COMPLETED'
     | 'REJECTED'
     | 'CANCELED' = 'SUBMITTED';

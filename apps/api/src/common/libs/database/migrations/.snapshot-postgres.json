@@ -1195,8 +1195,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "categoryId": {
-          "name": "categoryId",
+        "category_id": {
+          "name": "category_id",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -1245,10 +1245,10 @@
           "deleteRule": "cascade",
           "updateRule": "cascade"
         },
-        "case_subcategories_categoryId_foreign": {
-          "constraintName": "case_subcategories_categoryId_foreign",
+        "case_subcategories_category_id_foreign": {
+          "constraintName": "case_subcategories_category_id_foreign",
           "columnNames": [
-            "categoryId"
+            "category_id"
           ],
           "localTableName": "public.case_subcategories",
           "referencedColumnNames": [
@@ -2490,7 +2490,7 @@
           "default": "'NEW'",
           "enumItems": [
             "NEW",
-            "WAITING_FOR_USER",
+            "WAITING_FOR_APPROVAL",
             "PENDING",
             "IN_PROGRESS",
             "RESOLVED",
