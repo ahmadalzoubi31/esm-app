@@ -12,25 +12,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  useGroupsQuery,
-  useSearchGroupsQuery,
-} from '@/lib/queries/groups.query'
+import { useSearchGroupsQuery } from '@/lib/queries/groups.query'
 import { cn } from '@/lib/utils'
 import type { Group } from '@/types'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export interface GroupMenuProps {
-  value?: string
-  onChange: (value: string) => void
+  value?: string | null
+  onChange: (value: string | undefined) => void
   isInvalid?: boolean
   id?: string
   placeholder?: string
@@ -75,7 +65,9 @@ export function GroupMenu({
       : []),
   ]
 
-  const displayGroup = groups.find((Group: Group) => Group.id === value)
+  const displayGroup = groups.find(
+    (Group: Group) => Group.id === (value || undefined),
+  )
 
   return (
     <Popover
@@ -118,6 +110,19 @@ export function GroupMenu({
               {isLoading ? 'Searching...' : 'No group found.'}
             </CommandEmpty>
             <CommandGroup>
+              {value && (
+                <CommandItem
+                  value="none"
+                  onSelect={() => {
+                    onChange(undefined)
+                    setOpen(false)
+                  }}
+                  className="text-muted-foreground italic"
+                >
+                  <Check className="mr-2 h-4 w-4 opacity-0" />
+                  Clear selection
+                </CommandItem>
+              )}
               {groups.map((group: any) => (
                 <CommandItem
                   key={group.id}

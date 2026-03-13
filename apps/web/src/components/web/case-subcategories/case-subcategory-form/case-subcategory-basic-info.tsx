@@ -36,7 +36,9 @@ export function CaseSubcategoryBasicInfo({ form }: BasicInfoFormProps) {
                 placeholder="e.g. Broken Screen"
                 aria-invalid={field.state.meta.errors.length > 0}
               />
-              {field.state.meta.errors.length > 0 && <FieldError errors={field.state.meta.errors} />}
+              {field.state.meta.errors.length > 0 && (
+                <FieldError errors={field.state.meta.errors} />
+              )}
             </div>
           )}
         />
@@ -44,7 +46,8 @@ export function CaseSubcategoryBasicInfo({ form }: BasicInfoFormProps) {
         <form.Field
           name="category_id"
           children={(field: any) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <div className="space-y-2">
                 <Label htmlFor={field.name}>Parent Category</Label>
@@ -54,7 +57,9 @@ export function CaseSubcategoryBasicInfo({ form }: BasicInfoFormProps) {
                   onChange={(val) => field.handleChange(val)}
                   isInvalid={isInvalid}
                 />
-                {field.state.meta.errors.length > 0 && <FieldError errors={field.state.meta.errors} />}
+                {field.state.meta.errors.length > 0 && (
+                  <FieldError errors={field.state.meta.errors} />
+                )}
               </div>
             )
           }}
@@ -75,7 +80,9 @@ export function CaseSubcategoryBasicInfo({ form }: BasicInfoFormProps) {
                 className="min-h-[100px]"
                 aria-invalid={field.state.meta.errors.length > 0}
               />
-              {field.state.meta.errors.length > 0 && <FieldError errors={field.state.meta.errors} />}
+              {field.state.meta.errors.length > 0 && (
+                <FieldError errors={field.state.meta.errors} />
+              )}
             </div>
           )}
         />

@@ -19,8 +19,8 @@ import { useSearchUsersQuery } from '@/lib/queries/users.query'
 import { User } from '@/types'
 
 export interface UserMenuProps {
-  value?: string
-  onChange: (value: string) => void
+  value?: string | null
+  onChange: (value: string | undefined) => void
   isInvalid?: boolean
   id?: string
   placeholder?: string
@@ -65,7 +65,7 @@ export function UserMenu({
       : []),
   ]
 
-  const displayUser = users.find((user: User) => user.id === value)
+  const displayUser = users.find((user: User) => user.id === (value || undefined))
 
   return (
     <Popover
@@ -108,6 +108,19 @@ export function UserMenu({
               {isLoading ? 'Searching...' : 'No user found.'}
             </CommandEmpty>
             <CommandGroup>
+              {value && (
+                <CommandItem
+                  value="none"
+                  onSelect={() => {
+                    onChange(undefined)
+                    setOpen(false)
+                  }}
+                  className="text-muted-foreground italic"
+                >
+                  <Check className="mr-2 h-4 w-4 opacity-0" />
+                  Clear selection
+                </CommandItem>
+              )}
               {users.map((user: any) => (
                 <CommandItem
                   key={user.id}

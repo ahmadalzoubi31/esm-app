@@ -35,7 +35,9 @@ export function CaseCategoryBasicInfo({ form }: BasicInfoFormProps) {
                 placeholder="e.g. Hardware Issues"
                 aria-invalid={field.state.meta.errors.length > 0}
               />
-              {field.state.meta.errors.length > 0 && <FieldError errors={field.state.meta.errors} />}
+              {field.state.meta.errors.length > 0 && (
+                <FieldError errors={field.state.meta.errors} />
+              )}
             </div>
           )}
         />
@@ -55,7 +57,9 @@ export function CaseCategoryBasicInfo({ form }: BasicInfoFormProps) {
                 className="min-h-[100px]"
                 aria-invalid={field.state.meta.errors.length > 0}
               />
-              {field.state.meta.errors.length > 0 && <FieldError errors={field.state.meta.errors} />}
+              {field.state.meta.errors.length > 0 && (
+                <FieldError errors={field.state.meta.errors} />
+              )}
             </div>
           )}
         />

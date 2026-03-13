@@ -44,7 +44,7 @@ export class CaseCommentsService {
     });
 
     // 6: Persist comment to database
-    await em.persistAndFlush(newComment);
+    await em.persist(newComment).flush();
     return newComment;
   }
 

@@ -4,6 +4,12 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Link } from '@tanstack/react-router'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -75,11 +81,30 @@ export const columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Description" />
     ),
-    cell: ({ row }) => (
-      <div className="font-medium truncate max-w-[250px]">
-        {row.original.description}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const description = row.original.description
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="font-medium truncate max-w-[250px] cursor-help">
+                {description}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-[400px] p-0 overflow-hidden border shadow-lg">
+              <div className="bg-muted px-3 py-1.5 border-b flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  Full Description
+                </span>
+              </div>
+              <div className="p-3 text-sm leading-relaxed whitespace-pre-wrap">
+                {description}
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )
+    },
     enableSorting: true,
     enableHiding: false,
   },
@@ -138,7 +163,10 @@ export const columns: ColumnDef<any>[] = [
       const r = row.original.requester
       return (
         <div className="text-sm">
-          {r ? `${r.first_name} ${r.last_name}` : '-'}
+          {r
+            ? r.display_name ||
+              `${r.first_name || ''} ${r.last_name || ''}`.trim()
+            : '-'}
         </div>
       )
     },
@@ -154,7 +182,7 @@ export const columns: ColumnDef<any>[] = [
       const assignmentGroup = row.original.assignmentGroup
       return (
         <div className="flex items-center gap-2">
-          <span className="text-sm">{assignmentGroup.name}</span>
+          <span className="text-sm">{assignmentGroup?.name || '-'}</span>
         </div>
       )
     },
@@ -171,7 +199,10 @@ export const columns: ColumnDef<any>[] = [
 
       return assignee ? (
         <div className="flex items-center gap-2">
-          <span className="text-sm">{assignee}</span>
+          <span className="text-sm">
+            {assignee.display_name ||
+              `${assignee.first_name} ${assignee.last_name}`}
+          </span>
         </div>
       ) : (
         <span className="text-muted-foreground text-sm italic">Unassigned</span>

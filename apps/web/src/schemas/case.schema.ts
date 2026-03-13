@@ -6,12 +6,16 @@ export const CaseSchema = z.object({
   description: z.string().optional(),
   status: z.nativeEnum(CaseStatus),
   priority: z.nativeEnum(CasePriority),
-  category_id: z.string().min(1, { message: 'Please select a category.' }),
-  subcategory_id: z.string().optional(),
-  requester_id: z.string().min(1, { message: 'Please select a requester.' }),
-  assignee_id: z.string().optional(),
-  assignment_group_id: z.string().min(1, { message: 'Please select an assignment group.' }),
-  business_line_id: z.string().min(1, { message: 'Please select a business line.' }),
-  affected_service_id: z.string().optional(),
-  request_card_id: z.string().optional(),
+  categoryId: z.string().min(1, { message: 'Please select a category.' }),
+  subcategoryId: z.string().optional(),
+  requesterId: z.string().min(1, { message: 'Please select a requester.' }),
+  assigneeId: z.string().optional(),
+  assignmentGroupId: z
+    .string()
+    .min(1, { message: 'Please select an assignment group.' }),
+  businessLineId: z
+    .string()
+    .min(1, { message: 'Please select a business line.' }),
+  affectedServiceId: z.string().optional(),
+  requestCardId: z.string().optional(),
 })

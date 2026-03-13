@@ -1,5 +1,5 @@
 import { Label } from '@/components/ui/label'
-import { FieldError } from '@/components/ui/field'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import {
   Card,
   CardContent,
@@ -7,57 +7,76 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { BasicInfoFormProps } from '@/types/form'
 import { UserMenu } from '@/components/web/common/menus/user-menu'
 import { GroupMenu } from '@/components/web/common/menus/group-menu'
+import { FormInstance } from '@/types'
+import z from 'zod'
+import { CaseSchema } from '@/schemas/case.schema'
+import { UserCheck2Icon } from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
 
-export function CaseAssignmentInfo({ form }: BasicInfoFormProps) {
+interface CaseAssignmentInfoProps {
+  form: FormInstance<z.infer<typeof CaseSchema>>
+}
+
+export function CaseAssignmentInfo({ form }: CaseAssignmentInfoProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Assignment Information</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <UserCheck2Icon className="h-5 w-5" />
+          Assignment Information
+        </CardTitle>
         <CardDescription>
           Designate the assignee and assignment group responsible for this case.
         </CardDescription>
       </CardHeader>
+
       <CardContent className="space-y-6">
+        <Separator />
+
+        {/* Assignee and Assignment Group */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <form.Field
-            name="assignee_id"
-            children={(field: any) => (
-              <div className="space-y-2">
-                <Label htmlFor={field.name}>Assignee</Label>
-                <UserMenu
-                  id={field.name}
-                  value={field.state.value}
-                  onChange={(val) => field.handleChange(val)}
-                  isInvalid={field.state.meta.errors.length > 0}
-                  placeholder="Select assignee..."
-                />
-                {field.state.meta.errors.length > 0 && (
-                  <FieldError errors={field.state.meta.errors} />
-                )}
-              </div>
-            )}
+            name="assignmentGroupId"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Assignment Group</FieldLabel>
+                  <GroupMenu
+                    id={field.name}
+                    value={field.state.value}
+                    onChange={(val) => field.handleChange(val)}
+                    isInvalid={isInvalid}
+                    placeholder="Select Assignment Group..."
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              )
+            }}
           />
 
           <form.Field
-            name="assignment_group_id"
-            children={(field: any) => (
-              <div className="space-y-2">
-                <Label htmlFor={field.name}>Assignment Group</Label>
-                <GroupMenu
-                  id={field.name}
-                  value={field.state.value}
-                  onChange={(val) => field.handleChange(val)}
-                  isInvalid={field.state.meta.errors.length > 0}
-                  placeholder="Select  assignemt group..."
-                />
-                {field.state.meta.errors.length > 0 && (
-                  <FieldError errors={field.state.meta.errors} />
-                )}
-              </div>
-            )}
+            name="assigneeId"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Assignee</FieldLabel>
+                  <UserMenu
+                    id={field.name}
+                    value={field.state.value}
+                    onChange={(val) => field.handleChange(val)}
+                    isInvalid={isInvalid}
+                    placeholder="Select Assignee..."
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              )
+            }}
           />
         </div>
       </CardContent>

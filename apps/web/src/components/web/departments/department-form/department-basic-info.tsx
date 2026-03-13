@@ -58,7 +58,10 @@ export function DepartmentBasicInfo({ form }: { form: any }) {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
               return (
-                <Field data-invalid={isInvalid} className="flex flex-row items-center space-x-2 space-y-0 pt-8">
+                <Field
+                  data-invalid={isInvalid}
+                  className="flex flex-row items-center space-x-2 space-y-0 pt-8"
+                >
                   <Switch
                     id={field.name}
                     checked={field.state.value}

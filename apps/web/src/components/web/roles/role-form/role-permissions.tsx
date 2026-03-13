@@ -9,9 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  ShieldCheck,
-} from 'lucide-react'
+import { ShieldCheck } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
@@ -113,9 +111,12 @@ function PermissionCheckboxes({
   }
 
   // Handle checking/unchecking all in a category
-  const handleCategoryCheckedChange = (categoryPermissions: Permission[], checked: boolean) => {
+  const handleCategoryCheckedChange = (
+    categoryPermissions: Permission[],
+    checked: boolean,
+  ) => {
     const current = new Set(field.state.value || []) as Set<string>
-    categoryPermissions.forEach(p => {
+    categoryPermissions.forEach((p) => {
       if (checked) {
         current.add(p.id)
       } else {
@@ -131,18 +132,18 @@ function PermissionCheckboxes({
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([category, permissions]) => {
           const allInCategorySelected = permissions.every((p) =>
-            selectedPermissions.includes(p.id)
+            selectedPermissions.includes(p.id),
           )
           const someInCategorySelected = permissions.some((p) =>
-            selectedPermissions.includes(p.id)
+            selectedPermissions.includes(p.id),
           )
 
           // Try indeterminate, fallback to false if it's not all but some are selected
           const categoryCheckedState = allInCategorySelected
             ? true
             : someInCategorySelected
-            ? 'indeterminate'
-            : false
+              ? 'indeterminate'
+              : false
 
           return (
             <div key={category} className="space-y-4">

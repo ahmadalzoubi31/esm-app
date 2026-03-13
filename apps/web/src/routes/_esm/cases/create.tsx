@@ -25,23 +25,25 @@ function CreateCasePage() {
       description: '',
       status: CaseStatus.NEW,
       priority: CasePriority.MEDIUM,
-      category_id: '',
-      subcategory_id: '',
-      requester_id: '',
-      assignee_id: '',
-      assignment_group_id: '',
-      business_line_id: '',
+      categoryId: '',
+      subcategoryId: '',
+      requesterId: '',
+      assigneeId: '',
+      assignmentGroupId: '',
+      businessLineId: '',
+      affectedServiceId: 'c840564e-218e-4b0d-93b5-c48be6dc4350',
     } as z.infer<typeof CaseSchema>,
     validators: {
       onSubmit: CaseSchema,
     },
     onSubmit: async ({ value }) => {
+      console.log('🚀 ~ CreateCasePage ~ value:', value)
       // Clean up empty optional fields
       const submitData = { ...value }
-      if (!submitData.subcategory_id) delete submitData.subcategory_id
-      if (!submitData.assignee_id) delete submitData.assignee_id
-      if (!submitData.affected_service_id) delete submitData.affected_service_id
-      if (!submitData.request_card_id) delete submitData.request_card_id
+      if (!submitData.subcategoryId) delete submitData.subcategoryId
+      if (!submitData.assigneeId) delete submitData.assigneeId
+      // if (!submitData.affectedServiceId) delete submitData.affectedServiceId
+      // if (!submitData.requestCardId) delete submitData.requestCardId
 
       await createMutation.mutateAsync(submitData as any)
       navigate({ to: '/cases' })
@@ -96,10 +98,7 @@ function CreateCasePage() {
               })}
             >
               {({ isSubmitting, isValid }: any) => (
-                <Button
-                  type="submit"
-                  disabled={isSubmitting || !isValid}
-                >
+                <Button type="submit" disabled={isSubmitting || !isValid}>
                   {isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -5,12 +5,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
 import { useBusinessLinesQuery } from '@/lib/queries/business-lines.query'
 import { BusinessLine } from '@/types/business-lines'
 
 export interface BusinessLineMenuProps {
-  value?: string
-  onChange: (value: string) => void
+  value?: string | null
+  onChange: (value: string | undefined) => void
   isInvalid?: boolean
   id?: string
 }
@@ -30,13 +31,25 @@ export function BusinessLineMenu({
     : (businessLinesItem as any)?.data || []
 
   return (
-    <Select value={value} onValueChange={onChange} disabled={isLoading}>
+    <Select
+      value={value || ''}
+      onValueChange={(val) => onChange(val === 'none' ? '' : val)}
+      disabled={isLoading}
+    >
       <SelectTrigger id={id} aria-invalid={isInvalid}>
         <SelectValue
           placeholder={isLoading ? 'Loading...' : 'Select business line'}
         />
       </SelectTrigger>
       <SelectContent>
+        {value && (
+          <>
+            <SelectItem value="none" className="text-muted-foreground italic">
+              Clear selection
+            </SelectItem>
+            <Separator className="my-1" />
+          </>
+        )}
         {businessLines.map((bl: BusinessLine) => (
           <SelectItem key={bl.key} value={bl.id}>
             {bl.name} ({bl.key})

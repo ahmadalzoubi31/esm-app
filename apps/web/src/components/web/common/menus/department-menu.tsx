@@ -5,12 +5,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
 import { useDepartmentsQuery } from '@/lib/queries/departments.query'
 import type { Department } from '@/types'
 
 export interface DepartmentMenuProps {
-  value?: string
-  onChange: (value: string) => void
+  value?: string | null
+  onChange: (value: string | undefined) => void
   isInvalid?: boolean
   id?: string
 }
@@ -29,13 +30,25 @@ export function DepartmentMenu({
     : (departmentsItem as any)?.data || []
 
   return (
-    <Select value={value} onValueChange={onChange} disabled={isLoading}>
+    <Select
+      value={value || undefined}
+      onValueChange={(val) => onChange(val === 'none' ? undefined : val)}
+      disabled={isLoading}
+    >
       <SelectTrigger id={id} aria-invalid={isInvalid}>
         <SelectValue
           placeholder={isLoading ? 'Loading...' : 'Select department'}
         />
       </SelectTrigger>
       <SelectContent>
+        {value && (
+          <>
+            <SelectItem value="none" className="text-muted-foreground italic">
+              Clear selection
+            </SelectItem>
+            <Separator className="my-1" />
+          </>
+        )}
         {departments.map((dept: Department) => (
           <SelectItem key={dept.id} value={dept.id}>
             {dept.name}
