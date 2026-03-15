@@ -182,7 +182,7 @@ export const columns: ColumnDef<any>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'subCategory',
+    accessorKey: 'subcategory',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Sub Category" />
     ),

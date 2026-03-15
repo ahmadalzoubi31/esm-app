@@ -145,7 +145,7 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
           />
 
           <form.Field
-            name="businessLineId"
+            name="businessLine"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -168,7 +168,7 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
         {/* Affected Service and Category and Subcategory */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <form.Field
-            name="affectedServiceId"
+            name="affectedService"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -178,7 +178,7 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
                   <BusinessLineMenu
                     id={field.name}
                     value={field.state.value}
-                    onChange={(val) => field.handleChange(val)}
+                    onChange={(val) => field.handleChange(val as any)}
                     isInvalid={isInvalid}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -188,7 +188,7 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
           />
 
           <form.Field
-            name="categoryId"
+            name="category"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -208,10 +208,10 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
           />
 
           <form.Subscribe
-            selector={(state) => [state.values.categoryId]}
-            children={([categoryId]) => (
+            selector={(state) => [state.values.category]}
+            children={([category]) => (
               <form.Field
-                name="subcategoryId"
+                name="subcategory"
                 children={(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid
@@ -221,7 +221,7 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
                       <CaseSubcategoryMenu
                         id={field.name}
                         value={field.state.value}
-                        categoryId={categoryId}
+                        categoryId={category}
                         onChange={(val) => field.handleChange(val)}
                         isInvalid={isInvalid}
                       />

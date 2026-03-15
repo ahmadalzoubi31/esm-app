@@ -1,53 +1,91 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ClockIcon } from 'lucide-react'
-import { formatDate } from '@/lib/format-date'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Clock, CheckCircle2, History } from 'lucide-react'
+import { format } from 'date-fns'
+import { Separator } from '@/components/ui/separator'
 
 interface CaseActivityLogProps {
   caseRecord: {
     createdAt: string
     updatedAt: string
+    title?: string
   }
 }
 
 export function CaseActivityLog({ caseRecord }: CaseActivityLogProps) {
+  // Since we don't have a backend timeline yet, we'll construct a basic one
+  // from the available case record timestamps.
+  const events = [
+    {
+      id: 'updated',
+      type: 'case.updated',
+      title: 'Last State Update',
+      timestamp: caseRecord.updatedAt,
+      Icon: History,
+      description: 'System record updated',
+    },
+    {
+      id: 'created',
+      type: 'case.created',
+      title: 'Case Created',
+      timestamp: caseRecord.createdAt,
+      Icon: CheckCircle2,
+      description: `New case ticket opened: ${caseRecord.title || 'Untitled'}`,
+    },
+  ].sort(
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+  )
+
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center gap-2">
-        <ClockIcon className="h-4 w-4 text-muted-foreground/40" />
-        <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">
-          Activity Log
-        </CardTitle>
+    <Card className="overflow-hidden">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+        <div className="flex flex-col gap-2">
+          <CardTitle className="flex items-center gap-2">
+            <Clock className="h-4 w-4 text-primary" />
+            Activity Log
+          </CardTitle>
+          <CardDescription>
+            Track the history of changes and updates to the case.
+          </CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="relative pl-8 space-y-10 before:absolute before:left-[0.45rem] before:top-2 before:bottom-2 before:w-[2px] before:bg-gradient-to-b before:from-primary/20 before:via-border/40 before:to-border/20">
-          <div className="relative">
-            <div className="absolute -left-8 top-1 h-4 w-4 rounded-full bg-primary ring-4 ring-primary/10 shadow-[0_0_15px_rgba(var(--primary),0.3)]" />
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-primary uppercase tracking-widest">
-                Initial Creation
-              </p>
-              <p className="text-sm font-bold text-foreground">
-                Case Ticket Opened
-              </p>
-              <p className="text-xs text-muted-foreground font-medium italic">
-                {formatDate(caseRecord.createdAt)}
-              </p>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="absolute -left-[1.85rem] top-1.5 h-2.5 w-2.5 rounded-full bg-muted-foreground/30 border-2 border-background" />
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                System Record
-              </p>
-              <p className="text-sm font-semibold text-muted-foreground">
-                Last State Change
-              </p>
-              <p className="text-xs text-muted-foreground/60 font-medium italic">
-                {formatDate(caseRecord.updatedAt)}
-              </p>
-            </div>
+        <Separator />
+        <div className="space-y-6">
+          <div className="pt-8">
+            {events.map((event, index) => {
+              const Icon = event.Icon
+              return (
+                <div key={event.id} className="flex gap-4 group">
+                  <div className="flex flex-col items-center">
+                    <div className="p-2 rounded-full bg-primary/5 group-hover:bg-primary/10 transition-colors">
+                      <Icon className="h-4 w-4 text-primary/70" />
+                    </div>
+                    {index < events.length - 1 && (
+                      <div className="w-px h-full bg-gradient-to-b from-border via-border/50 to-transparent my-1 min-h-[40px]" />
+                    )}
+                  </div>
+                  <div className="flex-1 pb-6 pt-0.5">
+                    <div className="flex justify-between items-start mb-1">
+                      <h4 className="font-semibold text-sm text-foreground/90 leading-none">
+                        {event.title}
+                      </h4>
+                    </div>
+                    <p className="text-[11.5px] text-muted-foreground leading-relaxed mb-2">
+                      {event.description}
+                    </p>
+                    <p className="text-[10.5px] font-medium text-muted-foreground/60 uppercase tracking-tight italic">
+                      {format(new Date(event.timestamp), 'PPpp')}
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </CardContent>

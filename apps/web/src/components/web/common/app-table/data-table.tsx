@@ -112,7 +112,7 @@ export function AppDataTable<TData, TValue>({
         renderToolbarActions={renderToolbarActions}
         renderLeftActions={renderLeftActions}
       />
-      <div className="rounded-md border">
+      <div className="rounded-md border grid">
         <Table>
           {/* <TableHeader className="bg-muted sticky top-0 z-10"> */}
           <TableHeader className="bg-muted ">

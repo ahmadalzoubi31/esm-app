@@ -87,6 +87,20 @@ export const API_ENDPOINTS = {
     DELETE: (id: string) => `/cases/${id}`,
     BULK_DELETE: '/cases',
   },
+  // Case Comments endpoints
+  CASE_COMMENTS: {
+    LIST: (caseId: string) => `/cases/${caseId}/comments`,
+    CREATE: (caseId: string) => `/cases/${caseId}/comments`,
+    UPDATE: (caseId: string, id: string) => `/cases/${caseId}/comments/${id}`,
+    DELETE: (caseId: string, id: string) => `/cases/${caseId}/comments/${id}`,
+  },
+  // Case Attachments endpoints
+  CASE_ATTACHMENTS: {
+    LIST: (caseId: string) => `/cases/${caseId}/attachments`,
+    UPLOAD: (caseId: string) => `/cases/${caseId}/attachments`,
+    DETAIL: (caseId: string, id: string) => `/cases/${caseId}/attachments/${id}`,
+    DELETE: (caseId: string, id: string) => `/cases/${caseId}/attachments/${id}`,
+  },
   // Role endpoints
   ROLES: {
     LIST: '/roles',

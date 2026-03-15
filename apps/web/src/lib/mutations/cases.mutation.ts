@@ -2,7 +2,8 @@ import { useMutation } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { toast } from 'sonner'
 import { caseKeys } from '../queries/cases.query'
-import { BulkUpdateCaseDto, CreateCaseDto, UpdateCaseDto } from '@/types'
+import { caseCommentKeys } from '../queries/case-comments.query'
+import { BulkUpdateCaseDto, CreateCaseCommentDto, CreateCaseDto, UpdateCaseDto } from '@/types'
 import { queryClient } from '../query-client'
 
 export function useCreateCaseMutation() {
@@ -68,6 +69,32 @@ export function useDeleteBulkCasesMutation() {
     },
     onError: () => {
       toast.error('Failed to delete cases')
+    },
+  })
+}
+
+export function useCreateCaseCommentMutation(caseId: string) {
+  return useMutation({
+    mutationFn: (data: CreateCaseCommentDto) =>
+      api.caseComments.create(caseId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: caseCommentKeys.list(caseId) })
+    },
+    onError: () => {
+      toast.error('Failed to send comment')
+    },
+  })
+}
+
+export function useDeleteCaseCommentMutation(caseId: string) {
+  return useMutation({
+    mutationFn: (commentId: string) => api.caseComments.remove(caseId, commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: caseCommentKeys.list(caseId) })
+      toast.success('Comment deleted')
+    },
+    onError: () => {
+      toast.error('Failed to delete comment')
     },
   })
 }

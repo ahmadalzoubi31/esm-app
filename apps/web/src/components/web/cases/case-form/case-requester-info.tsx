@@ -17,9 +17,10 @@ import { Separator } from '@/components/ui/separator'
 
 interface CaseRequesterInfoProps {
   form: FormInstance<z.infer<typeof CaseSchema>>
+  disabled?: boolean
 }
 
-export function CaseRequesterInfo({ form }: CaseRequesterInfoProps) {
+export function CaseRequesterInfo({ form, disabled }: CaseRequesterInfoProps) {
   return (
     <Card>
       <CardHeader>
@@ -28,7 +29,9 @@ export function CaseRequesterInfo({ form }: CaseRequesterInfoProps) {
           Requester Information
         </CardTitle>
         <CardDescription>
-          Select the requester and view their details.
+          {disabled
+            ? 'View the requester details.'
+            : 'Select the requester and view their details.'}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -36,7 +39,7 @@ export function CaseRequesterInfo({ form }: CaseRequesterInfoProps) {
 
         {/* Requester */}
         <form.Field
-          name="requesterId"
+          name="requester"
           children={(field) => {
             const isInvalid =
               field.state.meta.isTouched && !field.state.meta.isValid
@@ -46,9 +49,10 @@ export function CaseRequesterInfo({ form }: CaseRequesterInfoProps) {
                 <UserMenu
                   id={field.name}
                   value={field.state.value}
-                  onChange={(val) => field.handleChange(val)}
+                  onChange={(val) => field.handleChange(val as any)}
                   isInvalid={isInvalid}
                   placeholder="Select requester..."
+                  disabled={disabled}
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
@@ -57,7 +61,7 @@ export function CaseRequesterInfo({ form }: CaseRequesterInfoProps) {
         />
 
         <form.Subscribe
-          selector={(state: any) => [state.values.requesterId]}
+          selector={(state: any) => [state.values.requester]}
           children={([requesterId]: any) => (
             <>{requesterId && <RequesterDetails requesterId={requesterId} />}</>
           )}

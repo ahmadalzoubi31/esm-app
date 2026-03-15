@@ -144,3 +144,27 @@ export interface BulkUpdateCaseDto {
   ids: string[]
   data: UpdateCaseDto
 }
+
+export interface CaseComment {
+  id: string
+  body: string
+  isPrivate: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CreateCaseCommentDto {
+  body: string
+  isPrivate?: boolean
+}
+
+export interface CaseAttachment {
+  id: string
+  filename: string
+  originalName: string
+  mimeType: string
+  size: number
+  storagePath: string
+  createdAt: string
+  updatedAt: string
+}

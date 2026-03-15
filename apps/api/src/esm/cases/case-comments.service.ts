@@ -34,6 +34,7 @@ export class CaseCommentsService {
 
     // 4: Get Tenant Reference
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
+    console.log('🚀 ~ CaseCommentsService ~ create ~ tenantRef:', tenantRef);
 
     // 5: Create new comment entity
     const newComment = this.commentRepo.create({

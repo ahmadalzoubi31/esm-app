@@ -58,8 +58,11 @@ function CaseDetailsPage() {
         <div className="xl:col-span-8 space-y-6">
           <CaseRequester requester={caseRecord.requester} />
           <CaseDetailsOverview caseRecord={caseRecord} />
-          <CaseInternalDiscussion requester={caseRecord.requester} />
           <CaseAttachments />
+          <CaseInternalDiscussion
+            caseId={caseId}
+            requester={caseRecord.requester}
+          />
         </div>
 
         {/* Right Column - Sidebar */}

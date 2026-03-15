@@ -24,6 +24,7 @@ export interface UserMenuProps {
   isInvalid?: boolean
   id?: string
   placeholder?: string
+  disabled?: boolean
 }
 
 export function UserMenu({
@@ -32,6 +33,7 @@ export function UserMenu({
   isInvalid,
   id,
   placeholder = 'Select user...',
+  disabled,
 }: UserMenuProps) {
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -82,6 +84,7 @@ export function UserMenu({
           role="combobox"
           aria-expanded={open}
           aria-invalid={isInvalid}
+          disabled={disabled}
           className={cn(
             'w-full justify-between font-normal',
             !value && 'text-muted-foreground',

@@ -38,7 +38,7 @@ export function CaseAssignmentInfo({ form }: CaseAssignmentInfoProps) {
         {/* Assignee and Assignment Group */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <form.Field
-            name="assignmentGroupId"
+            name="assignmentGroup"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -48,7 +48,7 @@ export function CaseAssignmentInfo({ form }: CaseAssignmentInfoProps) {
                   <GroupMenu
                     id={field.name}
                     value={field.state.value}
-                    onChange={(val) => field.handleChange(val)}
+                    onChange={(val) => field.handleChange(val as any)}
                     isInvalid={isInvalid}
                     placeholder="Select Assignment Group..."
                   />
@@ -59,7 +59,7 @@ export function CaseAssignmentInfo({ form }: CaseAssignmentInfoProps) {
           />
 
           <form.Field
-            name="assigneeId"
+            name="assignee"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid

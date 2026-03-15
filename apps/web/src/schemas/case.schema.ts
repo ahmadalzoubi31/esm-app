@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { CaseStatus, CasePriority } from '@/types/cases'
+import { GroupSchema } from './group.schema'
 
 export const CaseSchema = z.object({
   title: z
@@ -13,9 +14,7 @@ export const CaseSchema = z.object({
   subcategory: z.string().optional(),
   requester: z.string().min(1, { message: 'Please select a requester.' }),
   assignee: z.string().optional(),
-  assignmentGroup: z
-    .string()
-    .min(1, { message: 'Please select an assignment group.' }),
+  assignmentGroup: GroupSchema
   businessLine: z
     .string()
     .min(1, { message: 'Please select a business line.' }),

@@ -13,6 +13,8 @@ import { groupsApi } from './groups.api'
 import { businessLinesApi } from './business-lines.api'
 import { departmentsApi } from './departments.api'
 import { casesApi } from './cases.api'
+import { caseCommentsApi } from './case-comments.api'
+import { caseAttachmentsApi } from './case-attachments.api'
 import { caseCategoriesApi } from './case-categories.api'
 import { caseSubcategoriesApi } from './case-subcategories.api'
 
@@ -27,10 +29,12 @@ export const api = {
   roles: rolesApi,
   permissions: permissionsApi,
   ldap: ldapApi,
-    groups: groupsApi,
+  groups: groupsApi,
   businessLines: businessLinesApi,
   departments: departmentsApi,
   cases: casesApi,
+  caseComments: caseCommentsApi,
+  caseAttachments: caseAttachmentsApi,
   caseCategories: caseCategoriesApi,
   caseSubcategories: caseSubcategoriesApi,
 }
@@ -46,6 +50,8 @@ export { groupsApi } from './groups.api'
 export { businessLinesApi } from './business-lines.api'
 export { departmentsApi } from './departments.api'
 export { casesApi } from './cases.api'
+export { caseCommentsApi } from './case-comments.api'
+export { caseAttachmentsApi } from './case-attachments.api'
 export { caseCategoriesApi } from './case-categories.api'
 export { caseSubcategoriesApi } from './case-subcategories.api'
 

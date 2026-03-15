@@ -19,6 +19,7 @@ function EditCasePage() {
   const { caseId } = Route.useParams()
   const navigate = useNavigate()
   const { data: caseData, isLoading, error } = useCaseQuery(caseId)
+  console.log('🚀 ~ EditCasePage ~ caseData:', caseData)
   const updateCaseMutation = useUpdateCaseMutation()
 
   if (isLoading) {
@@ -68,17 +69,17 @@ function EditCaseForm({
       description: caseData.description,
       status: caseData.status,
       priority: caseData.priority,
-      category: caseData.category.id,
-      subcategory: caseData.subcategory?.id,
-      requester: caseData.requester.id,
-      assignee: caseData.assignee?.id,
-      assignmentGroup: caseData.assignmentGroup.id,
-      businessLine: caseData.businessLine.id,
-      affectedService: caseData.affectedService?.id,
-      requestCard: caseData.requestCard?.id,
+      category: caseData.category,
+      subcategory: caseData.subcategory,
+      requester: caseData.requester,
+      assignee: caseData.assignee,
+      assignmentGroup: caseData.assignmentGroup,
+      businessLine: caseData.businessLine,
+      affectedService: caseData.affectedService,
+      requestCard: caseData.requestCard,
     } as z.infer<typeof CaseSchema>,
     validators: {
-      onSubmit: UpdateCaseSchema,
+      onSubmit: CaseSchema,
     },
     onSubmit: async ({ value }) => {
       const submitData = { ...value }
@@ -100,7 +101,7 @@ function EditCaseForm({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => navigate({ to: '/cases' })}
+          onClick={() => navigate({ to: '/cases/$caseId', params: { caseId } })}
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -122,7 +123,7 @@ function EditCaseForm({
         >
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-4 mx-auto pb-4 pt-4">
             <div className="space-y-6 lg:col-span-4">
-              <CaseRequesterInfo form={form} />
+              <CaseRequesterInfo form={form} disabled={true} />
               <CaseBasicInfo form={form} />
               <CaseAssignmentInfo form={form} />
             </div>

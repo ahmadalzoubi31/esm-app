@@ -5,7 +5,6 @@ import { Separator } from '@/components/ui/separator'
 import {
   ArrowLeft,
   ArrowRightLeftIcon,
-  CaseLowerIcon,
   Edit,
   RotateCcwIcon,
   ShareIcon,
@@ -37,7 +36,7 @@ export function CaseHeader({ caseRecord }: CaseHeaderProps) {
           asChild
           className="-ml-3 gap-2 text-muted-foreground hover:text-foreground hover:bg-transparent px-3"
         >
-          <Link to="/cases">
+          <Link to="/cases/$caseId" params={{ caseId: caseRecord.id }}>
             <ArrowLeft className="h-4 w-4" />
             <span className="font-semibold tracking-tight">
               Back to Workspace

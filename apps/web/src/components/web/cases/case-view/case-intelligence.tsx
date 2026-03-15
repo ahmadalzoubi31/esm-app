@@ -1,6 +1,18 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { Activity, UserIcon, UsersIcon, FolderOpenIcon } from 'lucide-react'
+import {
+  ActivityIcon,
+  UserIcon,
+  UsersIcon,
+  FolderOpenIcon,
+  SquareRoundCornerIcon,
+} from 'lucide-react'
 import { InfoItem } from './info-item'
 
 interface CaseIntelligenceProps {
@@ -10,25 +22,35 @@ interface CaseIntelligenceProps {
       first_name?: string
       last_name?: string
     }
-    assignmentGroup?: {
-      name?: string
+    assignmentGroup: {
+      name: string
     }
-    businessLine?: {
-      name?: string
+    businessLine: {
+      name: string
+    }
+    requestCard?: {
+      name: string
     }
   }
 }
 
 export function CaseIntelligence({ caseRecord }: CaseIntelligenceProps) {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center gap-2">
-        <Activity className="h-4 w-4 text-primary opacity-50" />
-        <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">
-          Case Intelligence
-        </CardTitle>
+    <Card className="overflow-hidden">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+        <div className="flex flex-col gap-2">
+          <CardTitle className="flex items-center gap-2">
+            <ActivityIcon className="h-5 w-5" />
+            Case Intelligence
+          </CardTitle>
+          <CardDescription>
+            Case Intelligence provides insights into the case, including the
+            assignee, assignment group, business line, and request card.
+          </CardDescription>{' '}
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
+        <Separator />
         <div className="flex flex-col gap-4">
           <InfoItem
             icon={<UserIcon className="h-4 w-4" />}
@@ -51,19 +73,25 @@ export function CaseIntelligence({ caseRecord }: CaseIntelligenceProps) {
           <InfoItem
             icon={<UsersIcon className="h-4 w-4" />}
             label="Accountable Group"
-            value={caseRecord.assignmentGroup?.name || 'No Group'}
+            value={caseRecord.assignmentGroup.name}
           />
         </div>
 
-        <Separator className="bg-border/20" />
+        <InfoItem
+          icon={<SquareRoundCornerIcon className="h-4 w-4" />}
+          label="Source"
+          value={
+            caseRecord.requestCard?.name
+              ? 'Self Service: ' + caseRecord.requestCard?.name
+              : 'Direct Entry'
+          }
+        />
 
-        {caseRecord.businessLine && (
-          <InfoItem
-            icon={<FolderOpenIcon className="h-4 w-4" />}
-            label="Service Line"
-            value={caseRecord.businessLine.name}
-          />
-        )}
+        <InfoItem
+          icon={<FolderOpenIcon className="h-4 w-4" />}
+          label="Business Line"
+          value={caseRecord.businessLine.name}
+        />
       </CardContent>
     </Card>
   )

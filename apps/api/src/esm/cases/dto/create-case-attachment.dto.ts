@@ -3,10 +3,6 @@ import { IsString, IsNumber, IsUUID } from 'class-validator';
 
 export class CreateCaseAttachmentDto {
   @ApiProperty()
-  @IsUUID()
-  caseId!: string;
-
-  @ApiProperty()
   @IsString()
   filename!: string;
 

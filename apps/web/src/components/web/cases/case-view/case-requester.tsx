@@ -35,7 +35,7 @@ export function CaseRequester({ requester }: CaseRequesterProps) {
                   : 'SY'}
               </AvatarFallback>
             </Avatar>
-            <div className="absolute bottom-1 right-1 h-5 w-5 rounded-full bg-emerald-500 border-[3px] border-background" />
+            {/* <div className="absolute bottom-1 right-1 h-5 w-5 rounded-full bg-emerald-500 border-[3px] border-background" /> */}
           </div>
 
           <div className="flex-1 space-y-6">
