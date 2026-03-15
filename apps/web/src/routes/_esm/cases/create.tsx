@@ -25,13 +25,13 @@ function CreateCasePage() {
       description: '',
       status: CaseStatus.NEW,
       priority: CasePriority.MEDIUM,
-      categoryId: '',
-      subcategoryId: '',
-      requesterId: '',
-      assigneeId: '',
-      assignmentGroupId: '',
-      businessLineId: '',
-      affectedServiceId: 'c840564e-218e-4b0d-93b5-c48be6dc4350',
+      category: '',
+      subcategory: '',
+      requester: '',
+      assignee: '',
+      assignmentGroup: '',
+      businessLine: '',
+      affectedService: 'c840564e-218e-4b0d-93b5-c48be6dc4350',
     } as z.infer<typeof CaseSchema>,
     validators: {
       onSubmit: CaseSchema,
@@ -40,8 +40,8 @@ function CreateCasePage() {
       console.log('🚀 ~ CreateCasePage ~ value:', value)
       // Clean up empty optional fields
       const submitData = { ...value }
-      if (!submitData.subcategoryId) delete submitData.subcategoryId
-      if (!submitData.assigneeId) delete submitData.assigneeId
+      if (!submitData.subcategory) delete submitData.subcategory
+      if (!submitData.assignee) delete submitData.assignee
       // if (!submitData.affectedServiceId) delete submitData.affectedServiceId
       // if (!submitData.requestCardId) delete submitData.requestCardId
 
@@ -52,7 +52,7 @@ function CreateCasePage() {
 
   return (
     <>
-      <div className="flex flex-row items-center gap-4 px-4 lg:px-8">
+      <div className="flex flex-row items-center gap-4">
         <Button
           variant="ghost"
           size="icon"
@@ -68,7 +68,7 @@ function CreateCasePage() {
         </div>
       </div>
 
-      <div className="px-8 lg:px-8">
+      <div className="">
         <form
           onSubmit={(e) => {
             e.preventDefault()

@@ -273,7 +273,7 @@ export function AppDataTableAdvancedFilter<TData>({
               return (
                 <div key={condition.id} className="flex items-center gap-2">
                   {/* Field */}
-                  <div className="">
+                  <div className="space-y-4">
                     <Select
                       value={condition.field as string}
                       onValueChange={(value) =>
@@ -304,7 +304,7 @@ export function AppDataTableAdvancedFilter<TData>({
                   </div>
 
                   {/* Operator */}
-                  <div className="">
+                  <div className="space-y-4">
                     <Select
                       value={condition.operator}
                       onValueChange={(value: FilterOperator) =>

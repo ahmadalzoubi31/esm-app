@@ -5,56 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { CaseStatus } from '@/types/cases'
-
-import {
-  Circle,
-  Clock,
-  CheckCircle2,
-  XCircle,
-  PlayCircle,
-  UserCheck,
-} from 'lucide-react'
-
-export const CASE_STATUS_OPTIONS = [
-  { label: 'New', value: CaseStatus.NEW, icon: Circle, color: 'text-blue-500' },
-  {
-    label: 'Waiting for Approval',
-    value: CaseStatus.WAITING_FOR_APPROVAL,
-    icon: UserCheck,
-    color: 'text-yellow-500',
-  },
-  {
-    label: 'Pending',
-    value: CaseStatus.PENDING,
-    icon: Clock,
-    color: 'text-orange-500',
-  },
-  {
-    label: 'In Progress',
-    value: CaseStatus.IN_PROGRESS,
-    icon: PlayCircle,
-    color: 'text-indigo-500',
-  },
-  {
-    label: 'Resolved',
-    value: CaseStatus.RESOLVED,
-    icon: CheckCircle2,
-    color: 'text-green-500',
-  },
-  {
-    label: 'Closed',
-    value: CaseStatus.CLOSED,
-    icon: CheckCircle2,
-    color: 'text-gray-500',
-  },
-  {
-    label: 'Canceled',
-    value: CaseStatus.CANCELED,
-    icon: XCircle,
-    color: 'text-red-500',
-  },
-]
+import { CASE_STATUS_OPTIONS, CaseStatus } from '@/types/cases'
 
 import { Separator } from '@/components/ui/separator'
 

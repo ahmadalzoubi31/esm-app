@@ -1,6 +1,6 @@
 import { ShieldIcon, UsersIcon, LockIcon } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Role } from '@/types'
+import { Role } from '@/types/roles'
 
 interface RolesStatsProps {
   roles: Role[]
@@ -12,7 +12,7 @@ export function RolesStats({ roles }: RolesStatsProps) {
   const rolesWithPermissions = roles.filter((r) => r.permissionCount > 0).length
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-4 lg:grid-cols-8">
       <Card className="gap-2">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Roles</CardTitle>

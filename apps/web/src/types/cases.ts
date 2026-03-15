@@ -3,6 +3,18 @@ import { Group } from './groups'
 import { BusinessLine } from './business-lines'
 import { CaseCategory } from './case-categories'
 import { CaseSubcategory } from './case-subcategories'
+import {
+  Circle,
+  UserCheck,
+  Clock,
+  PlayCircle,
+  CheckCircle2,
+  XCircle,
+  AlertOctagon,
+  ArrowDownCircle,
+  ArrowRightCircle,
+  ArrowUpCircle,
+} from 'lucide-react'
 
 export const CaseStatus = {
   NEW: 'NEW',
@@ -16,6 +28,46 @@ export const CaseStatus = {
 
 export type CaseStatus = (typeof CaseStatus)[keyof typeof CaseStatus]
 
+export const CASE_STATUS_OPTIONS = [
+  { label: 'New', value: CaseStatus.NEW, icon: Circle, color: 'text-blue-500' },
+  {
+    label: 'Waiting for Approval',
+    value: CaseStatus.WAITING_FOR_APPROVAL,
+    icon: UserCheck,
+    color: 'text-yellow-500',
+  },
+  {
+    label: 'Pending',
+    value: CaseStatus.PENDING,
+    icon: Clock,
+    color: 'text-orange-500',
+  },
+  {
+    label: 'In Progress',
+    value: CaseStatus.IN_PROGRESS,
+    icon: PlayCircle,
+    color: 'text-indigo-500',
+  },
+  {
+    label: 'Resolved',
+    value: CaseStatus.RESOLVED,
+    icon: CheckCircle2,
+    color: 'text-green-500',
+  },
+  {
+    label: 'Closed',
+    value: CaseStatus.CLOSED,
+    icon: CheckCircle2,
+    color: 'text-gray-500',
+  },
+  {
+    label: 'Canceled',
+    value: CaseStatus.CANCELED,
+    icon: XCircle,
+    color: 'text-red-500',
+  },
+]
+
 export const CasePriority = {
   LOW: 'LOW',
   MEDIUM: 'MEDIUM',
@@ -24,6 +76,33 @@ export const CasePriority = {
 } as const
 
 export type CasePriority = (typeof CasePriority)[keyof typeof CasePriority]
+
+export const CASE_PRIORITY_OPTIONS = [
+  {
+    label: 'Low',
+    value: CasePriority.LOW,
+    icon: ArrowDownCircle,
+    color: 'text-blue-500',
+  },
+  {
+    label: 'Medium',
+    value: CasePriority.MEDIUM,
+    icon: ArrowRightCircle,
+    color: 'text-green-500',
+  },
+  {
+    label: 'High',
+    value: CasePriority.HIGH,
+    icon: ArrowUpCircle,
+    color: 'text-orange-500',
+  },
+  {
+    label: 'Critical',
+    value: CasePriority.CRITICAL,
+    icon: AlertOctagon,
+    color: 'text-red-500',
+  },
+]
 
 export interface Case {
   id: string

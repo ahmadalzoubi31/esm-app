@@ -26,7 +26,7 @@ export class Case extends TenantBaseEntity {
   @Index({ options: { unique: true } })
   number!: string;
 
-  @Property({ length: 200 })
+  @Property({ length: 50 })
   title!: string;
 
   @Property({ type: 'text', nullable: true })

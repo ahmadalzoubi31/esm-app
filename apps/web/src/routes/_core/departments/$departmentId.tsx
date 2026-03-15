@@ -17,7 +17,8 @@ function EditDepartmentPage() {
   const { departmentId } = Route.useParams()
   const navigate = useNavigate()
 
-  const { data: departmentResponse, isLoading: departmentLoading } = useDepartmentQuery(departmentId)
+  const { data: departmentResponse, isLoading: departmentLoading } =
+    useDepartmentQuery(departmentId)
   const updateMutation = useUpdateDepartmentMutation()
 
   // Handle case where API response format might differ
@@ -58,7 +59,7 @@ function EditDepartmentPage() {
 
   return (
     <>
-      <div className="flex flex-row items-center gap-4 px-4 lg:px-8">
+      <div className="flex flex-row items-center gap-4">
         <Button
           variant="ghost"
           size="icon"
@@ -74,7 +75,7 @@ function EditDepartmentPage() {
         </div>
       </div>
 
-      <div className="px-8 lg:px-8">
+      <div className="">
         <form
           onSubmit={(e) => {
             e.preventDefault()

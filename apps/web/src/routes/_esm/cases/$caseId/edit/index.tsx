@@ -5,11 +5,11 @@ import { ArrowLeft, Loader2 } from 'lucide-react'
 import { CaseBasicInfo } from '@/components/web/cases/case-form/case-basic-info'
 import { CaseRequesterInfo } from '@/components/web/cases/case-form/case-requester-info'
 import { CaseAssignmentInfo } from '@/components/web/cases/case-form/case-assignment-info'
-
 import { useCaseQuery } from '@/lib/queries/cases.query'
-import { useUpdateCaseMutation } from '@/lib/mutations/cases.mutation'
-import { CaseSchema } from '@/schemas/case.schema'
+import { CaseSchema, UpdateCaseSchema } from '@/schemas/case.schema'
 import z from 'zod'
+import { Case } from '@/types'
+import { useUpdateCaseMutation } from '@/lib/mutations'
 
 export const Route = createFileRoute('/_esm/cases/$caseId/edit/')({
   component: EditCasePage,
@@ -18,61 +18,10 @@ export const Route = createFileRoute('/_esm/cases/$caseId/edit/')({
 function EditCasePage() {
   const { caseId } = Route.useParams()
   const navigate = useNavigate()
+  const { data: caseData, isLoading, error } = useCaseQuery(caseId)
+  const updateCaseMutation = useUpdateCaseMutation()
 
-  const { data: caseResponse, isLoading: caseLoading } = useCaseQuery(caseId)
-  const updateMutation = useUpdateCaseMutation()
-
-  const caseData = caseResponse as any
-
-  const form = useForm({
-    defaultValues: {
-      title: caseData?.title || '',
-      description: caseData?.description || '',
-      status: caseData?.status || 'NEW',
-      priority: caseData?.priority || 'MEDIUM',
-      category_id:
-        (caseData?.category as any)?.id || caseData?.category_id || '',
-      subcategory_id:
-        (caseData?.subcategory as any)?.id || caseData?.subcategory_id || '',
-      requester_id:
-        (caseData?.requester as any)?.id || caseData?.requester_id || '',
-      assignee_id:
-        (caseData?.assignee as any)?.id || caseData?.assignee_id || '',
-      assignment_group_id:
-        (caseData?.assignment_group as any)?.id ||
-        caseData?.assignment_group_id ||
-        '',
-      business_line_id:
-        (caseData?.business_line as any)?.id ||
-        caseData?.business_line_id ||
-        '',
-      affected_service_id:
-        (caseData?.affected_service as any)?.id ||
-        caseData?.affected_service_id ||
-        '',
-      request_card_id:
-        (caseData?.request_card as any)?.id || caseData?.request_card_id || '',
-    } as z.infer<typeof CaseSchema>,
-    validators: {
-      onSubmit: CaseSchema,
-    },
-    onSubmit: async ({ value }) => {
-      const submitData = { ...value }
-      if (!submitData.subcategory_id) delete submitData.subcategory_id
-      if (!submitData.assignee_id) delete submitData.assignee_id
-      if (!submitData.affected_service_id) delete submitData.affected_service_id
-      if (!submitData.request_card_id) delete submitData.request_card_id
-
-      await updateMutation.mutateAsync({
-        id: caseId,
-        data: submitData,
-      })
-
-      navigate({ to: '/cases' })
-    },
-  })
-
-  if (caseLoading) {
+  if (isLoading) {
     return (
       <div className="flex h-[200px] w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -80,9 +29,74 @@ function EditCasePage() {
     )
   }
 
+  if (error || !caseData) {
+    return (
+      <div className="flex h-[50vh] w-full items-center justify-center flex-col gap-2">
+        <div className="text-lg font-semibold">Case not found</div>
+        <div className="text-muted-foreground">
+          The case you are looking for does not exist or you don't have
+          permission to view it.
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <EditCaseForm
+      caseData={caseData}
+      caseId={caseId}
+      navigate={navigate}
+      mutation={updateCaseMutation}
+    />
+  )
+}
+
+function EditCaseForm({
+  caseData,
+  caseId,
+  navigate,
+  mutation,
+}: {
+  caseData: Case
+  caseId: string
+  navigate: any
+  mutation: any
+}) {
+  const form = useForm({
+    defaultValues: {
+      title: caseData.title,
+      description: caseData.description,
+      status: caseData.status,
+      priority: caseData.priority,
+      category: caseData.category.id,
+      subcategory: caseData.subcategory?.id,
+      requester: caseData.requester.id,
+      assignee: caseData.assignee?.id,
+      assignmentGroup: caseData.assignmentGroup.id,
+      businessLine: caseData.businessLine.id,
+      affectedService: caseData.affectedService?.id,
+      requestCard: caseData.requestCard?.id,
+    } as z.infer<typeof CaseSchema>,
+    validators: {
+      onSubmit: UpdateCaseSchema,
+    },
+    onSubmit: async ({ value }) => {
+      const submitData = { ...value }
+      if (!submitData.subcategory) delete submitData.subcategory
+      if (!submitData.assignee) delete submitData.assignee
+      if (!submitData.requestCard) delete submitData.requestCard
+
+      await mutation.mutateAsync({
+        id: caseId,
+        data: submitData,
+      })
+      navigate({ to: '/cases' })
+    },
+  })
+
   return (
     <>
-      <div className="flex flex-row items-center gap-4 px-4 lg:px-8">
+      <div className="flex flex-row items-center gap-4">
         <Button
           variant="ghost"
           size="icon"
@@ -91,14 +105,14 @@ function EditCasePage() {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="text-2xl font-bold tracking-tight">
-          Edit Case: {caseData?.number || caseId}
+          Edit Case: {caseData.number}
           <div className="text-muted-foreground text-sm font-normal">
             Update case details
           </div>
         </div>
       </div>
 
-      <div className="px-8 lg:px-8">
+      <div className="">
         <form
           onSubmit={(e) => {
             e.preventDefault()

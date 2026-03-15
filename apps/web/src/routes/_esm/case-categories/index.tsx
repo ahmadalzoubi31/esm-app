@@ -21,14 +21,14 @@ function RouteComponent() {
   const [advancedFilter, setAdvancedFilter] = useState<
     FilterGroup<any> | undefined
   >()
-  
+
   // Note: search component will need advanced hook usage if filters are stringified, assuming same as users/departments
   const { data: response, isLoading } = useCaseCategoriesQuery()
 
   const categoriesData = response || []
 
   return (
-    <div className="px-2 lg:px-3 py-4 space-y-4">
+    <div className="space-y-4">
       <CaseCategoriesStats categories={categoriesData} />
 
       <AppDataTable

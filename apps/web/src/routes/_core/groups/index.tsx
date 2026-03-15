@@ -24,7 +24,7 @@ function RouteComponent() {
   const { data: groups, isLoading } = useGroupsQuery()
 
   return (
-    <div className="px-2 lg:px-3 py-4 space-y-4">
+    <div className="space-y-4">
       <GroupsStats groups={groups || []} />
 
       <AppDataTable

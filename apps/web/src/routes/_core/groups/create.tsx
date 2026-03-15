@@ -44,7 +44,7 @@ function CreateGroupPage() {
 
   return (
     <>
-      <div className="flex flex-row items-center gap-4 px-4 lg:px-8 py-4">
+      <div className="flex flex-row items-center gap-4 py-4">
         <Button
           variant="ghost"
           size="icon"
@@ -60,7 +60,7 @@ function CreateGroupPage() {
         </div>
       </div>
 
-      <div className="px-8 lg:px-8">
+      <div className="">
         <form
           onSubmit={(e) => {
             e.preventDefault()

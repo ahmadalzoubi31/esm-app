@@ -13,7 +13,7 @@ export const Route = createFileRoute('/_core/settings/ldap/')({
 
 function LdapSettingsPage() {
   return (
-    <div className="px-2 lg:px-3 py-4 space-y-4">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
           <h3 className="text-xl font-bold tracking-tight">LDAP Management</h3>

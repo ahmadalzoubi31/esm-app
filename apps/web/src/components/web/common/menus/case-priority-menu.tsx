@@ -5,41 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { CasePriority } from '@/types/cases'
-
-import {
-  ArrowDownCircle,
-  ArrowRightCircle,
-  ArrowUpCircle,
-  AlertOctagon,
-} from 'lucide-react'
-
-export const CASE_PRIORITY_OPTIONS = [
-  {
-    label: 'Low',
-    value: CasePriority.LOW,
-    icon: ArrowDownCircle,
-    color: 'text-blue-500',
-  },
-  {
-    label: 'Medium',
-    value: CasePriority.MEDIUM,
-    icon: ArrowRightCircle,
-    color: 'text-green-500',
-  },
-  {
-    label: 'High',
-    value: CasePriority.HIGH,
-    icon: ArrowUpCircle,
-    color: 'text-orange-500',
-  },
-  {
-    label: 'Critical',
-    value: CasePriority.CRITICAL,
-    icon: AlertOctagon,
-    color: 'text-red-500',
-  },
-]
+import { CASE_PRIORITY_OPTIONS, CasePriority } from '@/types/cases'
 
 import { Separator } from '@/components/ui/separator'
 

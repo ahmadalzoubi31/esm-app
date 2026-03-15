@@ -10,7 +10,10 @@ import {
   useAssignPermissionsMutation,
   useRemovePermissionsMutation,
 } from '@/lib/mutations/roles.mutation'
-import { useRoleQuery, useRolePermissionsQuery } from '@/lib/queries/roles.query'
+import {
+  useRoleQuery,
+  useRolePermissionsQuery,
+} from '@/lib/queries/roles.query'
 import { RoleSchema } from '@/schemas/role.schema'
 import z from 'zod'
 
@@ -59,7 +62,7 @@ function EditRolePage() {
 
       const permsToAdd = newPermIds.filter((id) => !currentPermIds.includes(id))
       const permsToRemove = currentPermIds.filter(
-        (id) => !newPermIds.includes(id)
+        (id) => !newPermIds.includes(id),
       )
 
       if (permsToAdd.length > 0) {
@@ -90,7 +93,7 @@ function EditRolePage() {
 
   return (
     <>
-      <div className="flex flex-row items-center gap-4 px-4 lg:px-8">
+      <div className="flex flex-row items-center gap-4">
         <Button
           variant="ghost"
           size="icon"
@@ -106,7 +109,7 @@ function EditRolePage() {
         </div>
       </div>
 
-      <div className="px-8 lg:px-8">
+      <div className="">
         <form
           onSubmit={(e) => {
             e.preventDefault()

@@ -10,6 +10,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { CASE_PRIORITY_OPTIONS, CASE_STATUS_OPTIONS, CaseStatus } from '@/types'
+import { GroupIcon, User2, UserIcon, Users, UsersIcon } from 'lucide-react'
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -36,7 +38,7 @@ export const columns: ColumnDef<any>[] = [
       </div>
     ),
     enableSorting: false,
-    enableHiding: false,
+    enableHiding: true,
   },
   {
     accessorKey: 'id',
@@ -72,7 +74,7 @@ export const columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Title" />
     ),
-    cell: ({ row }) => <div className="font-medium">{row.original.title}</div>,
+    cell: ({ row }) => <div className="text-sm">{row.original.title}</div>,
     enableSorting: true,
     enableHiding: false,
   },
@@ -87,7 +89,7 @@ export const columns: ColumnDef<any>[] = [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="font-medium truncate max-w-[250px] cursor-help">
+              <div className="text-sm min-w-[300px] max-w-[300px] truncate cursor-help">
                 {description}
               </div>
             </TooltipTrigger>
@@ -106,7 +108,7 @@ export const columns: ColumnDef<any>[] = [
       )
     },
     enableSorting: true,
-    enableHiding: false,
+    enableHiding: true,
   },
   {
     accessorKey: 'status',
@@ -116,9 +118,23 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       const status = row.original.status
       return (
-        <Badge variant="outline" className="whitespace-nowrap">
-          {status}
-        </Badge>
+        <div className="w-32 text-base">
+          {CASE_STATUS_OPTIONS.filter((option) => option.value === status).map(
+            (option) => {
+              const Icon = option.icon
+              return (
+                <Badge
+                  key={option.value}
+                  variant="outline"
+                  className="text-muted-foreground px-1.5"
+                >
+                  <Icon className={option.color} />
+                  {option.label}
+                </Badge>
+              )
+            },
+          )}
+        </div>
       )
     },
     enableSorting: true,
@@ -132,12 +148,23 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       const priority = row.original.priority
       return (
-        <Badge
-          variant={priority === 'CRITICAL' ? 'destructive' : 'secondary'}
-          className="whitespace-nowrap"
-        >
-          {priority}
-        </Badge>
+        <div className="w-32 text-base">
+          {CASE_PRIORITY_OPTIONS.filter(
+            (option) => option.value === priority,
+          ).map((option) => {
+            const Icon = option.icon
+            return (
+              <Badge
+                key={option.value}
+                variant="outline"
+                className="text-muted-foreground px-1.5"
+              >
+                <Icon className={option.color} />
+                {option.label}
+              </Badge>
+            )
+          })}
+        </div>
       )
     },
     enableSorting: true,
@@ -155,6 +182,28 @@ export const columns: ColumnDef<any>[] = [
     enableHiding: true,
   },
   {
+    accessorKey: 'subCategory',
+    header: ({ column }) => (
+      <AppDataTableColumnHeader column={column} title="Sub Category" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm">{row.original.subCategory?.name || '-'}</div>
+    ),
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'businessLine',
+    header: ({ column }) => (
+      <AppDataTableColumnHeader column={column} title="Business Line" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm">{row.original.businessLine?.name || '-'}</div>
+    ),
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
     accessorKey: 'requester',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Requester" />
@@ -162,16 +211,18 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       const r = row.original.requester
       return (
-        <div className="text-sm">
-          {r
-            ? r.display_name ||
-              `${r.first_name || ''} ${r.last_name || ''}`.trim()
-            : '-'}
+        <div className="flex items-center gap-2">
+          <span className="text-sm">
+            {r
+              ? r.display_name ||
+                `${r.first_name || ''} ${r.last_name || ''}`.trim()
+              : '-'}
+          </span>
         </div>
       )
     },
     enableSorting: true,
-    enableHiding: false,
+    enableHiding: true,
   },
   {
     accessorKey: 'assignmentGroup',
@@ -182,12 +233,13 @@ export const columns: ColumnDef<any>[] = [
       const assignmentGroup = row.original.assignmentGroup
       return (
         <div className="flex items-center gap-2">
+          <UsersIcon className="h-3.5 w-3.5 text-muted-foreground" />
           <span className="text-sm">{assignmentGroup?.name || '-'}</span>
         </div>
       )
     },
     enableSorting: true,
-    enableHiding: false,
+    enableHiding: true,
   },
   {
     accessorKey: 'assignee',
@@ -199,6 +251,8 @@ export const columns: ColumnDef<any>[] = [
 
       return assignee ? (
         <div className="flex items-center gap-2">
+          <UserIcon className="h-3.5 w-3.5 text-muted-foreground" />
+
           <span className="text-sm">
             {assignee.display_name ||
               `${assignee.first_name} ${assignee.last_name}`}
@@ -209,12 +263,31 @@ export const columns: ColumnDef<any>[] = [
       )
     },
     enableSorting: true,
-    enableHiding: false,
+    enableHiding: true,
   },
   {
     accessorKey: 'createdAt',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Created At" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm">
+        {new Date(row.original.createdAt).toLocaleString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+        })}
+      </div>
+    ),
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'updatedAt',
+    header: ({ column }) => (
+      <AppDataTableColumnHeader column={column} title="Updated At" />
     ),
     cell: ({ row }) => (
       <div className="text-sm">

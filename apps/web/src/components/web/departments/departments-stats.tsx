@@ -10,10 +10,12 @@ export function DepartmentsStats({ departments }: DepartmentsStatsProps) {
   const activeDepartments = departments.filter((d) => d.active).length
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-4 lg:grid-cols-8">
       <Card className="gap-2">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Departments</CardTitle>
+          <CardTitle className="text-sm font-medium">
+            Total Departments
+          </CardTitle>
           <Building2 className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
@@ -22,7 +24,9 @@ export function DepartmentsStats({ departments }: DepartmentsStatsProps) {
       </Card>
       <Card className="gap-2">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Active Departments</CardTitle>
+          <CardTitle className="text-sm font-medium">
+            Active Departments
+          </CardTitle>
           <UsersIcon className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>

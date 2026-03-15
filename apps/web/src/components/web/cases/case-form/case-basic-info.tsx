@@ -58,7 +58,19 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
                   autoComplete="off"
                   placeholder="Brief summary of the issue"
                 />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                <div className="flex justify-between items-start gap-2 mt-0 px-1">
+                  <div className="flex-1">
+                    {isInvalid && (
+                      <FieldError
+                        errors={field.state.meta.errors}
+                        className="mt-0"
+                      />
+                    )}
+                  </div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground/70 tabular-nums">
+                    {field.state.value?.length || 0}/50
+                  </span>
+                </div>
               </Field>
             )
           }}
@@ -90,8 +102,8 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
           }}
         />
 
-        {/* Status and Priority */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Status and Priority and business line */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <form.Field
             name="status"
             children={(field) => {
@@ -131,10 +143,50 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
               )
             }}
           />
+
+          <form.Field
+            name="businessLineId"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Business Line</FieldLabel>
+                  <BusinessLineMenu
+                    id={field.name}
+                    value={field.state.value}
+                    onChange={(val) => field.handleChange(val as any)}
+                    isInvalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              )
+            }}
+          />
         </div>
 
-        {/* Category and Subcategory */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Affected Service and Category and Subcategory */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <form.Field
+            name="affectedServiceId"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Affected Service</FieldLabel>
+                  <BusinessLineMenu
+                    id={field.name}
+                    value={field.state.value}
+                    onChange={(val) => field.handleChange(val)}
+                    isInvalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              )
+            }}
+          />
+
           <form.Field
             name="categoryId"
             children={(field) => {
@@ -181,49 +233,6 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
                 }}
               />
             )}
-          />
-        </div>
-
-        {/* Affected Service and Business Line */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <form.Field
-            name="affectedServiceId"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Affected Service</FieldLabel>
-                  <BusinessLineMenu
-                    id={field.name}
-                    value={field.state.value}
-                    onChange={(val) => field.handleChange(val)}
-                    isInvalid={isInvalid}
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              )
-            }}
-          />
-
-          <form.Field
-            name="businessLineId"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Business Line</FieldLabel>
-                  <BusinessLineMenu
-                    id={field.name}
-                    value={field.state.value}
-                    onChange={(val) => field.handleChange(val as any)}
-                    isInvalid={isInvalid}
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              )
-            }}
           />
         </div>
       </CardContent>

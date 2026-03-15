@@ -2,20 +2,27 @@ import { z } from 'zod'
 import { CaseStatus, CasePriority } from '@/types/cases'
 
 export const CaseSchema = z.object({
-  title: z.string().min(5, { message: 'Title must be at least 5 characters.' }),
+  title: z
+    .string()
+    .min(5, { message: 'Title must be at least 5 characters.' })
+    .max(50, { message: 'Title must be at most 50 characters.' }),
   description: z.string().optional(),
-  status: z.nativeEnum(CaseStatus),
-  priority: z.nativeEnum(CasePriority),
-  categoryId: z.string().min(1, { message: 'Please select a category.' }),
-  subcategoryId: z.string().optional(),
-  requesterId: z.string().min(1, { message: 'Please select a requester.' }),
-  assigneeId: z.string().optional(),
-  assignmentGroupId: z
+  status: z.enum(CaseStatus),
+  priority: z.enum(CasePriority),
+  category: z.string().min(1, { message: 'Please select a category.' }),
+  subcategory: z.string().optional(),
+  requester: z.string().min(1, { message: 'Please select a requester.' }),
+  assignee: z.string().optional(),
+  assignmentGroup: z
     .string()
     .min(1, { message: 'Please select an assignment group.' }),
-  businessLineId: z
+  businessLine: z
     .string()
     .min(1, { message: 'Please select a business line.' }),
-  affectedServiceId: z.string().optional(),
-  requestCardId: z.string().optional(),
+  affectedService: z
+    .string()
+    .min(1, { message: 'Please select an affected service.' }),
+  requestCard: z.string().optional(),
 })
+
+export const UpdateCaseSchema = CaseSchema

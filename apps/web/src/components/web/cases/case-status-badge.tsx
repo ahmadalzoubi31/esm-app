@@ -32,13 +32,9 @@ export function CaseStatusBadge({ status, className }: CaseStatusBadgeProps) {
   return (
     <Badge
       variant="outline"
-      className={cn(
-        'gap-1.5 px-3 py-1 shadow-sm',
-        getStatusStyles(status),
-        className,
-      )}
+      className={cn(getStatusStyles(status), className, 'text-[11px]')}
     >
-      <span className="capitalize font-semibold">
+      <span className="capitalize font-semibold ">
         {status?.toLowerCase().replace(/_/g, ' ')}
       </span>
     </Badge>

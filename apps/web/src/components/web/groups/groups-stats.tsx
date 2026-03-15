@@ -16,7 +16,7 @@ export function GroupsStats({ groups }: GroupsStatsProps) {
   const totalGroups = groups.length
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+    <div className="grid gap-4 md:grid-cols-4 lg:grid-cols-8">
       <Card className="gap-2">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Groups</CardTitle>
@@ -26,7 +26,6 @@ export function GroupsStats({ groups }: GroupsStatsProps) {
           <div className="text-2xl font-bold">{totalGroups}</div>
         </CardContent>
       </Card>
-      
     </div>
   )
 }

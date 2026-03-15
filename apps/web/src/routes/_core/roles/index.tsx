@@ -29,7 +29,7 @@ function RouteComponent() {
   const roleData = roles?.data || []
 
   return (
-    <div className="px-2 lg:px-3 py-4 space-y-4">
+    <div className="space-y-4">
       <RolesStats roles={roleData} />
 
       <AppDataTable
@@ -51,7 +51,7 @@ function RouteComponent() {
         )}
         renderToolbarActions={() => (
           <Button variant="default" size="sm" asChild>
-              <Link to="/roles/create">
+            <Link to="/roles/create">
               <PlusIcon className="mr-2 h-4 w-4" />
               Add New
             </Link>

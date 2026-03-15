@@ -170,10 +170,7 @@ export class RoleSeeder extends Seeder {
     const roleRepo = em.getRepository(Role);
     const permissionRepo = em.getRepository(Permission);
 
-    const tenantIds = [
-      '6da67552-faeb-4507-9f58-0161803afca8',
-      '5beb697a-d171-4716-8d79-cb3b42bb0d19',
-    ];
+    const tenantIds = ['6da67552-faeb-4507-9f58-0161803afca8'];
 
     for (const tenantId of tenantIds) {
       // 3: Get Tenant Reference

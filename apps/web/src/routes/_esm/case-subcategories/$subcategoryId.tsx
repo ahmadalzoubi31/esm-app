@@ -9,15 +9,18 @@ import { useUpdateCaseSubcategoryMutation } from '@/lib/mutations/case-subcatego
 import { CaseSubcategorySchema } from '@/schemas/case-subcategory.schema'
 import z from 'zod'
 
-export const Route = createFileRoute('/_esm/case-subcategories/$subcategoryId')({
-  component: EditCaseSubcategoryPage,
-})
+export const Route = createFileRoute('/_esm/case-subcategories/$subcategoryId')(
+  {
+    component: EditCaseSubcategoryPage,
+  },
+)
 
 function EditCaseSubcategoryPage() {
   const { subcategoryId } = Route.useParams()
   const navigate = useNavigate()
 
-  const { data: subcategoryResponse, isLoading: subcategoryLoading } = useCaseSubcategoryQuery(subcategoryId)
+  const { data: subcategoryResponse, isLoading: subcategoryLoading } =
+    useCaseSubcategoryQuery(subcategoryId)
   const updateMutation = useUpdateCaseSubcategoryMutation()
 
   const subcategory = subcategoryResponse?.data || subcategoryResponse
@@ -26,7 +29,8 @@ function EditCaseSubcategoryPage() {
     defaultValues: {
       name: subcategory?.name || '',
       description: subcategory?.description || '',
-      category_id: (subcategory?.category as any)?.id || subcategory?.category_id || '',
+      category_id:
+        (subcategory?.category as any)?.id || subcategory?.category_id || '',
     } as z.infer<typeof CaseSubcategorySchema>,
     validators: {
       onSubmit: CaseSubcategorySchema,
@@ -57,7 +61,7 @@ function EditCaseSubcategoryPage() {
 
   return (
     <>
-      <div className="flex flex-row items-center gap-4 px-4 lg:px-8">
+      <div className="flex flex-row items-center gap-4">
         <Button
           variant="ghost"
           size="icon"
@@ -73,7 +77,7 @@ function EditCaseSubcategoryPage() {
         </div>
       </div>
 
-      <div className="px-8 lg:px-8">
+      <div className="">
         <form
           onSubmit={(e) => {
             e.preventDefault()

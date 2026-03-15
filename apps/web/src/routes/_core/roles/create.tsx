@@ -32,9 +32,10 @@ function CreateRolePage() {
       const roleData = {
         name: value.name,
         description: value.description,
-        permissionIds: value.permissions.length > 0 ? value.permissions : undefined,
+        permissionIds:
+          value.permissions.length > 0 ? value.permissions : undefined,
       }
-      
+
       await createMutation.mutateAsync(roleData as any)
 
       navigate({ to: '/roles' })
@@ -43,7 +44,7 @@ function CreateRolePage() {
 
   return (
     <>
-      <div className="flex flex-row items-center gap-4 px-4 lg:px-8">
+      <div className="flex flex-row items-center gap-4">
         <Button
           variant="ghost"
           size="icon"
@@ -59,7 +60,7 @@ function CreateRolePage() {
         </div>
       </div>
 
-      <div className="px-8 lg:px-8">
+      <div className="">
         <form
           onSubmit={(e) => {
             e.preventDefault()

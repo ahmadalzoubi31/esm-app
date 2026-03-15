@@ -68,6 +68,12 @@ export function AppDataTable<TData, TValue>({
     return data
   }, [data, advancedFilter])
 
+  const [pageSize] = React.useState<number>(() => {
+    if (typeof window === 'undefined') return 10
+    const stored = localStorage.getItem('app-table-page-size')
+    return stored ? Number(stored) : 10
+  })
+
   const table = useReactTable({
     data: filteredData,
     columns,
@@ -79,9 +85,7 @@ export function AppDataTable<TData, TValue>({
     },
     initialState: {
       pagination: {
-        pageSize: typeof window !== 'undefined' && localStorage.getItem('app-table-page-size')
-          ? Number(localStorage.getItem('app-table-page-size'))
-          : 10,
+        pageSize,
       },
     },
     enableRowSelection: true,

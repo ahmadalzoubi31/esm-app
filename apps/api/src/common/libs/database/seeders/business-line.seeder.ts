@@ -29,10 +29,7 @@ export class BusinessLineSeeder extends Seeder {
     // 1. Get repositories
     const businessLineRepo = em.getRepository(BusinessLine);
 
-    const tenantIds = [
-      '6da67552-faeb-4507-9f58-0161803afca8',
-      '5beb697a-d171-4716-8d79-cb3b42bb0d19',
-    ];
+    const tenantIds = ['6da67552-faeb-4507-9f58-0161803afca8'];
 
     for (const tenantId of tenantIds) {
       const tenantRef = em.getReference(Tenant, tenantId);
