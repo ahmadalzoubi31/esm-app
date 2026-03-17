@@ -4,15 +4,15 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import {
   ArrowLeft,
-  ArrowRightLeftIcon,
   Edit,
-  RotateCcwIcon,
-  ShareIcon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/format-date'
 import { CaseStatusBadge } from '@/components/web/cases/case-status-badge'
 import { getPriorityColor } from './info-item'
+import { CaseStatusModal } from './modals/case-status-modal'
+import { CaseReassignModal } from './modals/case-reassign-modal'
+import { CaseShareModal } from './modals/case-share-modal'
 
 interface CaseHeaderProps {
   caseRecord: {
@@ -23,6 +23,7 @@ interface CaseHeaderProps {
     priority: string
     createdAt: string
     updatedAt: string
+    assignee?: { id: string }
   }
 }
 
@@ -59,18 +60,15 @@ export function CaseHeader({ caseRecord }: CaseHeaderProps) {
               <span className="font-semibold">Modify Case</span>
             </Link>
           </Button>
-          <Button size="sm" variant="outline" className="ml-auto h-8 lg:flex">
-            <ArrowRightLeftIcon className="h-3.5 w-3.5" />
-            <span className="font-semibold">Change Case Status</span>
-          </Button>
-          <Button size="sm" variant="outline" className="ml-auto h-8 lg:flex">
-            <RotateCcwIcon className="h-3.5 w-3.5" />
-            <span className="font-semibold">Reassign Case</span>
-          </Button>
-          <Button size="sm" variant="outline" className="ml-auto h-8 lg:flex">
-            <ShareIcon className="h-3.5 w-3.5" />
-            <span className="font-semibold">Share Case</span>
-          </Button>
+          <CaseStatusModal
+            caseId={caseRecord.id}
+            currentStatus={caseRecord.status}
+          />
+          <CaseReassignModal
+            caseId={caseRecord.id}
+            currentAssigneeId={caseRecord.assignee?.id}
+          />
+          <CaseShareModal caseNumber={caseRecord.number} />
         </div>
       </div>
 

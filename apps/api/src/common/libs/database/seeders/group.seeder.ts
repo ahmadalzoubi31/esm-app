@@ -1,0 +1,74 @@
+import { EntityManager } from '@mikro-orm/core';
+import { Seeder } from '@mikro-orm/seeder';
+import { Group } from '../../../../core/groups/entities/group.entity';
+import { GROUP_TYPE_ENUM } from '../../../../core/groups/constants/group-type.constant';
+import { BusinessLine } from '../../../../core/business-lines/entities/business-line.entity';
+import { Department } from '../../../../core/departments/entities/department.entity';
+import { Tenant } from '../../../../tenants/entities/tenant.entity';
+
+export class GroupSeeder extends Seeder {
+  async run(em: EntityManager): Promise<void> {
+    const groupRepo = em.getRepository(Group);
+    const businessLineRepo = em.getRepository(BusinessLine);
+    const departmentRepo = em.getRepository(Department);
+    const tenantId = '6da67552-faeb-4507-9f58-0161803afca8';
+    const tenantRef = em.getReference(Tenant, tenantId);
+
+    // Get dependencies
+    const itBusinessLine = await businessLineRepo.findOne({ key: 'it', tenant: tenantId }, { filters: { tenant: false } });
+    const itDepartment = await departmentRepo.findOne({ code: 'information-technology', tenant: tenantId }, { filters: { tenant: false } });
+
+    if (!itBusinessLine || !itDepartment) {
+      console.warn('⚠ Could not find IT Business Line or IT Department. Skipping Group seeding for IT.');
+    } else {
+      const groups = [
+        {
+          name: 'IT Service Desk',
+          type: GROUP_TYPE_ENUM.HELP_DESK,
+          description: 'First point of contact for IT issues.',
+        },
+        {
+          name: 'Network Operations',
+          type: GROUP_TYPE_ENUM.TIER_2,
+          description: 'Manages network infrastructure and connectivity.',
+        },
+        {
+          name: 'Security Operations',
+          type: GROUP_TYPE_ENUM.TIER_2,
+          description: 'Handles security monitoring and incident response.',
+        },
+        {
+          name: 'App Support Tier 1',
+          type: GROUP_TYPE_ENUM.TIER_1,
+          description: 'Intermediate support for enterprise applications.',
+        },
+      ];
+
+      for (const groupData of groups) {
+        const existing = await groupRepo.findOne({
+          name: groupData.name,
+          tenant: tenantId,
+        }, { filters: { tenant: false } });
+
+        if (existing) {
+          console.log(`✔ Group ${groupData.name} already exists, skipping.`);
+          continue;
+        }
+
+        em.create(Group, {
+          id: crypto.randomUUID(),
+          name: groupData.name,
+          type: groupData.type,
+          description: groupData.description,
+          businessLine: itBusinessLine,
+          department: itDepartment,
+          tenant: tenantRef,
+        } as any);
+        
+        console.log(`✔ Created group: ${groupData.name}`);
+      }
+    }
+
+    await em.flush();
+  }
+}

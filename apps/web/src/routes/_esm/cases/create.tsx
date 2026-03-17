@@ -7,7 +7,7 @@ import { CaseRequesterInfo } from '@/components/web/cases/case-form/case-request
 import { CaseAssignmentInfo } from '@/components/web/cases/case-form/case-assignment-info'
 
 import { useCreateCaseMutation } from '@/lib/mutations'
-import { CaseSchema, CreateCaseSchema } from '@/schemas/case.schema'
+import { CaseSchema } from '@/schemas/case.schema'
 import z from 'zod'
 import { CaseStatus, CasePriority } from '@/types/cases'
 
@@ -25,23 +25,23 @@ function CreateCasePage() {
       description: '',
       status: CaseStatus.NEW,
       priority: CasePriority.MEDIUM,
-      category: '',
-      subcategory: '',
-      requester: '',
-      assignee: '',
-      assignmentGroup: '',
-      businessLine: '',
-      affectedService: 'c840564e-218e-4b0d-93b5-c48be6dc4350',
+      categoryId: '',
+      subcategoryId: '',
+      requesterId: '',
+      assigneeId: '',
+      assignmentGroupId: '',
+      businessLineId: '',
+      affectedServiceId: 'c840564e-218e-4b0d-93b5-c48be6dc4350',
     } as z.infer<typeof CaseSchema>,
     validators: {
-      onSubmit: CreateCaseSchema,
+      onSubmit: CaseSchema,
     },
     onSubmit: async ({ value }) => {
       console.log('🚀 ~ CreateCasePage ~ value:', value)
       // Clean up empty optional fields
       const submitData = { ...value }
-      if (!submitData.subcategory) delete submitData.subcategory
-      if (!submitData.assignee) delete submitData.assignee
+      if (!submitData.subcategoryId) delete submitData.subcategoryId
+      if (!submitData.assigneeId) delete submitData.assigneeId
       // if (!submitData.affectedServiceId) delete submitData.affectedServiceId
       // if (!submitData.requestCardId) delete submitData.requestCardId
 

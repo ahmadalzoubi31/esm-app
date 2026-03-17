@@ -39,7 +39,7 @@ export function CaseRequesterInfo({ form, disabled }: CaseRequesterInfoProps) {
 
         {/* Requester */}
         <form.Field
-          name="requester"
+          name="requesterId"
           children={(field) => {
             const isInvalid =
               field.state.meta.isTouched && !field.state.meta.isValid
@@ -61,7 +61,7 @@ export function CaseRequesterInfo({ form, disabled }: CaseRequesterInfoProps) {
         />
 
         <form.Subscribe
-          selector={(state: any) => [state.values.requester]}
+          selector={(state: any) => [state.values.requesterId]}
           children={([requesterId]: any) => (
             <>{requesterId && <RequesterDetails requesterId={requesterId} />}</>
           )}

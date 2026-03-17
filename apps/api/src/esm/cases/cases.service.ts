@@ -6,9 +6,9 @@ import { UpdateCaseDto } from './dto/update-case.dto';
 import { Case } from './entities/case.entity';
 import { Tenant } from '../../tenants/entities/tenant.entity';
 import { BusinessLine } from 'src/core/business-lines/entities/business-line.entity';
-import { CaseCategory } from '../case-categories/entities/case-category.entity';
+import { Category } from '../../core/categories/entities/category.entity';
+import { Subcategory } from '../../core/subcategories/entities/subcategory.entity';
 import { User } from '../../core/users/entities/user.entity';
-import { CaseSubcategory } from '../case-subcategories/entities/case-subcategory.entity';
 import { CasePriority } from './constants/case-priority.constant';
 import { CaseStatus } from './constants/case-status.constant';
 import { Group } from '../../core/groups/entities/group.entity';
@@ -30,10 +30,10 @@ export class CasesService {
     private readonly caseRepo: EntityRepository<Case>,
     @InjectRepository(BusinessLine)
     private readonly businessLineRepo: EntityRepository<BusinessLine>,
-    @InjectRepository(CaseCategory)
-    private readonly categoryRepo: EntityRepository<CaseCategory>,
-    @InjectRepository(CaseSubcategory)
-    private readonly subcategoryRepo: EntityRepository<CaseSubcategory>,
+    @InjectRepository(Category)
+    private readonly categoryRepo: EntityRepository<Category>,
+    @InjectRepository(Subcategory)
+    private readonly subcategoryRepo: EntityRepository<Subcategory>,
     @InjectRepository(User)
     private readonly userRepo: EntityRepository<User>,
     @InjectRepository(Group)

@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { CaseCategoryMenu } from '@/components/web/common/menus/case-category-menu'
-import { CaseSubcategoryMenu } from '@/components/web/common/menus/case-subcategory-menu'
+import { CategoryMenu } from '@/components/web/common/menus/category-menu'
+import { SubcategoryMenu } from '@/components/web/common/menus/subcategory-menu'
 import { BusinessLineMenu } from '@/components/web/common/menus/business-line-menu'
 import { CaseSchema } from '@/schemas/case.schema'
 import { CasePriority, CaseStatus, FormInstance } from '@/types'
@@ -145,7 +145,7 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
           />
 
           <form.Field
-            name="businessLine"
+            name="businessLineId"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -168,7 +168,7 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
         {/* Affected Service and Category and Subcategory */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <form.Field
-            name="affectedService"
+            name="affectedServiceId"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -188,17 +188,20 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
           />
 
           <form.Field
-            name="category"
+            name="categoryId"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Category</FieldLabel>
-                  <CaseCategoryMenu
+                  <CategoryMenu
                     id={field.name}
                     value={field.state.value}
-                    onChange={(val) => field.handleChange(val)}
+                    onChange={(val) => {
+                      field.handleChange(val)
+                      form.setFieldValue('subcategoryId', '')
+                    }}
                     isInvalid={isInvalid}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -208,20 +211,20 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
           />
 
           <form.Subscribe
-            selector={(state) => [state.values.category]}
-            children={([category]) => (
+            selector={(state) => [state.values.categoryId]}
+            children={([categoryId]) => (
               <form.Field
-                name="subcategory"
+                name="subcategoryId"
                 children={(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>Subcategory</FieldLabel>
-                      <CaseSubcategoryMenu
+                      <SubcategoryMenu
                         id={field.name}
                         value={field.state.value}
-                        categoryId={category}
+                        categoryId={categoryId}
                         onChange={(val) => field.handleChange(val)}
                         isInvalid={isInvalid}
                       />

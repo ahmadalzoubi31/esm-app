@@ -36,8 +36,7 @@ export function useSignInMutation() {
       await router.navigate({ to: redirectUrl || '/dashboard' })
     },
     onError: (error) => {
-      console.error('Login error:', error)
-      toast.error('Failed to log in: Invalid credentials')
+      toast.error('Failed to log in: Unauthorized')
     },
   })
 }

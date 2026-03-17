@@ -38,7 +38,7 @@ export function CaseAssignmentInfo({ form }: CaseAssignmentInfoProps) {
         {/* Assignee and Assignment Group */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <form.Field
-            name="assignmentGroup"
+            name="assignmentGroupId"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -59,7 +59,7 @@ export function CaseAssignmentInfo({ form }: CaseAssignmentInfoProps) {
           />
 
           <form.Field
-            name="assignee"
+            name="assigneeId"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid

@@ -13,12 +13,8 @@ import { databaseConfig, jwtConfig, serverConfig } from './config';
 import { CoreModule } from './core/core.module';
 import { EsmModule } from './esm/esm.module';
 import { TenantsModule } from './tenants/tenants.module';
-import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
-import { EntityManager } from '@mikro-orm/core';
-import { CasesModule } from './esm/cases/cases.module';
-import { CaseCategoriesModule } from './esm/case-categories/case-categories.module';
-import { CaseSubcategoriesModule } from './esm/case-subcategories/case-subcategories.module';
 
 @Module({
   imports: [
@@ -35,9 +31,6 @@ import { CaseSubcategoriesModule } from './esm/case-subcategories/case-subcatego
         configService.get('database')!,
       inject: [ConfigService],
     }),
-    CasesModule,
-    CaseCategoriesModule,
-    CaseSubcategoriesModule,
   ],
   controllers: [AppController],
   providers: [

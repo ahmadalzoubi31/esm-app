@@ -69,6 +69,14 @@ const nav_items = {
           title: 'Permissions',
           url: '/permissions',
         },
+        {
+          title: 'Categories',
+          url: '/categories',
+        },
+        {
+          title: 'Subcategories',
+          url: '/subcategories',
+        },
       ],
     },
     {
@@ -100,12 +108,8 @@ const nav_items = {
           url: '/cases',
         },
         {
-          title: 'Case Categories',
-          url: '/case-categories',
-        },
-        {
-          title: 'Case Subcategories',
-          url: '/case-subcategories',
+          title: 'Create Cases',
+          url: '/cases/create',
         },
       ],
     },

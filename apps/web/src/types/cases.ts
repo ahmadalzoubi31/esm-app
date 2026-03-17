@@ -1,8 +1,8 @@
 import { User } from './users'
 import { Group } from './groups'
 import { BusinessLine } from './business-lines'
-import { CaseCategory } from './case-categories'
-import { CaseSubcategory } from './case-subcategories'
+import { Category } from './categories'
+import { Subcategory } from './subcategories'
 import {
   Circle,
   UserCheck,
@@ -111,8 +111,8 @@ export interface Case {
   description?: string
   status: CaseStatus
   priority: CasePriority
-  category: CaseCategory
-  subcategory?: CaseSubcategory
+  category: Category
+  subcategory?: Subcategory
   requester: User
   assignee?: User
   assignmentGroup: Group
@@ -128,14 +128,14 @@ export interface CreateCaseDto {
   description?: string
   priority?: CasePriority
   status?: CaseStatus
-  category_id: string
-  subcategory_id?: string
-  requester_id: string
-  assignee_id?: string
-  assignment_group_id: string
-  business_line_id: string
-  affected_service_id?: string
-  request_card_id?: string
+  categoryId: string
+  subcategoryId?: string
+  requesterId: string
+  assigneeId?: string
+  assignment_groupId: string
+  business_lineId: string
+  affected_serviceId?: string
+  request_cardId?: string
 }
 
 export type UpdateCaseDto = Partial<CreateCaseDto>

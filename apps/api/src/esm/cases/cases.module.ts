@@ -8,8 +8,8 @@ import { CaseAttachmentsService } from './case-attachments.service';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Case } from './entities/case.entity';
 import { BusinessLine } from 'src/core/business-lines/entities/business-line.entity';
-import { CaseCategory } from '../case-categories/entities/case-category.entity';
-import { CaseSubcategory } from '../case-subcategories/entities/case-subcategory.entity';
+import { Category } from '../../core/categories/entities/category.entity';
+import { Subcategory } from '../../core/subcategories/entities/subcategory.entity';
 import { User } from 'src/core/users/entities/user.entity';
 import { Group } from 'src/core/groups/entities/group.entity';
 import { Service } from '../catalog/services/entities/service.entity';
@@ -23,8 +23,8 @@ import { PermissionsModule } from 'src/core/permissions/permissions.module';
     MikroOrmModule.forFeature([
       Case,
       BusinessLine,
-      CaseCategory,
-      CaseSubcategory,
+      Category,
+      Subcategory,
       User,
       Group,
       Service,

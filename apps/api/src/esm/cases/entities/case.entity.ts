@@ -13,8 +13,8 @@ import { Group } from '../../../core/groups/entities/group.entity';
 import { BusinessLine } from '../../../core/business-lines/entities/business-line.entity';
 import { Service } from '../../catalog/services/entities/service.entity';
 import { ServiceCard } from '../../catalog/service-cards/entities/service-card.entity';
-import { CaseCategory } from '../../case-categories/entities/case-category.entity';
-import { CaseSubcategory } from '../../case-subcategories/entities/case-subcategory.entity';
+import { Category } from '../../../core/categories/entities/category.entity';
+import { Subcategory } from '../../../core/subcategories/entities/subcategory.entity';
 import { CaseStatus } from '../constants/case-status.constant';
 import { CasePriority } from '../constants/case-priority.constant';
 import { CaseAttachment } from './case-attachment.entity';
@@ -38,16 +38,16 @@ export class Case extends TenantBaseEntity {
   @Enum({ items: () => CasePriority, default: CasePriority.MEDIUM })
   priority: CasePriority = CasePriority.MEDIUM;
 
-  @ManyToOne(() => CaseCategory)
-  category!: CaseCategory;
+  @ManyToOne(() => Category)
+  category!: Category;
 
-  @ManyToOne(() => CaseSubcategory)
-  subcategory?: CaseSubcategory;
+  @ManyToOne(() => Subcategory)
+  subcategory?: Subcategory;
 
   @ManyToOne(() => User, { fieldName: 'requester_id' })
   requester!: User;
 
-  @ManyToOne(() => User, { nullable: true, fieldName: 'assignee_id' })
+  @ManyToOne(() => User, { nullable: true, fieldName: 'assigneeId' })
   assignee?: User;
 
   @ManyToOne(() => Group, { fieldName: 'assignment_group_id' })

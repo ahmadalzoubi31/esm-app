@@ -61,22 +61,22 @@ export const API_ENDPOINTS = {
     BULK_DELETE: '/departments',
   },
   // Case Categories endpoints
-  CASE_CATEGORIES: {
-    LIST: '/case-categories',
-    DETAIL: (id: string) => `/case-categories/${id}`,
-    CREATE: '/case-categories',
-    UPDATE: (id: string) => `/case-categories/${id}`,
-    DELETE: (id: string) => `/case-categories/${id}`,
-    BULK_DELETE: '/case-categories',
+  CATEGORIES: {
+    LIST: '/categories',
+    DETAIL: (id: string) => `/categories/${id}`,
+    CREATE: '/categories',
+    UPDATE: (id: string) => `/categories/${id}`,
+    DELETE: (id: string) => `/categories/${id}`,
+    BULK_DELETE: '/categories',
   },
   // Case Subcategories endpoints
-  CASE_SUBCATEGORIES: {
-    LIST: '/case-subcategories',
-    DETAIL: (id: string) => `/case-subcategories/${id}`,
-    CREATE: '/case-subcategories',
-    UPDATE: (id: string) => `/case-subcategories/${id}`,
-    DELETE: (id: string) => `/case-subcategories/${id}`,
-    BULK_DELETE: '/case-subcategories',
+  SUBCATEGORIES: {
+    LIST: '/subcategories',
+    DETAIL: (id: string) => `/subcategories/${id}`,
+    CREATE: '/subcategories',
+    UPDATE: (id: string) => `/subcategories/${id}`,
+    DELETE: (id: string) => `/subcategories/${id}`,
+    BULK_DELETE: '/subcategories',
   },
   // Cases endpoints
   CASES: {
@@ -98,8 +98,10 @@ export const API_ENDPOINTS = {
   CASE_ATTACHMENTS: {
     LIST: (caseId: string) => `/cases/${caseId}/attachments`,
     UPLOAD: (caseId: string) => `/cases/${caseId}/attachments`,
-    DETAIL: (caseId: string, id: string) => `/cases/${caseId}/attachments/${id}`,
-    DELETE: (caseId: string, id: string) => `/cases/${caseId}/attachments/${id}`,
+    DETAIL: (caseId: string, id: string) =>
+      `/cases/${caseId}/attachments/${id}`,
+    DELETE: (caseId: string, id: string) =>
+      `/cases/${caseId}/attachments/${id}`,
   },
   // Role endpoints
   ROLES: {

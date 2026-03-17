@@ -30,11 +30,11 @@ export class CreateCaseDto {
   @IsOptional()
   priority?: CasePriority;
 
-  @ApiProperty({ description: 'UUID of the Case Category' })
+  @ApiProperty({ description: 'UUID of the category' })
   @IsUUID()
   categoryId!: string;
 
-  @ApiPropertyOptional({ description: 'UUID of the Case Subcategory' })
+  @ApiPropertyOptional({ description: 'UUID of the Subcategory' })
   @IsUUID()
   @IsOptional()
   subcategoryId?: string;

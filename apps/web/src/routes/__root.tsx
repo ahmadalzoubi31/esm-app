@@ -3,7 +3,6 @@ import {
   Outlet,
   Scripts,
   createRootRoute,
-  createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClientProvider } from '@tanstack/react-query'

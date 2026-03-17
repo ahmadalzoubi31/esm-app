@@ -5,6 +5,10 @@ import { PermissionSeeder } from './permissions.seeder';
 import { RoleSeeder } from './roles.seeder';
 import { UserSeeder } from './user.seeder';
 import { TenantSeeder } from './tenant.seeder';
+import { DepartmentSeeder } from './department.seeder';
+import { GroupSeeder } from './group.seeder';
+import { CategorySeeder } from './category.seeder';
+import { SubcategorySeeder } from './subcategory.seeder';
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
@@ -17,6 +21,10 @@ export class DatabaseSeeder extends Seeder {
       PermissionSeeder,
       RoleSeeder,
       BusinessLineSeeder,
+      DepartmentSeeder,
+      GroupSeeder,
+      CategorySeeder,
+      SubcategorySeeder,
       UserSeeder,
     ]);
 

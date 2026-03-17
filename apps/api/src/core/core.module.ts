@@ -7,6 +7,8 @@ import { CaslModule } from './casl/casl.module';
 import { BusinessLineModule } from './business-lines/business-line.module';
 import { GroupsModule } from './groups/groups.module';
 import { DepartmentsModule } from './departments/departments.module';
+import { CategoriesModule } from './categories/categories.module';
+import { SubcategoriesModule } from './subcategories/subcategories.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { DepartmentsModule } from './departments/departments.module';
     CaslModule,
     BusinessLineModule,
     DepartmentsModule,
+    CategoriesModule,
+    SubcategoriesModule,
   ],
 })
 export class CoreModule {}

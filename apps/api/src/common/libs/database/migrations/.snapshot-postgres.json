@@ -1089,7 +1089,7 @@
           "mappedType": "string"
         }
       },
-      "name": "case_categories",
+      "name": "categories",
       "schema": "public",
       "indexes": [
         {
@@ -1097,13 +1097,13 @@
             "tenant_id"
           ],
           "composite": false,
-          "keyName": "case_categories_tenant_id_index",
+          "keyName": "categories_tenant_id_index",
           "constraint": false,
           "primary": false,
           "unique": false
         },
         {
-          "keyName": "case_categories_pkey",
+          "keyName": "categories_pkey",
           "columnNames": [
             "id"
           ],
@@ -1115,12 +1115,12 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "case_categories_tenant_id_foreign": {
-          "constraintName": "case_categories_tenant_id_foreign",
+        "categories_tenant_id_foreign": {
+          "constraintName": "categories_tenant_id_foreign",
           "columnNames": [
             "tenant_id"
           ],
-          "localTableName": "public.case_categories",
+          "localTableName": "public.categories",
           "referencedColumnNames": [
             "id"
           ],
@@ -1206,7 +1206,7 @@
           "mappedType": "string"
         }
       },
-      "name": "case_subcategories",
+      "name": "subcategories",
       "schema": "public",
       "indexes": [
         {
@@ -1214,13 +1214,13 @@
             "tenant_id"
           ],
           "composite": false,
-          "keyName": "case_subcategories_tenant_id_index",
+          "keyName": "subcategories_tenant_id_index",
           "constraint": false,
           "primary": false,
           "unique": false
         },
         {
-          "keyName": "case_subcategories_pkey",
+          "keyName": "subcategories_pkey",
           "columnNames": [
             "id"
           ],
@@ -1232,12 +1232,12 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "case_subcategories_tenant_id_foreign": {
-          "constraintName": "case_subcategories_tenant_id_foreign",
+        "subcategories_tenant_id_foreign": {
+          "constraintName": "subcategories_tenant_id_foreign",
           "columnNames": [
             "tenant_id"
           ],
-          "localTableName": "public.case_subcategories",
+          "localTableName": "public.subcategories",
           "referencedColumnNames": [
             "id"
           ],
@@ -1245,16 +1245,16 @@
           "deleteRule": "cascade",
           "updateRule": "cascade"
         },
-        "case_subcategories_category_id_foreign": {
-          "constraintName": "case_subcategories_category_id_foreign",
+        "subcategories_category_id_foreign": {
+          "constraintName": "subcategories_category_id_foreign",
           "columnNames": [
             "category_id"
           ],
-          "localTableName": "public.case_subcategories",
+          "localTableName": "public.subcategories",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.case_categories",
+          "referencedTableName": "public.categories",
           "updateRule": "cascade"
         }
       },
@@ -2463,12 +2463,12 @@
         },
         "title": {
           "name": "title",
-          "type": "varchar(200)",
+          "type": "varchar(50)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 200,
+          "length": 50,
           "mappedType": "string"
         },
         "description": {
@@ -2545,8 +2545,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "assignee_id": {
-          "name": "assignee_id",
+        "assigneeId": {
+          "name": "assigneeId",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -2655,7 +2655,7 @@
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.case_categories",
+          "referencedTableName": "public.categories",
           "updateRule": "cascade"
         },
         "cases_subcategory_id_foreign": {
@@ -2667,7 +2667,7 @@
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.case_subcategories",
+          "referencedTableName": "public.subcategories",
           "deleteRule": "set null",
           "updateRule": "cascade"
         },
@@ -2683,10 +2683,10 @@
           "referencedTableName": "public.users",
           "updateRule": "cascade"
         },
-        "cases_assignee_id_foreign": {
-          "constraintName": "cases_assignee_id_foreign",
+        "cases_assigneeId_foreign": {
+          "constraintName": "cases_assigneeId_foreign",
           "columnNames": [
-            "assignee_id"
+            "assigneeId"
           ],
           "localTableName": "public.cases",
           "referencedColumnNames": [

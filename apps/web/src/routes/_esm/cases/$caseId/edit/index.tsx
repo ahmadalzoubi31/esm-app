@@ -69,23 +69,23 @@ function EditCaseForm({
       description: caseData.description,
       status: caseData.status,
       priority: caseData.priority,
-      category: caseData.category,
-      subcategory: caseData.subcategory,
-      requester: caseData.requester,
-      assignee: caseData.assignee,
-      assignmentGroup: caseData.assignmentGroup,
-      businessLine: caseData.businessLine,
-      affectedService: caseData.affectedService,
-      requestCard: caseData.requestCard,
+      categoryId: caseData.category.id,
+      subcategoryId: caseData.subcategory?.id,
+      requesterId: caseData.requester.id,
+      assigneeId: caseData.assignee?.id,
+      assignmentGroupId: caseData.assignmentGroup.id,
+      businessLineId: caseData.businessLine.id,
+      affectedServiceId: caseData.affectedService.id,
+      requestCardId: caseData.requestCard?.id,
     } as z.infer<typeof CaseSchema>,
     validators: {
       onSubmit: CaseSchema,
     },
     onSubmit: async ({ value }) => {
       const submitData = { ...value }
-      if (!submitData.subcategory) delete submitData.subcategory
-      if (!submitData.assignee) delete submitData.assignee
-      if (!submitData.requestCard) delete submitData.requestCard
+      if (!submitData.subcategoryId) delete submitData.subcategoryId
+      if (!submitData.assigneeId) delete submitData.assigneeId
+      if (!submitData.requestCardId) delete submitData.requestCardId
 
       await mutation.mutateAsync({
         id: caseId,
