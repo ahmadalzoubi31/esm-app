@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: webpexo-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: your_secure_password
+      POSTGRES_DB: webpexo_esm
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # NestJS API (api.webpexo.com)
+  api:
+    build: .
+    container_name: webpexo-api
+    restart: always
+    command: pnpm turbo run start --filter=@webpexo/api
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://admin:your_secure_password@db:5432/webpexo_esm
+      PORT: 5000
+    depends_on:
+      - db
+
+  # TanStack Start Frontend (webpexo.com)
+  web:
+    build: .
+    container_name: webpexo-web
+    restart: always
+    command: pnpm turbo run start --filter=@webpexo/web
+    ports:
+      - "5000:5000"
+    environment:
+      API_URL: https://api.webpexo.com
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
