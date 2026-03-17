@@ -40,3 +40,16 @@ yarn-error.log*
 # Temporary
 apps/api/temp/
 apps/*/temp/
+
+
+.DS_Store
+dist
+dist-ssr
+*.local
+count.txt
+.nitro
+.tanstack
+.wrangler
+.output
+.vinxi
+todos.json
