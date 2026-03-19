@@ -10,7 +10,8 @@ RUN turbo prune web --docker
 # ---- Install dependencies from pruned lockfile ----
 FROM base AS installer
 COPY --from=pruner /app/out/json/ .
-COPY --from=pruner /app/out/package-lock.json ./package-lock.json
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml  # 👈 changed
+RUN npm install -g pnpm && pnpm install --frozen-lockfile     # 👈 changed
 RUN npm ci
 
 # ---- Build the app ----
