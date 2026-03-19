@@ -12,8 +12,7 @@ FROM base AS installer
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
-RUN npm ci
+RUN npm install -g pnpm && pnpm install --no-frozen-lockfile
 
 # ---- Build the app ----
 FROM installer AS builder
