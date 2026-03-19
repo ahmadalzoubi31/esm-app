@@ -7,7 +7,7 @@ import AppBreadcrumb from '@/components/web/common/app-breadcrumb'
 import { AppSidebar } from '@/components/web/common/app-sidebar'
 import { Separator } from '@radix-ui/react-separator'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { getContextUser } from '@/server/auth.server'
+import { getContextUser } from '@/server/auth'
 
 export const Route = createFileRoute('/_core')({
   loader: async () => {

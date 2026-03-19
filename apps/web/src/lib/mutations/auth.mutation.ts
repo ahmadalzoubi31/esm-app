@@ -7,7 +7,7 @@ import {
   signInFn,
   resetPasswordFn,
   cleanupOldTokensFn,
-} from '@/server/auth.server'
+} from '@/server/auth'
 import type { ResetPasswordDto } from '@/types'
 import { LoginSchema } from '@/schemas/auth.schema'
 import z from 'zod'

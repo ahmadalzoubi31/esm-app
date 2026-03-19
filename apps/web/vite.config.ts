@@ -25,6 +25,9 @@ const config = defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+  server: {
+    allowedHosts: ['webpexo.com', 'api.webpexo.com'],
+  }
 })
 
 export default config

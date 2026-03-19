@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getProfileFn } from '@/server/auth.server'
+import { getProfileFn } from '@/server/auth'
 
 export const authKeys = {
   all: ['auth'] as const,
