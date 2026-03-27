@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 export function setupSwagger(app: INestApplication) {
   const configService = new ConfigService();
-  const port = configService.get<number>('PORT', 5000);
+  const port = configService.get<number>('API_PORT', 5000);
   const nodeEnv = configService.get<string>('NODE_ENV', 'development');
 
   // Determine server URL based on environment

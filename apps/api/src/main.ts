@@ -1,4 +1,9 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import * as dotenv from 'dotenv';
+import { resolve } from 'path';
+
+dotenv.config({ path: resolve(process.cwd(), '../../.env') });
+
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { VersioningType } from '@nestjs/common';
@@ -9,8 +14,6 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import requestID from 'express-request-id';
 import cookieParser from 'cookie-parser';
 import { Logger } from '@nestjs/common';
-import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
-import { EntityManager } from '@mikro-orm/core';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -58,7 +61,7 @@ async function bootstrap() {
   setupSwagger(app);
 
   // ## listen ##
-  await app.listen(process.env.PORT ?? 5000);
+  await app.listen(process.env.API_PORT ?? 5000);
   logger.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

@@ -6,7 +6,7 @@ export const UserSchema = z.object({
   last_name: z.string().min(1, 'Last name is required'),
   username: z.string().min(3, 'Username must be at least 3 characters'),
   email: z
-    .union([z.string().email('Invalid email address'), z.literal('')])
+    .union([z.email('Invalid email address'), z.literal('')])
     .transform((e) => (e === '' ? undefined : e)),
   avatar: z.string().optional(),
   auth_source: z.enum([AuthSource.LOCAL, AuthSource.LDAP]),

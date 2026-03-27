@@ -15,6 +15,7 @@ import { EsmModule } from './esm/esm.module';
 import { TenantsModule } from './tenants/tenants.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
     CoreModule,
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: join(__dirname, '../../.env'),
       load: [serverConfig, jwtConfig, databaseConfig],
     }),
     ScheduleModule.forRoot(),

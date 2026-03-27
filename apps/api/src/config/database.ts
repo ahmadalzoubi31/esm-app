@@ -11,7 +11,11 @@ import 'dotenv/config';
 export const databaseConfig = registerAs('database', () =>
   defineConfig({
     highlighter: new SqlHighlighter(),
-    clientUrl: process.env.DATABASE_URL,
+    clientUrl:
+      process.env.NODE_ENV === 'production'
+        ? process.env.DATABASE_URL
+        : 'postgresql://postgres.cjunkhxcenvybixlumgt:5ZAgoMPZxSrhG5So@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres',
+
     // folder-based discovery setup, using common filename suffix
     entities: ['./dist/**/*.entity.js'],
     entitiesTs: ['./src/**/*.entity.ts'],

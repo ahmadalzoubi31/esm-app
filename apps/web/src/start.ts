@@ -14,14 +14,20 @@ const public_paths = [
   '/session-timeout',
   '/.well-known/appspecific/com.chrome.devtools.json',
   '/_serverFn/eyJmaWxlIjoiL0BpZC9zcmMvc2VydmVyL2F1dGguc2VydmVyLnRzP3Rzcy1zZXJ2ZXJmbi1zcGxpdCIsImV4cG9ydCI6InNpZ25JbkZuX2NyZWF0ZVNlcnZlckZuX2hhbmRsZXIifQ',
+  '/_serverFn/eyJmaWxlIjoiL0BpZC9zcmMvc2VydmVyL2F1dGgudHM_dHNzLXNlcnZlcmZuLXNwbGl0IiwiZXhwb3J0Ijoic2lnbkluRm5fY3JlYXRlU2VydmVyRm5faGFuZGxlciJ9',
 ]
 
 const authMiddleware = createMiddleware().server(async ({ next, request }) => {
   // 1: Check if path is public
   const url = new URL(request.url)
 
+  // 1.a: log the full path of the request for debugging
+  console.log(`Incoming request: ${url.pathname}`)
+
   // 2: Allow public paths
   if (public_paths.includes(url.pathname)) {
+    // 2.a: log public path access for debugging
+    console.log(`Public path accessed: true`)
     return next()
   }
 
