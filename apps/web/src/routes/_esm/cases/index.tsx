@@ -6,7 +6,6 @@ import type { FilterGroup } from '@/components/web/common/app-table/types'
 import columns from '@/components/web/cases/columns'
 import { useCasesQuery } from '@/lib/queries'
 import { tableConfig } from '@/components/web/cases/table-config'
-
 import { Button } from '@/components/ui/button'
 import { PlusIcon } from 'lucide-react'
 

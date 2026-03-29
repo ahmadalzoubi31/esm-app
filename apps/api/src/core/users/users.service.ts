@@ -7,7 +7,7 @@ import { User } from './entities/user.entity';
 import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
 import { Group } from '../groups/entities/group.entity';
-import { Tenant } from 'src/tenants/entities/tenant.entity';
+import { Tenant } from '../../tenants/entities/tenant.entity';
 
 @Injectable()
 export class UsersService {
@@ -59,6 +59,8 @@ export class UsersService {
 
     // 7: Save user and return
     await em.persist(user).flush();
+
+    // 8: Return user
     return user;
   }
 
@@ -101,15 +103,15 @@ export class UsersService {
     where = {},
     search,
   }: {
-    where?: any;
+    where?: Record<string, unknown>;
     search?: string;
   }): Promise<User[]> {
-    const query = { ...where };
+    const query: Record<string, unknown> = { ...where };
 
     if (search) {
       query['$or'] = [
-        { first_name: { $ilike: `%${search}%` } },
-        { last_name: { $ilike: `%${search}%` } },
+        { firstName: { $ilike: `%${search}%` } },
+        { lastName: { $ilike: `%${search}%` } },
         { username: { $ilike: `%${search}%` } },
         { email: { $ilike: `%${search}%` } },
       ];
@@ -229,8 +231,8 @@ export class UsersService {
     // 7: Update user with remaining fields (no collection fields)
     this.userRepository.assign(user, userDataToUpdate);
 
-    // 8: If is_licensed is set to false (or remains false), ensure roles/permissions are removed
-    if (user.is_licensed === false) {
+    // 8: If isLicensed is set to false (or remains false), ensure roles/permissions are removed
+    if (user.isLicensed === false) {
       user.roles.removeAll();
       user.permissions.removeAll();
     }

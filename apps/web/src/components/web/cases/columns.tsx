@@ -214,8 +214,8 @@ export const columns: ColumnDef<any>[] = [
         <div className="flex items-center gap-2">
           <span className="text-sm">
             {r
-              ? r.display_name ||
-                `${r.first_name || ''} ${r.last_name || ''}`.trim()
+              ? r.displayName ||
+                `${r.firstName || ''} ${r.lastName || ''}`.trim()
               : '-'}
           </span>
         </div>
@@ -254,8 +254,8 @@ export const columns: ColumnDef<any>[] = [
           <UserIcon className="h-3.5 w-3.5 text-muted-foreground" />
 
           <span className="text-sm">
-            {assignee.display_name ||
-              `${assignee.first_name} ${assignee.last_name}`}
+            {assignee.displayName ||
+              `${assignee.firstName} ${assignee.lastName}`}
           </span>
         </div>
       ) : (
@@ -306,3 +306,4 @@ export const columns: ColumnDef<any>[] = [
 ]
 
 export default columns
+

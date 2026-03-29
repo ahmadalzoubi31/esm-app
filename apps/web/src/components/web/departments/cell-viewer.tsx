@@ -1,5 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { Department } from '@repo/shared'
+
 import {
   Drawer,
   DrawerClose,
@@ -18,8 +20,9 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { formatDate } from '@/lib/format-date'
 import { Building2, InfoIcon, CalendarIcon } from 'lucide-react'
 
-// Using any temporarily, ideally replace with Department type once available
-export function TableCellViewer({ item }: { item: any }) {
+// Standardized Department type from shared package
+export function TableCellViewer({ item }: { item: Department }) {
+
   const isMobile = useIsMobile()
 
   return (
@@ -92,8 +95,9 @@ export function TableCellViewer({ item }: { item: any }) {
                 />
                 <DetailItem
                   label="Updated At"
-                  value={formatDate(item.updatedAt)}
+                  value={item.updatedAt ? formatDate(item.updatedAt) : '-'}
                 />
+
               </div>
             </section>
           </div>

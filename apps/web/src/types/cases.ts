@@ -2,7 +2,6 @@ import { User } from './users'
 import { Group } from './groups'
 import { BusinessLine } from './business-lines'
 import { Category } from './categories'
-import { Subcategory } from './subcategories'
 import {
   Circle,
   UserCheck,
@@ -112,13 +111,15 @@ export interface Case {
   status: CaseStatus
   priority: CasePriority
   category: Category
-  subcategory?: Subcategory
+  subcategory?: Category
   requester: User
   assignee?: User
   assignmentGroup: Group
   businessLine: BusinessLine
-  affectedService?: any
+  affectedService: any // Required in Entity
   requestCard?: any
+  comments: CaseComment[]
+  attachments: CaseAttachment[]
   createdAt: string
   updatedAt: string
 }
@@ -132,10 +133,10 @@ export interface CreateCaseDto {
   subcategoryId?: string
   requesterId: string
   assigneeId?: string
-  assignment_groupId: string
-  business_lineId: string
-  affected_serviceId?: string
-  request_cardId?: string
+  assignmentGroupId: string
+  businessLineId: string
+  affectedServiceId: string // Required in Entity
+  requestCardId?: string
 }
 
 export type UpdateCaseDto = Partial<CreateCaseDto>
@@ -155,7 +156,15 @@ export interface CaseComment {
 
 export interface CreateCaseCommentDto {
   body: string
-  isPrivate?: boolean
+  isPrivate: boolean
+}
+
+export interface CreateCaseAttachmentDto {
+  filename: string
+  originalName: string
+  mimeType: string
+  size: number
+  storagePath: string
 }
 
 export interface CaseAttachment {

@@ -8,6 +8,8 @@ export const tableConfig: DataTableConfig<Category> = {
     id: false,
     name: true,
     description: true,
+    tier: true,
+    parent: true,
     createdAt: true,
     updatedAt: false,
   },
@@ -19,7 +21,17 @@ export const tableConfig: DataTableConfig<Category> = {
     placeholder: 'Filter categories...',
   },
 
-  facetedFilters: [],
+  facetedFilters: [
+    {
+      columnKey: 'tier',
+      title: 'Tier',
+      options: [
+        { label: 'Tier 1', value: '1' },
+        { label: 'Tier 2', value: '2' },
+        { label: 'Tier 3', value: '3' },
+      ] as const,
+    },
+  ],
 
   loadingRowCount: 3,
   loadingColumnCount: 3,

@@ -15,12 +15,12 @@ export class UpdateUserDto {
   @ApiProperty({ example: 'John', required: false })
   @IsString()
   @IsOptional()
-  first_name?: string;
+  firstName?: string;
 
   @ApiProperty({ example: 'Doe', required: false })
   @IsString()
   @IsOptional()
-  last_name?: string;
+  lastName?: string;
 
   @ApiProperty({ example: 'johndoe', required: false })
   @IsString()
@@ -51,7 +51,7 @@ export class UpdateUserDto {
   @ApiProperty({ example: 'ldap', required: false })
   @IsString()
   @IsOptional()
-  auth_source?: AuthSource;
+  authSource?: AuthSource;
 
   @ApiProperty({ example: 'IT', required: false })
   @IsString()
@@ -61,7 +61,7 @@ export class UpdateUserDto {
   @ApiProperty({ example: '123456', required: false })
   @IsString()
   @IsOptional()
-  external_id?: string;
+  externalId?: string;
 
   @ApiProperty({ example: 'password', required: false })
   @IsStrongPassword()
@@ -71,12 +71,12 @@ export class UpdateUserDto {
   @ApiProperty({ example: true, required: false })
   @IsBoolean()
   @IsOptional()
-  is_active?: boolean;
+  isActive?: boolean;
 
   @ApiProperty({ example: true, required: false })
   @IsBoolean()
   @IsOptional()
-  is_licensed?: boolean;
+  isLicensed?: boolean;
 
   @ApiProperty({ example: { phone: '1234567890' }, required: false })
   @IsObject()

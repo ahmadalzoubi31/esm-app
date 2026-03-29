@@ -6,16 +6,16 @@ export const tableConfig: DataTableConfig<User> = {
 
   defaultColumnVisibility: {
     id: false,
-    display_name: true,
+    displayName: true,
     username: true,
     email: true,
     department: true,
     phone: true,
-    auth_source: true,
-    is_active: true,
-    external_id: false,
-    last_login_at: false,
-    is_licensed: false,
+    authSource: true,
+    isActive: true,
+    externalId: false,
+    lastLoginAt: false,
+    isLicensed: false,
     permissions: false,
     createdAt: true,
     updatedAt: false,
@@ -30,7 +30,7 @@ export const tableConfig: DataTableConfig<User> = {
 
   facetedFilters: [
     {
-      columnKey: 'auth_source',
+      columnKey: 'authSource',
       title: 'Auth Source',
       options: [
         { label: 'Local', value: AuthSource.LOCAL },
@@ -51,3 +51,4 @@ export const tableConfig: DataTableConfig<User> = {
   loadingColumnCount: 7,
   enableRowSelection: true,
 } as const
+

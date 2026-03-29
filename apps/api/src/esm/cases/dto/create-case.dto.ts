@@ -10,9 +10,9 @@ import { CaseStatus } from '../constants/case-status.constant';
 import { CasePriority } from '../constants/case-priority.constant';
 
 export class CreateCaseDto {
-  @ApiProperty({ maxLength: 200 })
+  @ApiProperty({ maxLength: 50 })
   @IsString()
-  @MaxLength(200)
+  @MaxLength(50)
   title!: string;
 
   @ApiPropertyOptional()

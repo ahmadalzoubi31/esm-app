@@ -19,8 +19,8 @@ import {
   ApiTags,
   ApiResponse,
 } from '@nestjs/swagger';
-import { PoliciesGuard } from 'src/common/guards/policies-guard.guard';
-import { CheckPolicies } from 'src/common/decorators/check-policies.decorator';
+import { PoliciesGuard } from '../../common/guards/policies-guard.guard';
+import { CheckPolicies } from '../../common/decorators/check-policies.decorator';
 import { AppAbility } from '../casl/casl-ability.factory';
 import { ACTION_ENUM } from '../casl/constants/action.constant';
 import { Role } from './entities/role.entity';

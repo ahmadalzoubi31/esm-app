@@ -12,6 +12,7 @@ import {
 import { z } from 'zod'
 import { FormInstance } from '@/types'
 import { CategorySchema } from '@/schemas/category.schema'
+import { CategoryMenu } from '@/components/web/common/menus/category-menu'
 
 interface CategoryBasicInfoProps {
   form: FormInstance<z.infer<typeof CategorySchema>>
@@ -62,6 +63,28 @@ export function CategoryBasicInfo({ form }: CategoryBasicInfoProps) {
                 placeholder="Brief description of this category"
                 className="min-h-[100px]"
                 aria-invalid={field.state.meta.errors.length > 0}
+              />
+              {field.state.meta.errors.length > 0 && (
+                <FieldError errors={field.state.meta.errors} />
+              )}
+            </div>
+          )}
+        />
+
+        <form.Field
+          name="parentId"
+          children={(field: any) => (
+            <div className="space-y-2">
+              <Label htmlFor={field.name}>Parent Category (Optional)</Label>
+              <div className="text-sm text-muted-foreground mb-1">
+                Select a parent category if this should be a subcategory.
+              </div>
+              <CategoryMenu
+                id={field.name}
+                value={field.state.value}
+                tier={1}
+                onChange={(val) => field.handleChange(val)}
+                isInvalid={field.state.meta.errors.length > 0}
               />
               {field.state.meta.errors.length > 0 && (
                 <FieldError errors={field.state.meta.errors} />

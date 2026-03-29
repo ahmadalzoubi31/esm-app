@@ -24,23 +24,23 @@ interface CaseInternalDiscussionProps {
 }
 
 function getInitials(
-  user?: Pick<User, 'first_name' | 'last_name' | 'username' | 'display_name'>,
+  user?: Pick<User, 'firstName' | 'lastName' | 'username' | 'displayName'>,
 ): string {
   if (!user) return '??'
-  if (user.first_name && user.last_name) {
-    return `${user.first_name[0]}${user.last_name[0]}`.toUpperCase()
+  if (user.firstName && user.lastName) {
+    return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
   }
   if (user.username) return user.username.slice(0, 2).toUpperCase()
   return '??'
 }
 
 function getDisplayName(
-  user?: Pick<User, 'first_name' | 'last_name' | 'username' | 'display_name'>,
+  user?: Pick<User, 'firstName' | 'lastName' | 'username' | 'displayName'>,
 ): string {
   if (!user) return 'Unknown'
-  if (user.display_name) return user.display_name
-  if (user.first_name && user.last_name)
-    return `${user.first_name} ${user.last_name}`
+  if (user.displayName) return user.displayName
+  if (user.firstName && user.lastName)
+    return `${user.firstName} ${user.lastName}`
   if (user.username) return user.username
   return 'Unknown'
 }
@@ -125,7 +125,7 @@ export function CaseInternalDiscussion({
                 </div>
               </div>
               <div className="space-y-1 max-w-[260px]">
-                <h3 className="text-sm font-bold text-foreground font-sans">
+                <h3 className="text-sm font-medium text-foreground font-sans">
                   No comments yet
                 </h3>
                 <p className="text-xs text-muted-foreground font-medium leading-relaxed">
@@ -139,13 +139,13 @@ export function CaseInternalDiscussion({
               {comments.map((comment) => (
                 <div key={comment.id} className="flex gap-3 group">
                   <Avatar className="h-9 w-9 border shrink-0">
-                    <AvatarFallback className="text-xs font-bold">
+                    <AvatarFallback className="text-xs font-medium">
                       {getInitials(requester)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 space-y-1.5 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-bold text-foreground">
+                      <span className="text-xs font-medium text-foreground">
                         {getDisplayName(requester)}
                       </span>
                       <span className="text-xs text-muted-foreground">
@@ -154,12 +154,12 @@ export function CaseInternalDiscussion({
                         })}
                       </span>
                       {comment.isPrivate ? (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-600 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-full px-1.5 py-0.5">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-amber-600 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-full px-1.5 py-0.5">
                           <Lock className="h-2.5 w-2.5" />
                           Private
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-full px-1.5 py-0.5">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-full px-1.5 py-0.5">
                           <Globe className="h-2.5 w-2.5" />
                           Shared
                         </span>
@@ -185,7 +185,7 @@ export function CaseInternalDiscussion({
             <button
               type="button"
               onClick={() => setIsPrivate(true)}
-              className={`inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-2.5 py-1 border transition-all ${
+              className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-2.5 py-1 border transition-all ${
                 isPrivate
                   ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 border-amber-300 dark:border-amber-700'
                   : 'text-muted-foreground border-transparent hover:border-border'
@@ -197,7 +197,7 @@ export function CaseInternalDiscussion({
             <button
               type="button"
               onClick={() => setIsPrivate(false)}
-              className={`inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-2.5 py-1 border transition-all ${
+              className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-2.5 py-1 border transition-all ${
                 !isPrivate
                   ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 border-emerald-300 dark:border-emerald-700'
                   : 'text-muted-foreground border-transparent hover:border-border'
@@ -239,3 +239,4 @@ export function CaseInternalDiscussion({
     </Card>
   )
 }
+

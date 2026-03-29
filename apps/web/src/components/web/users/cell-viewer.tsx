@@ -66,7 +66,7 @@ export function TableCellViewer({ item }: { item: User }) {
     <Drawer direction={isMobile ? 'bottom' : 'right'}>
       <DrawerTrigger asChild>
         <Button variant="link" className="text-foreground w-fit px-0 text-left">
-          {item.display_name || item.username}
+          {item.displayName || item.username}
         </Button>
       </DrawerTrigger>
       <DrawerContent className="h-[95vh] sm:h-auto sm:max-w-xl">
@@ -75,14 +75,14 @@ export function TableCellViewer({ item }: { item: User }) {
             <Avatar className="h-10 w-10 border">
               <AvatarImage
                 src={item.avatar}
-                alt={item.display_name || item.username}
+                alt={item.displayName || item.username}
               />
               <AvatarFallback className="bg-primary/10 text-primary">
                 <UserIcon className="h-6 w-6" />
               </AvatarFallback>
             </Avatar>
             <div>
-              <DrawerTitle>{item.display_name || item.username}</DrawerTitle>
+              <DrawerTitle>{item.displayName || item.username}</DrawerTitle>
               <DrawerDescription className="flex items-center gap-1">
                 <MailIcon className="h-3.5 w-3.5" />
                 {item.email}
@@ -106,35 +106,35 @@ export function TableCellViewer({ item }: { item: User }) {
                     variant="outline"
                     className="capitalize h-5 px-1.5 text-[10px]"
                   >
-                    {item.auth_source}
+                    {item.authSource}
                   </Badge>
                 </DetailItem>
                 <DetailItem label="Status">
                   <Badge
-                    variant={item.is_active ? 'secondary' : 'destructive'}
+                    variant={item.isActive ? 'secondary' : 'destructive'}
                     className={`h-5 px-1.5 text-[10px] ${
-                      item.is_active
+                      item.isActive
                         ? 'bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400'
                         : ''
                     }`}
                   >
-                    {item.is_active ? 'Active' : 'Inactive'}
+                    {item.isActive ? 'Active' : 'Inactive'}
                   </Badge>
                 </DetailItem>
                 <DetailItem
                   label="External ID"
-                  value={item.external_id || '-'}
+                  value={item.externalId || '-'}
                 />
                 <DetailItem label="Licensed">
                   <Badge
-                    variant={item.is_licensed ? 'default' : 'secondary'}
+                    variant={item.isLicensed ? 'default' : 'secondary'}
                     className={`h-5 px-1.5 text-[10px] ${
-                      item.is_licensed
+                      item.isLicensed
                         ? 'bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400'
                         : ''
                     }`}
                   >
-                    {item.is_licensed ? 'Yes' : 'No'}
+                    {item.isLicensed ? 'Yes' : 'No'}
                   </Badge>
                 </DetailItem>
               </div>
@@ -149,9 +149,9 @@ export function TableCellViewer({ item }: { item: User }) {
                 Personal Details
               </h4>
               <div className="grid grid-cols-3 gap-x-4 gap-y-4 rounded-lg border p-3 bg-muted/30">
-                <DetailItem label="First Name" value={item.first_name} />
-                <DetailItem label="Last Name" value={item.last_name} />
-                <DetailItem label="Display Name" value={item.display_name} />
+                <DetailItem label="First Name" value={item.firstName} />
+                <DetailItem label="Last Name" value={item.lastName} />
+                <DetailItem label="Display Name" value={item.displayName} />
                 <DetailItem label="Department" value={typeof item.department === 'object' && item.department !== null ? (item.department as any).name : item.department} />
                 <DetailItem label="Phone" value={item.phone} />
                 <DetailItem label="Manager" value={item.manager} />
@@ -348,8 +348,8 @@ export function TableCellViewer({ item }: { item: User }) {
                 <DetailItem
                   label="Last Login"
                   value={
-                    item.last_login_at
-                      ? new Date(item.last_login_at).toLocaleString()
+                    item.lastLoginAt
+                      ? new Date(item.lastLoginAt).toLocaleString()
                       : 'Never'
                   }
                 />
@@ -397,3 +397,4 @@ function DetailItem({
     </div>
   )
 }
+

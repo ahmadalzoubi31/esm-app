@@ -39,7 +39,7 @@ export function GroupUsers({ form }: GroupUsersProps) {
   const { data: usersResponse, isLoading } = useSearchUsersQuery({
     search,
     limit: '10',
-    is_licensed: true,
+    isLicensed: true,
   })
   const users = usersResponse || []
   const [open, setOpen] = useState(false)
@@ -87,7 +87,7 @@ export function GroupUsers({ form }: GroupUsersProps) {
               }
 
               const availableUsers = users.filter(
-                (user) => !selectedUsers.includes(user.id) && user.is_licensed,
+                (user) => !selectedUsers.includes(user.id) && user.isLicensed,
               )
 
               return (
@@ -107,14 +107,14 @@ export function GroupUsers({ form }: GroupUsersProps) {
                             <Avatar className="h-6 w-6 border-muted-foreground/20 border">
                               <AvatarFallback className="text-[10px] bg-background">
                                 {user
-                                  ? (user.first_name?.[0] || '') +
-                                    (user.last_name?.[0] || '')
+                                  ? (user.firstName?.[0] || '') +
+                                    (user.lastName?.[0] || '')
                                   : 'U'}
                               </AvatarFallback>
                             </Avatar>
                             <span className="font-medium mr-1">
                               {user
-                                ? `${user.first_name} ${user.last_name}`
+                                ? `${user.firstName} ${user.lastName}`
                                 : selectedUserId.substring(0, 8)}
                             </span>
                             <Button
@@ -167,7 +167,7 @@ export function GroupUsers({ form }: GroupUsersProps) {
                             {availableUsers.map((user) => (
                               <CommandItem
                                 key={user.id}
-                                value={`${user.first_name} ${user.last_name} ${user.username}`}
+                                value={`${user.firstName} ${user.lastName} ${user.username}`}
                                 className="flex items-center gap-3 p-2 cursor-pointer"
                                 onSelect={() => {
                                   handleSelect(user.id)
@@ -175,13 +175,13 @@ export function GroupUsers({ form }: GroupUsersProps) {
                               >
                                 <Avatar className="h-8 w-8">
                                   <AvatarFallback className="bg-primary/10 text-primary">
-                                    {(user.first_name?.[0] || '') +
-                                      (user.last_name?.[0] || '')}
+                                    {(user.firstName?.[0] || '') +
+                                      (user.lastName?.[0] || '')}
                                   </AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col flex-1">
                                   <span className="font-medium">
-                                    {user.first_name} {user.last_name}
+                                    {user.firstName} {user.lastName}
                                   </span>
                                   <span className="text-xs text-muted-foreground">
                                     {user.email || user.username}
@@ -211,3 +211,4 @@ export function GroupUsers({ form }: GroupUsersProps) {
     </Card>
   )
 }
+

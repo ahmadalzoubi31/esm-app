@@ -1,16 +1,17 @@
 import { ExtractSubjectType, InferSubjects, MongoAbility } from '@casl/ability';
 import { Injectable, Type } from '@nestjs/common';
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
-import { User } from 'src/core/users/entities/user.entity';
-import { Role } from 'src/core/roles/entities/role.entity';
-import { Permission } from 'src/core/permissions/entities/permission.entity';
-import { ACTION_ENUM } from 'src/core/casl/constants/action.constant';
+import { User } from '../../core/users/entities/user.entity';
+import { Role } from '../../core/roles/entities/role.entity';
+import { Permission } from '../../core/permissions/entities/permission.entity';
+import { ACTION_ENUM } from '../../core/casl/constants/action.constant';
 import { PermissionsService } from '../permissions/permissions.service';
 import { Group } from '../groups/entities/group.entity';
 import { BusinessLine } from '../business-lines/entities/business-line.entity';
-import { Case } from 'src/esm/cases/entities/case.entity';
-import { CaseAttachment } from 'src/esm/cases/entities/case-attachment.entity';
-import { CaseComment } from 'src/esm/cases/entities/case-comment.entity';
+import { Case } from '../../esm/cases/entities/case.entity';
+import { CaseAttachment } from '../../esm/cases/entities/case-attachment.entity';
+import { CaseComment } from '../../esm/cases/entities/case-comment.entity';
+import { SlaTarget } from '../sla/entities/sla-target.entity';
 
 type Subjects =
   | InferSubjects<
@@ -22,6 +23,7 @@ type Subjects =
       | typeof Case
       | typeof CaseAttachment
       | typeof CaseComment
+      | typeof SlaTarget
     >
   | 'all';
 

@@ -15,6 +15,8 @@ export interface CategoryMenuProps {
   onChange: (value: string) => void
   isInvalid?: boolean
   id?: string
+  tier?: number
+  parentId?: string
 }
 
 export function CategoryMenu({
@@ -22,8 +24,10 @@ export function CategoryMenu({
   onChange,
   isInvalid,
   id,
+  tier = 1,
+  parentId,
 }: CategoryMenuProps) {
-  const { data: categoriesItem, isLoading } = useCategoriesQuery()
+  const { data: categoriesItem, isLoading } = useCategoriesQuery(tier, parentId)
 
   const categories = Array.isArray(categoriesItem)
     ? categoriesItem

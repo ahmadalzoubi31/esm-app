@@ -13,8 +13,15 @@ import { apiFetch } from '../api-client'
 import { API_ENDPOINTS } from '../api-config'
 
 export const categoriesApi = {
-  findAll: async (): Promise<ApiResponse<Category[]>> => {
-    return await apiFetch<Category[]>(API_ENDPOINTS.CATEGORIES.LIST, {
+  findAll: async (tier?: number, parentId?: string): Promise<ApiResponse<Category[]>> => {
+    let url = API_ENDPOINTS.CATEGORIES.LIST
+    const queryParams = new URLSearchParams()
+    if (tier !== undefined) queryParams.append('tier', tier.toString())
+    if (parentId !== undefined) queryParams.append('parentId', parentId)
+    const queryString = queryParams.toString()
+    if (queryString) url += `?${queryString}`
+
+    return await apiFetch<Category[]>(url, {
       method: 'GET',
     })
   },

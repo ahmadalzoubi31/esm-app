@@ -14,13 +14,13 @@ interface UsersStatsProps {
 
 export function UsersStats({ users }: UsersStatsProps) {
   const totalUsers = users.length
-  const activeUsers = users.filter((u) => u.is_active).length
-  const inactiveUsers = users.filter((u) => !u.is_active).length
+  const activeUsers = users.filter((u) => u.isActive).length
+  const inactiveUsers = users.filter((u) => !u.isActive).length
   const ldapUsers = users.filter(
-    (u) => u.auth_source === AuthSource.LDAP,
+    (u) => u.authSource === AuthSource.LDAP,
   ).length
   const localUsers = users.filter(
-    (u) => u.auth_source === AuthSource.LOCAL,
+    (u) => u.authSource === AuthSource.LOCAL,
   ).length
 
   return (
@@ -82,3 +82,4 @@ export function UsersStats({ users }: UsersStatsProps) {
     </div>
   )
 }
+

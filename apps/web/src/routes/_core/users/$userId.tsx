@@ -76,19 +76,19 @@ function EditUserForm({
 }) {
   const form = useForm({
     defaultValues: {
-      first_name: user.first_name,
-      last_name: user.last_name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       username: user.username,
       email: user.email,
       avatar: user.avatar,
-      auth_source: user.auth_source,
+      authSource: user.authSource,
       department: user.department,
       phone: user.phone,
       manager: user.manager,
       password: user.password,
-      external_id: user.external_id,
-      is_active: user.is_active,
-      is_licensed: user.is_licensed,
+      externalId: user.externalId,
+      isActive: user.isActive,
+      isLicensed: user.isLicensed,
       roles: user.roles?.map((r) => r.id) || [],
       permissions: user.permissions?.map((p) => p.id) || [],
       groups: user.groups?.map((g) => g.id) || [],
@@ -135,7 +135,7 @@ function EditUserForm({
         >
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
             <form.Subscribe
-              selector={(state) => [state.values.is_licensed]}
+              selector={(state) => [state.values.isLicensed]}
               children={([isLicensed]: any) => (
                 <div className="space-y-6 lg:col-span-3">
                   <Tabs defaultValue="basic" className="w-full">
@@ -224,3 +224,4 @@ function EditUserForm({
     </>
   )
 }
+

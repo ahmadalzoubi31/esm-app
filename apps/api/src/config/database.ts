@@ -1,4 +1,4 @@
-import { defineConfig } from '@mikro-orm/postgresql';
+import { defineConfig, EntityCaseNamingStrategy } from '@mikro-orm/postgresql';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { Migrator } from '@mikro-orm/migrations';
 import { EntityGenerator } from '@mikro-orm/entity-generator';
@@ -14,7 +14,9 @@ export const databaseConfig = registerAs('database', () =>
     clientUrl:
       process.env.NODE_ENV === 'production'
         ? process.env.DATABASE_URL
-        : 'postgresql://postgres.cjunkhxcenvybixlumgt:5ZAgoMPZxSrhG5So@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres',
+        : process.env.NODE_ENV === 'development'
+          ? 'postgresql://postgres.cjunkhxcenvybixlumgt:5ZAgoMPZxSrhG5So@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres'
+          : 'postgresql://postgres:P@ssw0rd@localhost:5432/postgres',
 
     // folder-based discovery setup, using common filename suffix
     entities: ['./dist/**/*.entity.js'],
@@ -45,5 +47,8 @@ export const databaseConfig = registerAs('database', () =>
       emit: 'ts', // seeder generation mode
       fileName: (className: string) => className, // seeder file naming convention
     },
+
+    // camelCase
+    namingStrategy: EntityCaseNamingStrategy,
   }),
 );

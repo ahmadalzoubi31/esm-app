@@ -14,7 +14,6 @@ import { BusinessLine } from '../../../core/business-lines/entities/business-lin
 import { Service } from '../../catalog/services/entities/service.entity';
 import { ServiceCard } from '../../catalog/service-cards/entities/service-card.entity';
 import { Category } from '../../../core/categories/entities/category.entity';
-import { Subcategory } from '../../../core/subcategories/entities/subcategory.entity';
 import { CaseStatus } from '../constants/case-status.constant';
 import { CasePriority } from '../constants/case-priority.constant';
 import { CaseAttachment } from './case-attachment.entity';
@@ -41,30 +40,30 @@ export class Case extends TenantBaseEntity {
   @ManyToOne(() => Category)
   category!: Category;
 
-  @ManyToOne(() => Subcategory)
-  subcategory?: Subcategory;
+  @ManyToOne(() => Category, { nullable: true })
+  subcategory?: Category;
 
-  @ManyToOne(() => User, { fieldName: 'requester_id' })
+  @ManyToOne(() => User, { fieldName: 'requesterId' })
   requester!: User;
 
   @ManyToOne(() => User, { nullable: true, fieldName: 'assigneeId' })
   assignee?: User;
 
-  @ManyToOne(() => Group, { fieldName: 'assignment_group_id' })
+  @ManyToOne(() => Group, { fieldName: 'assignmentGroupId' })
   assignmentGroup!: Group;
 
   @ManyToOne(() => BusinessLine, {
     deleteRule: 'cascade',
-    fieldName: 'business_line_id',
+    fieldName: 'businessLineId',
   })
   businessLine!: BusinessLine;
 
-  @ManyToOne(() => Service, { fieldName: 'affected_service_id' })
+  @ManyToOne(() => Service, { fieldName: 'affectedServiceId' })
   affectedService!: Service;
 
   @ManyToOne(() => ServiceCard, {
     nullable: true,
-    fieldName: 'request_card_id',
+    fieldName: 'requestCardId',
   })
   requestCard?: ServiceCard;
 

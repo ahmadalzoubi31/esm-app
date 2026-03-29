@@ -7,7 +7,7 @@ import { CaseRequesterInfo } from '@/components/web/cases/case-form/case-request
 import { CaseAssignmentInfo } from '@/components/web/cases/case-form/case-assignment-info'
 
 import { useCreateCaseMutation } from '@/lib/mutations'
-import { CaseSchema } from '@/schemas/case.schema'
+import { CreateCaseSchema } from '@/schemas/case.schema'
 import z from 'zod'
 import { CaseStatus, CasePriority } from '@/types/cases'
 
@@ -32,9 +32,9 @@ function CreateCasePage() {
       assignmentGroupId: '',
       businessLineId: '',
       affectedServiceId: 'c840564e-218e-4b0d-93b5-c48be6dc4350',
-    } as z.infer<typeof CaseSchema>,
+    } as z.infer<typeof CreateCaseSchema>,
     validators: {
-      onSubmit: CaseSchema,
+      onSubmit: CreateCaseSchema,
     },
     onSubmit: async ({ value }) => {
       console.log('🚀 ~ CreateCasePage ~ value:', value)

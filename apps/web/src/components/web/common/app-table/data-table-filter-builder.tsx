@@ -69,10 +69,10 @@ export function AppDataTableFilterBuilder<TData>({
         let displayValue: string
         let filterValue: string
 
-        // Handle nested objects (e.g., requester.display_name)
+        // Handle nested objects (e.g., requester.displayName)
         if (typeof value === 'object' && !Array.isArray(value)) {
           displayValue =
-            value.display_name ||
+            value.displayName ||
             value.name ||
             value.email ||
             value.title ||
@@ -259,3 +259,4 @@ export function AppDataTableFilterBuilder<TData>({
     </div>
   )
 }
+

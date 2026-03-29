@@ -32,19 +32,19 @@ function CreateUserPage() {
 
   const form = useForm({
     defaultValues: {
-      first_name: '',
-      last_name: '',
+      firstName: '',
+      lastName: '',
       username: '',
       email: '',
       avatar: '',
-      auth_source: AuthSource.LOCAL as AuthSource,
+      authSource: AuthSource.LOCAL as AuthSource,
       department: '',
       phone: '',
       manager: '',
       password: '',
-      external_id: '',
-      is_active: true,
-      is_licensed: false,
+      externalId: '',
+      isActive: true,
+      isLicensed: false,
       roles: [] as string[],
       permissions: [] as string[],
       groups: [] as string[],
@@ -87,7 +87,7 @@ function CreateUserPage() {
         >
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
             <form.Subscribe
-              selector={(state) => [state.values.is_licensed]}
+              selector={(state) => [state.values.isLicensed]}
               children={([isLicensed]: any) => (
                 <div className="space-y-6 lg:col-span-3">
                   <Tabs defaultValue="basic" className="w-full">
@@ -176,3 +176,4 @@ function CreateUserPage() {
     </>
   )
 }
+

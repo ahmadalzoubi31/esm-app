@@ -83,11 +83,11 @@ export function TableCellViewer({ item }: { item: Category }) {
             <section className="space-y-3">
               <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <FolderTreeIcon className="h-4 w-4 text-muted-foreground" />
-                Subcategories ({item.subcategories?.length || 0})
+                Subcategories ({item.children?.length || 0})
               </h4>
               <div className="flex flex-wrap gap-2 rounded-lg border p-3 bg-muted/30 min-h-[60px]">
-                {item.subcategories && item.subcategories.length > 0 ? (
-                  item.subcategories.map((sub) => (
+                {item.children && item.children.length > 0 ? (
+                  item.children.map((sub: Category) => (
                     <Badge key={sub.id} variant="secondary" className="font-normal">
                       {sub.name}
                     </Badge>

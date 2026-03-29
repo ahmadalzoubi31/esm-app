@@ -1,9 +1,12 @@
 import { Building2, UsersIcon } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Department } from '@repo/shared'
 
 interface DepartmentsStatsProps {
-  departments: any[]
+  departments: Department[]
 }
+
+
 
 export function DepartmentsStats({ departments }: DepartmentsStatsProps) {
   const totalDepartments = departments.length

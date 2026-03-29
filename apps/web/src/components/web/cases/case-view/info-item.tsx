@@ -36,11 +36,11 @@ export function InfoItem({
         <div className="text-muted-foreground group-hover:text-primary transition-colors">
           {icon}
         </div>
-        <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.1em] font-sans">
+        <p className="text-xs font-medium text-muted-foreground uppercase tracking-[0.1em] font-sans">
           {label}
         </p>
       </div>
-      <div className="text-sm font-semibold text-foreground leading-tight pl-0.5">
+      <div className="text-sm font-medium text-foreground leading-tight pl-0.5">
         {value}
       </div>
     </div>

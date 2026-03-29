@@ -28,16 +28,16 @@ export function UserSettings({ form }: UserSettingsProps) {
       <CardContent className="space-y-6">
         {/* Is Active */}
         <form.Field
-          name="is_active"
+          name="isActive"
           children={(field: any) => (
             <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
               <Checkbox
-                id="is_active"
+                id="isActive"
                 checked={field.state.value}
                 onCheckedChange={(checked) => field.handleChange(checked)}
               />
               <div className="space-y-1 leading-none">
-                <FieldLabel htmlFor="is_active">Active Account</FieldLabel>
+                <FieldLabel htmlFor="isActive">Active Account</FieldLabel>
                 <p className="text-sm text-muted-foreground">
                   Active users can log in to the system. Disabling this will
                   prevent the user from accessing the application.
@@ -49,11 +49,11 @@ export function UserSettings({ form }: UserSettingsProps) {
 
         {/* Is Licensed */}
         <form.Field
-          name="is_licensed"
+          name="isLicensed"
           children={(field: any) => (
             <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
               <Checkbox
-                id="is_licensed"
+                id="isLicensed"
                 checked={field.state.value}
                 onCheckedChange={(checked) => {
                   field.handleChange(checked)
@@ -64,7 +64,7 @@ export function UserSettings({ form }: UserSettingsProps) {
                 }}
               />
               <div className="space-y-1 leading-none">
-                <FieldLabel htmlFor="is_licensed">Licensed User</FieldLabel>
+                <FieldLabel htmlFor="isLicensed">Licensed User</FieldLabel>
                 <p className="text-sm text-muted-foreground">
                   Licensed users count towards your subscription quota and can
                   be assigned roles and permissions.
@@ -77,3 +77,4 @@ export function UserSettings({ form }: UserSettingsProps) {
     </Card>
   )
 }
+

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { FormSchemasService } from './form-schemas.service';
 import { CreateFormSchemaDto } from './dto/create-form-schema.dto';
 import { UpdateFormSchemaDto } from './dto/update-form-schema.dto';
@@ -23,7 +31,10 @@ export class FormSchemasController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFormSchemaDto: UpdateFormSchemaDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateFormSchemaDto: UpdateFormSchemaDto,
+  ) {
     return this.formSchemasService.update(+id, updateFormSchemaDto);
   }
 

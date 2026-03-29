@@ -72,7 +72,7 @@ export function CaseActivityLog({ caseRecord }: CaseActivityLogProps) {
                   </div>
                   <div className="flex-1 pb-6 pt-0.5">
                     <div className="flex justify-between items-start mb-1">
-                      <h4 className="font-semibold text-sm text-foreground/90 leading-none">
+                      <h4 className="font-medium text-sm text-foreground/90 leading-none">
                         {event.title}
                       </h4>
                     </div>

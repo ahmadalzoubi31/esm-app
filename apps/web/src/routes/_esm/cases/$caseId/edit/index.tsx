@@ -6,7 +6,7 @@ import { CaseBasicInfo } from '@/components/web/cases/case-form/case-basic-info'
 import { CaseRequesterInfo } from '@/components/web/cases/case-form/case-requester-info'
 import { CaseAssignmentInfo } from '@/components/web/cases/case-form/case-assignment-info'
 import { useCaseQuery } from '@/lib/queries/cases.query'
-import { CaseSchema, UpdateCaseSchema } from '@/schemas/case.schema'
+import { UpdateCaseSchema } from '@/schemas/case.schema'
 import z from 'zod'
 import { Case } from '@/types'
 import { useUpdateCaseMutation } from '@/lib/mutations'
@@ -77,9 +77,9 @@ function EditCaseForm({
       businessLineId: caseData.businessLine.id,
       affectedServiceId: caseData.affectedService.id,
       requestCardId: caseData.requestCard?.id,
-    } as z.infer<typeof CaseSchema>,
+    } as z.infer<typeof UpdateCaseSchema>,
     validators: {
-      onSubmit: CaseSchema,
+      onSubmit: UpdateCaseSchema,
     },
     onSubmit: async ({ value }) => {
       const submitData = { ...value }

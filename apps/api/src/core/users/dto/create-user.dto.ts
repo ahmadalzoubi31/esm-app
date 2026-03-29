@@ -14,11 +14,11 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateUserDto {
   @ApiProperty({ example: 'John' })
   @IsString()
-  first_name: string;
+  firstName: string;
 
   @ApiProperty({ example: 'Doe' })
   @IsString()
-  last_name: string;
+  lastName: string;
 
   @ApiProperty({ example: 'johndoe' })
   @IsString()
@@ -46,7 +46,7 @@ export class CreateUserDto {
 
   @ApiProperty({ example: 'ldap' })
   @IsString()
-  auth_source: AuthSource;
+  authSource: AuthSource;
 
   @ApiProperty({ example: 'IT' })
   @IsString()
@@ -56,7 +56,7 @@ export class CreateUserDto {
   @ApiProperty({ example: '123456' })
   @IsString()
   @IsOptional()
-  external_id?: string;
+  externalId?: string;
 
   @ApiProperty({ example: 'password' })
   @IsStrongPassword()
@@ -65,11 +65,11 @@ export class CreateUserDto {
 
   @ApiProperty({ example: true })
   @IsBoolean()
-  is_active: boolean;
+  isActive: boolean;
 
   @ApiProperty({ example: true })
   @IsBoolean()
-  is_licensed: boolean;
+  isLicensed: boolean;
 
   @ApiProperty({ example: { phone: '1234567890' } })
   @IsObject()

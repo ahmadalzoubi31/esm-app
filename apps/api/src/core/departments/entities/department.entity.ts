@@ -1,10 +1,20 @@
-import { BeforeCreate, BeforeUpdate, Property, Entity, OneToMany, Collection } from '@mikro-orm/core';
+import {
+  BeforeCreate,
+  BeforeUpdate,
+  Property,
+  Entity,
+  OneToMany,
+  Collection,
+} from '@mikro-orm/core';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 import { User } from '../../users/entities/user.entity';
 import { Group } from '../../groups/entities/group.entity';
+import type { DepartmentDto } from '@repo/shared';
+
 
 @Entity({ tableName: 'departments' })
-export class Department extends TenantBaseEntity {
+export class Department extends TenantBaseEntity implements DepartmentDto {
+
   @Property()
   code!: string;
 

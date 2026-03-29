@@ -37,7 +37,7 @@ export function CaseReassignModal({
 
   const filteredUsers = users?.filter(
     (user) =>
-      user.display_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.displayName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email?.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
@@ -56,7 +56,7 @@ export function CaseReassignModal({
         {trigger || (
           <Button size="sm" variant="outline" className="ml-auto h-8 lg:flex">
             <RotateCcwIcon className="h-3.5 w-3.5" />
-            <span className="font-semibold">Reassign Case</span>
+            <span className="font-medium">Reassign Case</span>
           </Button>
         )}
       </DialogTrigger>
@@ -94,13 +94,13 @@ export function CaseReassignModal({
                     onClick={() => setSelectedUserId(user.id)}
                   >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.avatar} alt={user.display_name} />
+                      <AvatarImage src={user.avatar} alt={user.displayName} />
                       <AvatarFallback>
-                        {user.display_name?.slice(0, 2).toUpperCase()}
+                        {user.displayName?.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                      <span className="font-medium">{user.display_name}</span>
+                      <span className="font-medium">{user.displayName}</span>
                       <span className="text-xs text-muted-foreground">
                         {user.email}
                       </span>
@@ -138,3 +138,4 @@ export function CaseReassignModal({
     </Dialog>
   )
 }
+

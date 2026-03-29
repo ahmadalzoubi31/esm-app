@@ -22,7 +22,11 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@repo/shared": ["../../packages/shared/src/index.ts"]
     }
-  }
+  },
+  "references": [
+    { "path": "../../packages/shared" }
+  ]
 }

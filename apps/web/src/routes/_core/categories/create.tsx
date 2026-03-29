@@ -20,14 +20,22 @@ function CreateCategoryPage() {
     defaultValues: {
       name: '',
       description: '',
+      parentId: '',
     } as z.infer<typeof CategorySchema>,
     validators: {
       onSubmit: CategorySchema,
     },
     onSubmit: async ({ value }) => {
-      const categoryData = {
+      const categoryData: any = {
         name: value.name,
         description: value.description,
+      }
+      if (value.parentId) {
+        categoryData.parentId = value.parentId
+        categoryData.tier = 2
+      } else {
+        categoryData.tier = 1
+        categoryData.parentId = null
       }
 
       await createMutation.mutateAsync(categoryData as any)

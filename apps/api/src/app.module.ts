@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { databaseConfig, jwtConfig, serverConfig } from './config';
@@ -28,6 +29,7 @@ import { join } from 'path';
       load: [serverConfig, jwtConfig, databaseConfig],
     }),
     ScheduleModule.forRoot(),
+    EventEmitterModule.forRoot({ wildcard: true, delimiter: '.' }),
     MikroOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) =>
         configService.get('database')!,

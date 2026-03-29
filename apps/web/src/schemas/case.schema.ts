@@ -1,18 +1,24 @@
 import { z } from 'zod'
 import { CaseStatus, CasePriority } from '@/types/cases'
 
-export const CaseSchema = z.object({
+/**
+ * BEST PRACTICE: Read vs Write Models
+ *
+ * This is the Base schema for Forms (Write Model).
+ * Forms only need the IDs for nested relationships (like businessLineId).
+ * When fetching data (Read Model), the backend returns the full nested objects,
+ * which are typed via TypeScript interfaces (like `Case` in `types/cases.ts`), not Zod.
+ */
+export const CaseFormBaseSchema = z.object({
   title: z
     .string()
     .min(5, { message: 'Title must be at least 5 characters.' })
-    .max(200, { message: 'Title must be at most 200 characters.' }),
+    .max(50, { message: 'Title must be at most 50 characters.' }),
   description: z.string().optional(),
-  status: z.enum(CaseStatus).optional(),
-  priority: z.enum(CasePriority).optional(),
   categoryId: z.uuid({ message: 'Please select a category.' }),
-  subcategoryId: z.uuid().optional(),
+  subcategoryId: z.union([z.uuid(), z.literal('')]).optional(),
   requesterId: z.uuid({ message: 'Please select a requester.' }),
-  assigneeId: z.uuid().optional(),
+  assigneeId: z.union([z.uuid(), z.literal('')]).optional(),
   assignmentGroupId: z.uuid({
     message: 'Please select an assignment group.',
   }),
@@ -20,7 +26,18 @@ export const CaseSchema = z.object({
   affectedServiceId: z.uuid({
     message: 'Please select an affected service.',
   }),
-  requestCardId: z.uuid().optional(),
+  requestCardId: z.union([z.uuid(), z.literal('')]).optional(),
 })
 
-export const UpdateCaseSchema = CaseSchema
+export const CreateCaseSchema = CaseFormBaseSchema.extend({
+  status: z.enum(CaseStatus),
+  priority: z.enum(CasePriority),
+})
+
+export const UpdateCaseSchema = CaseFormBaseSchema.extend({
+  status: z.enum(CaseStatus),
+  priority: z.enum(CasePriority),
+}).omit({
+  title: true,
+  businessLineId: true,
+})

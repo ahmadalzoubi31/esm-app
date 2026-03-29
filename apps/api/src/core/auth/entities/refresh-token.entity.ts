@@ -1,38 +1,41 @@
 import { Entity, Property, PrimaryKey } from '@mikro-orm/core';
 
-@Entity({ tableName: 'refresh_token' })
+@Entity({ tableName: 'refresh_tokens' })
 export class RefreshToken {
   @PrimaryKey()
   id!: number;
 
   @Property()
-  user_id!: string;
+  userId!: string;
 
   @Property()
   token!: string;
 
   @Property()
-  expires_at!: Date;
+  expiresAt!: Date;
 
   @Property()
-  is_revoked!: boolean;
+  isRevoked!: boolean;
 
   @Property({ onCreate: () => new Date() })
-  created_at?: Date;
+  createdAt?: Date;
 
   @Property({ nullable: true })
-  revoked_at?: Date;
+  revokedAt?: Date;
 
   // Session metadata
   @Property({ nullable: true, length: 45 })
-  ip_address!: string;
+  ipAddress!: string;
 
   @Property({ type: 'text', nullable: true })
-  user_agent!: string;
+  userAgent!: string;
 
   @Property({ nullable: true })
-  device_name!: string;
+  deviceName!: string;
 
-  @Property({ onCreate: () => new Date(), onUpdate: () => new Date() })
-  last_activity?: Date;
+  @Property({
+    onCreate: () => new Date(),
+    onUpdate: () => new Date(),
+  })
+  lastActivity?: Date;
 }

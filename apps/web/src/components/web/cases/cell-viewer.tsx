@@ -178,7 +178,7 @@ export function TableCellViewer({ item }: { item: Case }) {
                     label="Requester"
                     value={
                       item.requester
-                        ? `${item.requester.first_name || ''} ${item.requester.last_name || ''}`.trim() ||
+                        ? `${item.requester.firstName || ''} ${item.requester.lastName || ''}`.trim() ||
                           undefined
                         : undefined
                     }
@@ -188,7 +188,7 @@ export function TableCellViewer({ item }: { item: Case }) {
                     label="Assignee"
                     value={
                       item.assignee
-                        ? `${item.assignee.first_name || ''} ${item.assignee.last_name || ''}`.trim() ||
+                        ? `${item.assignee.firstName || ''} ${item.assignee.lastName || ''}`.trim() ||
                           'Unassigned'
                         : 'Unassigned'
                     }
@@ -239,3 +239,4 @@ export function TableCellViewer({ item }: { item: Case }) {
     </Drawer>
   )
 }
+

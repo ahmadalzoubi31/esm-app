@@ -85,21 +85,21 @@ export function CaseAttachments() {
           </CardDescription>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-background text-xs font-bold">
+          <Badge variant="outline" className="bg-background text-xs font-medium">
             PDF
           </Badge>
-          <Badge variant="outline" className="bg-background text-xs font-bold">
+          <Badge variant="outline" className="bg-background text-xs font-medium">
             DOCX
           </Badge>
-          <Badge variant="outline" className="bg-background text-xs font-bold">
+          <Badge variant="outline" className="bg-background text-xs font-medium">
             EXCEL
           </Badge>
-          <Badge variant="outline" className="bg-background text-xs font-bold">
+          <Badge variant="outline" className="bg-background text-xs font-medium">
             IMAGE
           </Badge>
           {/* <Badge
             variant="outline"
-            className="bg-background text-xs font-bold opacity-40"
+            className="bg-background text-xs font-medium opacity-40"
           >
             IMG
           </Badge> */}
@@ -135,13 +135,13 @@ export function CaseAttachments() {
             )}
           </div>
           <div className="space-y-1">
-            <h3 className="text-base font-bold text-foreground font-sans">
+            <h3 className="text-base font-medium text-foreground font-sans">
               Upload Documentation
             </h3>
             <p className="text-xs text-muted-foreground font-medium max-w-[240px]">
               Drag and drop your files here or{' '}
               <span
-                className="text-primary font-bold cursor-pointer hover:underline"
+                className="text-primary font-medium cursor-pointer hover:underline"
                 onClick={() => fileInputRef.current?.click()}
               >
                 browse files
@@ -149,7 +149,7 @@ export function CaseAttachments() {
             </p>
           </div>
           <div className="pt-2">
-            <p className="text-xs font-bold text-muted-foreground/40 uppercase tracking-widest">
+            <p className="text-xs font-medium text-muted-foreground/40 uppercase tracking-widest">
               Maximum file size: 25MB
             </p>
           </div>
@@ -159,7 +159,7 @@ export function CaseAttachments() {
         {attachments && attachments.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-bold text-foreground">
+              <h4 className="text-sm font-medium text-foreground">
                 Recent Files ({attachments.length})
               </h4>
             </div>
@@ -174,7 +174,7 @@ export function CaseAttachments() {
                       <FileTextIcon className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-bold text-foreground truncate max-w-[200px] sm:max-w-[400px]">
+                      <p className="text-sm font-medium text-foreground truncate max-w-[200px] sm:max-w-[400px]">
                         {attachment.originalName}
                       </p>
                       <div className="flex items-center gap-2 text-[10px] font-medium text-muted-foreground">
@@ -249,7 +249,7 @@ export function CaseAttachments() {
             <FileTextIcon className="h-4 w-4 text-blue-500 dark:text-blue-400" />
           </div>
           <div className="space-y-1">
-            <p className="text-sm font-bold text-blue-900 dark:text-blue-100 leading-none">
+            <p className="text-sm font-medium text-blue-900 dark:text-blue-100 leading-none">
               Security Note
             </p>
             <p className="text-xs text-blue-700/80 dark:text-blue-300/80 font-medium leading-relaxed">

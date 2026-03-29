@@ -8,7 +8,7 @@ import { TenantSeeder } from './tenant.seeder';
 import { DepartmentSeeder } from './department.seeder';
 import { GroupSeeder } from './group.seeder';
 import { CategorySeeder } from './category.seeder';
-import { SubcategorySeeder } from './subcategory.seeder';
+import { SlaTargetSeeder } from './sla-target.seeder';
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
@@ -24,7 +24,7 @@ export class DatabaseSeeder extends Seeder {
       DepartmentSeeder,
       GroupSeeder,
       CategorySeeder,
-      SubcategorySeeder,
+      SlaTargetSeeder,
       UserSeeder,
     ]);
 

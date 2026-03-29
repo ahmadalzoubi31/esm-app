@@ -39,15 +39,15 @@ export class UserSeeder extends Seeder {
 
     // 5. Create the user (auto-persists)
     em.create(User, {
-      first_name: 'System',
-      last_name: 'Admin',
-      display_name: 'System Admin',
+      firstName: 'System',
+      lastName: 'Admin',
+      displayName: 'System Admin',
       username: 'system',
       email: 'admin@system.com',
       password: 'P@ssw0rd',
-      auth_source: 'local',
-      is_active: true,
-      is_licensed: true,
+      authSource: 'local',
+      isActive: true,
+      isLicensed: true,
       roles: [systemAdminRole],
       tenant,
     });

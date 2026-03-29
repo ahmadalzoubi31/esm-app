@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsStrongPassword, IsUUID } from 'class-validator';
 
 export class ResetPasswordDto {
-  @ApiProperty({ example: 'user_id' })
+  @ApiProperty({ example: 'userId' })
   @IsUUID()
-  user_id: string;
+  userId: string;
 
   @ApiProperty({ example: 'password' })
   @IsStrongPassword()

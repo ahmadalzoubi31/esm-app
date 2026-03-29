@@ -63,14 +63,38 @@ export const columns: ColumnDef<Category>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'subcategories',
+    accessorKey: 'tier',
+    header: ({ column }) => (
+      <AppDataTableColumnHeader column={column} title="Tier" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-muted-foreground text-sm">{row.original.tier}</div>
+    ),
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'parent',
+    header: ({ column }) => (
+      <AppDataTableColumnHeader column={column} title="Parent Category" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex space-x-2">
+        {row.original.parent ? row.original.parent.name : '-'}
+      </div>
+    ),
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'children',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Subcategories" />
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <span className="font-medium">
-          {row.original.subcategories?.length || 0}
+          {row.original.children?.length || 0}
         </span>
       </div>
     ),

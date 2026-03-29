@@ -1,6 +1,7 @@
 import {
   BookOpen,
   Bot,
+  ClockIcon,
   Command,
   Frame,
   Home,
@@ -73,10 +74,6 @@ const nav_items = {
           title: 'Categories',
           url: '/categories',
         },
-        {
-          title: 'Subcategories',
-          url: '/subcategories',
-        },
       ],
     },
     {
@@ -110,6 +107,29 @@ const nav_items = {
         {
           title: 'Create Cases',
           url: '/cases/create',
+        },
+      ],
+    },
+    {
+      title: 'SLA Management',
+      url: '#',
+      icon: ClockIcon,
+      items: [
+        {
+          title: 'SLA',
+          url: '/sla',
+        },
+        {
+          title: 'SLA Targets',
+          url: '/sla/targets',
+        },
+        {
+          title: 'SLA Rules',
+          url: '/sla/rules',
+        },
+        {
+          title: 'SLA Timer',
+          url: '/sla/timer',
         },
       ],
     },

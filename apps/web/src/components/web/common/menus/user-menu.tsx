@@ -91,7 +91,7 @@ export function UserMenu({
           )}
         >
           {displayUser
-            ? `${displayUser.first_name} ${displayUser.last_name} (${displayUser.username})`
+            ? `${displayUser.firstName} ${displayUser.lastName} (${displayUser.username})`
             : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -140,7 +140,7 @@ export function UserMenu({
                       value === user.id ? 'opacity-100' : 'opacity-0',
                     )}
                   />
-                  {user.first_name} {user.last_name} ({user.username})
+                  {user.firstName} {user.lastName} ({user.username})
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -150,3 +150,4 @@ export function UserMenu({
     </Popover>
   )
 }
+

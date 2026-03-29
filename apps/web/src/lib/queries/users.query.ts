@@ -39,7 +39,7 @@ export function useSearchUsersQuery(
         filters?: string
         search?: string
         limit?: string
-        is_licensed?: boolean
+        isLicensed?: boolean
       },
   options?: any,
 ) {
@@ -52,3 +52,4 @@ export function useSearchUsersQuery(
     ...options,
   })
 }
+

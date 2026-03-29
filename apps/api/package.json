@@ -38,6 +38,7 @@
     "cache:clear": "npx mikro-orm cache:clear"
   },
   "dependencies": {
+    "@repo/shared": "workspace:*",
     "@apollo/server": "^5.4.0",
     "@as-integrations/express5": "^1.1.2",
     "@casl/ability": "^6.8.0",
@@ -53,6 +54,7 @@
     "@nestjs/common": "^11.1.13",
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.1.13",
+    "@nestjs/event-emitter": "^3.0.1",
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/mapped-types": "^2.1.0",
     "@nestjs/passport": "^11.0.5",

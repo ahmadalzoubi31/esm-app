@@ -22,8 +22,8 @@ import {
   ApiTags,
   ApiResponse,
 } from '@nestjs/swagger';
-import { PoliciesGuard } from 'src/common/guards/policies-guard.guard';
-import { CheckPolicies } from 'src/common/decorators/check-policies.decorator';
+import { PoliciesGuard } from '../../common/guards/policies-guard.guard';
+import { CheckPolicies } from '../../common/decorators/check-policies.decorator';
 import { AppAbility } from '../casl/casl-ability.factory';
 import { ACTION_ENUM } from '../casl/constants/action.constant';
 import { User } from './entities/user.entity';
@@ -91,11 +91,11 @@ export class UsersController {
   @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Read, User))
   async findAll(
     @Query('search') search?: string,
-    @Query('is_licensed') isLicensed?: boolean | string,
+    @Query('isLicensed') isLicensed?: boolean | string,
   ) {
     const where: any = {};
     if (isLicensed !== undefined) {
-      where.is_licensed = isLicensed === 'true' || isLicensed === true;
+      where.isLicensed = isLicensed === 'true' || isLicensed === true;
     }
     return await this.usersService.findAll({ search, where });
   }

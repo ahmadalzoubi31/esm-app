@@ -8,7 +8,8 @@ import { BusinessLineModule } from './business-lines/business-line.module';
 import { GroupsModule } from './groups/groups.module';
 import { DepartmentsModule } from './departments/departments.module';
 import { CategoriesModule } from './categories/categories.module';
-import { SubcategoriesModule } from './subcategories/subcategories.module';
+import { AuditModule } from './audit/audit.module';
+import { SlaModule } from './sla/sla.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { SubcategoriesModule } from './subcategories/subcategories.module';
     BusinessLineModule,
     DepartmentsModule,
     CategoriesModule,
-    SubcategoriesModule,
+    AuditModule,
+    SlaModule,
   ],
 })
 export class CoreModule {}

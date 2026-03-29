@@ -45,7 +45,7 @@ export class AuthService {
   async signIn(
     dto: SignInDto,
     request?: any,
-  ): Promise<{ access_token: string; refresh_token: string }> {
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     // 1. Validate user credentials
     const user = await this.validateUser(dto.username, dto.password);
     if (!user) {
@@ -68,7 +68,7 @@ export class AuthService {
     const payload = {
       username: user.username,
       sub: user.id,
-      name: user.display_name,
+      name: user.displayName,
       email: user.email,
       avatar: user.avatar,
       roles,
@@ -78,23 +78,23 @@ export class AuthService {
     };
 
     // 4. Generate access token with the JWT Payload
-    const access_token = await this.jwtService.signAsync(payload);
+    const accessToken = await this.jwtService.signAsync(payload);
 
     // 5. Generate RAW token for cookie
-    const refresh_token_value = randomBytes(64).toString('hex');
+    const refreshTokenValue = randomBytes(64).toString('hex');
 
     // 6.1. Hash the token and store it in DB
-    const refresh_token_hash = await hash(refresh_token_value);
+    const refreshTokenHash = await hash(refreshTokenValue);
 
     // 7. Create an instance of RefreshToken with session metadata
-    const refresh_token = this.refreshTokenRepository.create({
-      user_id: user.id,
-      token: refresh_token_hash,
-      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      is_revoked: false,
-      ip_address: request ? extractClientIp(request) : '',
-      user_agent: request ? request.headers['user-agent'] || '' : '',
-      device_name: request
+    const refreshToken = this.refreshTokenRepository.create({
+      userId: user.id,
+      token: refreshTokenHash,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      isRevoked: false,
+      ipAddress: request ? extractClientIp(request) : '',
+      userAgent: request ? request.headers['user-agent'] || '' : '',
+      deviceName: request
         ? extractDeviceName(request.headers['user-agent'] || '')
         : '',
     });
@@ -102,15 +102,15 @@ export class AuthService {
     // 7. save refresh token in database
     await this.refreshTokenRepository
       .getEntityManager()
-      .persist(refresh_token)
+      .persist(refreshToken)
       .flush();
-    const savedToken = refresh_token;
+    const savedToken = refreshToken;
 
     // 8. Return access and refresh tokens RAW so controller can set cookie
     // Format: {id}:{secret}
     return {
-      access_token,
-      refresh_token: `${savedToken.id}:${refresh_token_value}`,
+      accessToken,
+      refreshToken: `${savedToken.id}:${refreshTokenValue}`,
     };
   }
 
@@ -126,7 +126,7 @@ export class AuthService {
     // Revoke only the specific token
     await this.refreshTokenRepository.nativeUpdate(
       { id: tokenId },
-      { is_revoked: true, revoked_at: new Date() },
+      { isRevoked: true, revokedAt: new Date() },
     );
     return true;
   }
@@ -134,8 +134,8 @@ export class AuthService {
   async revokeAllSessions(userId: string): Promise<boolean> {
     // Revoke ALL active tokens for this user
     await this.refreshTokenRepository.nativeUpdate(
-      { user_id: userId, is_revoked: false },
-      { is_revoked: true, revoked_at: new Date() },
+      { userId, isRevoked: false },
+      { isRevoked: true, revokedAt: new Date() },
     );
     return true;
   }
@@ -143,7 +143,7 @@ export class AuthService {
   async refreshTokensFromCookie(
     refreshTokenValue?: string,
     request?: any,
-  ): Promise<{ access_token: string; refresh_token: string }> {
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     // 0. Check if refresh token is provided
     if (!refreshTokenValue)
       throw new UnauthorizedException('Refresh token not provided');
@@ -173,7 +173,7 @@ export class AuthService {
     // 2.2 Parallelize CPU-intensive verification and DB-intensive user fetch
     // This hides the latency of one behind the other
     const verifyPromise = verify(matched.token, secret);
-    const userPromise = this.usersService.findOne(matched.user_id);
+    const userPromise = this.usersService.findOne(matched.userId);
 
     const [isMatch, user] = await Promise.all([verifyPromise, userPromise]);
 
@@ -184,7 +184,7 @@ export class AuthService {
     }
 
     // 3. Check if matched token is valid (Reuse Detection)
-    if (matched.is_revoked) {
+    if (matched.isRevoked) {
       // Security Event: A revoked token is being reused.
       // This implies the token chain has split (Theft or Race Condition).
 
@@ -192,9 +192,9 @@ export class AuthService {
       // If the token was revoked less than 10 seconds ago, it's likely a frontend race condition.
       // We generally just want to fail this request, NOT nuke the user.
       const GRACE_PERIOD = 10 * 1000; // 10s
-      const timeSinceRevoke = matched.revoked_at
-        ? Date.now() - matched.revoked_at.getTime()
-        : GRACE_PERIOD + 1; // If no revoked_at, assume old.
+      const timeSinceRevoke = matched.revokedAt
+        ? Date.now() - matched.revokedAt.getTime()
+        : GRACE_PERIOD + 1; // If no revokedAt, assume old.
 
       if (timeSinceRevoke < GRACE_PERIOD) {
         throw new UnauthorizedException('Invalid refresh token (Concurrent)');
@@ -202,8 +202,8 @@ export class AuthService {
 
       // Action: Revoke ALL sessions for this user (Nuclear Option).
       await this.refreshTokenRepository.nativeUpdate(
-        { user_id: matched.user_id },
-        { is_revoked: true, revoked_at: new Date() },
+        { userId: matched.userId },
+        { isRevoked: true, revokedAt: new Date() },
       );
       throw new UnauthorizedException(
         'Refresh token reuse detected. All sessions revoked.',
@@ -213,7 +213,7 @@ export class AuthService {
     // 4. Check if matched token is expired
     // Note: We used to check this before user fetch, but now we do it after parallel execution
     // for simplicity and because expiration is rare compared to valid refreshes.
-    if (matched.expires_at < new Date())
+    if (matched.expiresAt < new Date())
       throw new UnauthorizedException('Refresh token expired');
 
     // 5. validate user
@@ -232,7 +232,7 @@ export class AuthService {
     const payload = {
       username: user.username,
       sub: user.id,
-      name: user.display_name,
+      name: user.displayName,
       email: user.email,
       avatar: user.avatar,
       roles,
@@ -242,18 +242,18 @@ export class AuthService {
     };
 
     // 8: Generate Access Token with the payload
-    const access_token = await this.jwtService.signAsync(payload);
+    const accessToken = await this.jwtService.signAsync(payload);
 
     // 9. Update last activity timestamp (Throttled)
-    // Only update if last_activity is older than 1 hour or doesn't exist
+    // Only update if lastActivity is older than 1 hour or doesn't exist
     const now = Date.now();
-    const lastActivityTime = matched.last_activity
-      ? matched.last_activity.getTime()
+    const lastActivityTime = matched.lastActivity
+      ? matched.lastActivity.getTime()
       : 0;
     const oneHour = 60 * 60 * 1000;
 
     if (request && now - lastActivityTime > oneHour) {
-      matched.last_activity = new Date();
+      matched.lastActivity = new Date();
       // We don't await this to avoid blocking the response
       // But we should handle errors, or just fire and forget if safe in this context.
       // For safety in serverless/async contexts, usually best to await or use a queue.
@@ -263,61 +263,61 @@ export class AuthService {
 
     // 10. Check if token needs rotation
     // Current policy: Rotate if less than 24 hours remaining (1 day)
-    const timeRemaining = matched.expires_at.getTime() - now;
+    const timeRemaining = matched.expiresAt.getTime() - now;
     const shouldRotate = timeRemaining < 1 * 24 * 60 * 60 * 1000; // < 1 day
 
     if (shouldRotate) {
       // 10.1: Generate RAW Refresh Token by Rotate refresh token
-      const refresh_token_value = randomBytes(64).toString('hex');
+      const refreshTokenValue = randomBytes(64).toString('hex');
 
       // 10.2: Hash the token and store it in DB (High cost: Argon2)
-      const refresh_token_hash = await hash(refresh_token_value);
+      const refreshTokenHash = await hash(refreshTokenValue);
 
       // 10.3: Revoke refresh token in database
       await this.refreshTokenRepository.nativeUpdate(
         { id: matched.id },
-        { is_revoked: true, revoked_at: new Date() },
+        { isRevoked: true, revokedAt: new Date() },
       );
 
       // 10.4. Create an instance of RefreshToken with session metadata
-      const refresh_token_entity = this.refreshTokenRepository.create({
-        user_id: user.id,
-        token: refresh_token_hash,
-        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Reset to 7 days
-        is_revoked: false,
-        ip_address: request ? extractClientIp(request) : matched.ip_address,
-        user_agent: request
+      const refreshTokenEntity = this.refreshTokenRepository.create({
+        userId: user.id,
+        token: refreshTokenHash,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Reset to 7 days
+        isRevoked: false,
+        ipAddress: request ? extractClientIp(request) : matched.ipAddress,
+        userAgent: request
           ? request.headers['user-agent'] || ''
-          : matched.user_agent,
-        device_name: request
+          : matched.userAgent,
+        deviceName: request
           ? extractDeviceName(request.headers['user-agent'] || '')
-          : matched.device_name,
+          : matched.deviceName,
       });
 
       // 11. save refresh token in database
       await this.refreshTokenRepository
         .getEntityManager()
-        .persist(refresh_token_entity)
+        .persist(refreshTokenEntity)
         .flush();
-      const savedToken = refresh_token_entity;
+      const savedToken = refreshTokenEntity;
 
       // 12. Return access and refresh tokens RAW so controller can set cookie
       return {
-        access_token,
-        refresh_token: `${savedToken.id}:${refresh_token_value}`,
+        accessToken,
+        refreshToken: `${savedToken.id}:${refreshTokenValue}`,
       };
     } else {
       // 11. Return new access token and SAME refresh token (no DB write, no Hash)
       return {
-        access_token,
-        refresh_token: refreshTokenValue,
+        accessToken,
+        refreshToken: refreshTokenValue,
       };
     }
   }
 
   async resetPassword(dto: ResetPasswordDto): Promise<boolean> {
     // 1. Validate user
-    const user = await this.usersService.findOne(dto.user_id);
+    const user = await this.usersService.findOne(dto.userId);
 
     // 2. Check if user exists
     if (!user) {
@@ -341,8 +341,8 @@ export class AuthService {
 
     // 2. Delete old revoked tokens
     const result = await this.refreshTokenRepository.nativeDelete({
-      is_revoked: true,
-      created_at: { $lt: cutoffDate },
+      isRevoked: true,
+      createdAt: { $lt: cutoffDate },
     });
 
     // 3. Return number of deleted tokens
@@ -352,20 +352,20 @@ export class AuthService {
   async getActiveSessions(userId: string): Promise<SessionInfoDto[]> {
     // 1. Find all active (non-revoked) refresh tokens for the user
     const sessions = await this.refreshTokenRepository.find(
-      { user_id: userId, is_revoked: false },
-      { orderBy: { last_activity: 'DESC' } },
+      { userId, isRevoked: false },
+      { orderBy: { lastActivity: 'DESC' } },
     );
 
     // 2. Map to SessionInfoDto
     return sessions.map((session) => ({
       id: session.id,
-      device_name: session.device_name || 'Unknown Device',
-      ip_address: session.ip_address,
-      last_activity: session.last_activity ?? new Date(),
-      created_at: session.created_at ?? new Date(),
-      expires_at: session.expires_at,
-      is_current: false, // Will be set by controller based on current session
-      user_id: session.user_id,
+      deviceName: session.deviceName || 'Unknown Device',
+      ipAddress: session.ipAddress,
+      lastActivity: session.lastActivity ?? new Date(),
+      createdAt: session.createdAt ?? new Date(),
+      expiresAt: session.expiresAt,
+      isCurrent: false, // Will be set by controller based on current session
+      userId: session.userId,
     }));
   }
 
@@ -373,7 +373,7 @@ export class AuthService {
     // 1. Find the session
     const session = await this.refreshTokenRepository.findOne({
       id: sessionId,
-      user_id: userId,
+      userId,
     });
 
     // 2. Check if session exists and belongs to the user
@@ -384,7 +384,7 @@ export class AuthService {
     // 3. Revoke the session
     await this.refreshTokenRepository.nativeUpdate(
       { id: sessionId },
-      { is_revoked: true },
+      { isRevoked: true },
     );
 
     return true;

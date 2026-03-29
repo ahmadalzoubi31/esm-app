@@ -4,7 +4,7 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Group } from './entities/group.entity';
 import { EntityRepository } from '@mikro-orm/core';
-import { Tenant } from 'src/tenants/entities/tenant.entity';
+import { Tenant } from '../../tenants/entities/tenant.entity';
 import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
 import { User } from '../users/entities/user.entity';
@@ -39,7 +39,7 @@ export class GroupsService {
     // 5: Create group and set references
     const group = this.groupRepository.create({
       ...rest,
-      businessLine: businessLineId as string,
+      businessLine: businessLineId,
       teamLeader: teamLeaderId as string,
       department: departmentId as string,
       tenant: tenantRef,

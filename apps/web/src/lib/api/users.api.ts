@@ -31,7 +31,7 @@ export const usersApi = {
           filters?: string
           search?: string
           limit?: string
-          is_licensed?: boolean
+          isLicensed?: boolean
         },
   ): Promise<ApiResponse<User[]>> => {
     let url = API_ENDPOINTS.USERS.LIST
@@ -43,8 +43,8 @@ export const usersApi = {
       if (params.filters) queryParams.append('filters', params.filters)
       if (params.search) queryParams.append('search', params.search)
       if (params.limit) queryParams.append('limit', params.limit)
-      if (params.is_licensed !== undefined)
-        queryParams.append('is_licensed', String(params.is_licensed))
+      if (params.isLicensed !== undefined)
+        queryParams.append('isLicensed', String(params.isLicensed))
     }
 
     const queryString = queryParams.toString()
@@ -128,3 +128,4 @@ export const usersApi = {
     })
   },
 }
+

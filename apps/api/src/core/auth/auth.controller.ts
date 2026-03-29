@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Public } from 'src/common/decorators/public.decorator';
+import { Public } from '../../common/decorators/public.decorator';
 import { SignInDto } from './dto/sign-in.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { AuthResponse } from './dto/auth-response.dto';
@@ -25,7 +25,7 @@ import {
 } from './auth.constants';
 import { Response } from 'express';
 import { SessionInfoDto } from './dto/session-info.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('Auth')
 @ApiBearerAuth()
@@ -43,14 +43,14 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @Request() req,
   ) {
-    const { access_token, refresh_token } = await this.authService.signIn(
+    const { accessToken, refreshToken } = await this.authService.signIn(
       signInDto,
       req,
     );
 
     // ✅ set both access and refresh token cookies
-    res.cookie(ACCESS_COOKIE_NAME, access_token, accessCookieOptions());
-    res.cookie(REFRESH_COOKIE_NAME, refresh_token, refreshCookieOptions());
+    res.cookie(ACCESS_COOKIE_NAME, accessToken, accessCookieOptions());
+    res.cookie(REFRESH_COOKIE_NAME, refreshToken, refreshCookieOptions());
 
     // No longer return access token in response body
     return { message: 'Login successful' };
@@ -118,14 +118,14 @@ export class AuthController {
   ) {
     // ✅ decode because cookie value may contain %3A instead of :
     const raw = req.cookies?.[REFRESH_COOKIE_NAME];
-    const refreshToken = raw ? decodeURIComponent(raw) : undefined;
+    const refreshTokenValue = raw ? decodeURIComponent(raw) : undefined;
 
-    const { access_token, refresh_token } =
-      await this.authService.refreshTokensFromCookie(refreshToken, req);
+    const { accessToken, refreshToken } =
+      await this.authService.refreshTokensFromCookie(refreshTokenValue, req);
 
     // ✅ set both access and refresh token cookies
-    res.cookie(ACCESS_COOKIE_NAME, access_token, accessCookieOptions());
-    res.cookie(REFRESH_COOKIE_NAME, refresh_token, refreshCookieOptions());
+    res.cookie(ACCESS_COOKIE_NAME, accessToken, accessCookieOptions());
+    res.cookie(REFRESH_COOKIE_NAME, refreshToken, refreshCookieOptions());
 
     // No longer return access token in response body
     return { message: 'Token refreshed successfully' };
@@ -162,7 +162,7 @@ export class AuthController {
     if (currentRefreshToken) {
       const [currentId] = currentRefreshToken.split(':');
       sessions.forEach((session) => {
-        session.is_current = session.id === parseInt(currentId, 10);
+        session.isCurrent = session.id === parseInt(currentId, 10);
       });
     }
 

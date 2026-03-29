@@ -25,7 +25,7 @@ sequenceDiagram
     AuthService->>AuthService: Generate JWT (Access Token)
     AuthService->>AuthService: Generate Refresh Token
 
-    AuthService->>DB: Save Refresh Token hash (refresh_token table)
+    AuthService->>DB: Save Refresh Token hash (refreshToken table)
 
     AuthService-->>AuthController: { accessToken, refreshToken, user }
     AuthController-->>Client: JSON Response
@@ -33,13 +33,13 @@ sequenceDiagram
 
 ## Data Model (RefreshToken)
 
-| Field        | Type     | Description            |
-| :----------- | :------- | :--------------------- |
-| `id`         | number   | Primary Key.           |
-| `user_id`    | string   | User UUID (Reference). |
-| `token`      | string   | Hashed token value.    |
-| `expires_at` | datetime | Expiration date.       |
-| `is_revoked` | boolean  | Revocation status.     |
+| Field       | Type     | Description            |
+| :---------- | :------- | :--------------------- |
+| `id`        | number   | Primary Key.           |
+| `userId`    | string   | User UUID (Reference). |
+| `token`     | string   | Hashed token value.    |
+| `expiresAt` | datetime | Expiration date.       |
+| `isRevoked` | boolean  | Revocation status.     |
 
 ## API Operations
 

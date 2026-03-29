@@ -4,8 +4,11 @@ import { AppDataTableColumnHeader } from '@/components/web/common/app-table'
 import { Checkbox } from '@/components/ui/checkbox'
 import { TableCellViewer } from './cell-viewer'
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react'
+import { Department } from '@repo/shared'
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<Department>[] = [
+
+
   {
     id: 'select',
     header: ({ table }) => (

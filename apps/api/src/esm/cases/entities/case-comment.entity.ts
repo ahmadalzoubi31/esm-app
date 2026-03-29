@@ -5,7 +5,7 @@ import { Case } from './case.entity';
 @Entity({ tableName: 'case_comments' })
 @Index({ properties: ['case', 'createdAt'] })
 export class CaseComment extends TenantBaseEntity {
-  @ManyToOne(() => Case, { deleteRule: 'cascade', fieldName: 'case_id' })
+  @ManyToOne(() => Case, { deleteRule: 'cascade', fieldName: 'caseId' })
   case!: Case;
 
   @Property({ type: 'text' })

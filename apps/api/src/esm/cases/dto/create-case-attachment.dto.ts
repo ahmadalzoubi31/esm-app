@@ -19,14 +19,6 @@ export class CreateCaseAttachmentDto {
   size!: number;
 
   @ApiProperty()
-  @IsUUID()
-  createdById!: string;
-
-  @ApiProperty()
-  @IsString()
-  createdByName!: string;
-
-  @ApiProperty()
   @IsString()
   storagePath!: string;
 }

@@ -11,7 +11,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Permission } from '../permissions/entities/permission.entity';
 import { PermissionsService } from '../permissions/permissions.service';
 import { UsersService } from '../users/users.service';
-import { Tenant } from 'src/tenants/entities/tenant.entity';
+import { Tenant } from '../../tenants/entities/tenant.entity';
 
 @Injectable()
 export class RolesService {
@@ -47,7 +47,7 @@ export class RolesService {
 
     // 7. Assign permissions if present
     if (permissionIds && permissionIds.length > 0) {
-      await this.assignPermissions(role.id as string, permissionIds);
+      await this.assignPermissions(role.id, permissionIds);
     }
 
     // 8: Return role

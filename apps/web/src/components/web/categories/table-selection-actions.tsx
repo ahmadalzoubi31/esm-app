@@ -1,6 +1,6 @@
 import { Table } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
-import { TrashIcon } from 'lucide-react'
+import { TrashIcon, CopyIcon, DownloadIcon } from 'lucide-react'
 import { useDeleteBulkCategoriesMutation } from '@/lib/mutations'
 import {
   AlertDialog,
@@ -13,7 +13,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { useState } from 'react'
 
 interface CategoriesTableSelectionActionsProps<TData> {
   table: Table<TData>
@@ -21,57 +20,58 @@ interface CategoriesTableSelectionActionsProps<TData> {
 
 export function CategoriesTableSelectionActions<TData>({
   table,
-}: CategoriesTableSelectionActionsProps<TData>) {
-  const selectedRows = table.getFilteredSelectedRowModel().rows
+}: CategoriesTableSelectionActionsProps<TData & { id: string }>) {
   const deleteBulkMutation = useDeleteBulkCategoriesMutation()
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  if (selectedRows.length === 0) return null
+  const selectedCount = table.getSelectedRowModel().rows.length
 
   const handleDelete = async () => {
-    try {
-      setIsDeleting(true)
-      const ids = selectedRows.map((row) => (row.original as any).id)
-      await deleteBulkMutation.mutateAsync(ids)
-      table.toggleAllRowsSelected(false)
-    } catch (error) {
-    } finally {
-      setIsDeleting(false)
-    }
+    const selectedRows = table.getSelectedRowModel().rows
+    const ids = selectedRows.map((row) => row.original.id)
+    await deleteBulkMutation.mutateAsync(ids)
+    table.resetRowSelection()
   }
 
   return (
     <div className="flex items-center gap-2">
-      <div className="text-sm text-muted-foreground mr-2 border-r pr-4">
-        {selectedRows.length} selected
-      </div>
-
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="destructive" size="sm" disabled={isDeleting}>
-            <TrashIcon className="mr-2 h-4 w-4" />
-            Delete
+          <Button variant="outline" size="sm" className="h-8">
+            <TrashIcon className="mr-2 size-4" />
+            Delete {selectedCount} row{selectedCount !== 1 ? 's' : ''}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete {selectedRows.length} case
-              categories.
+              This action cannot be undone. This will permanently delete{' '}
+              <span className="font-medium text-destructive">
+                {selectedCount}
+              </span>{' '}
+              selected case categor{selectedCount !== 1 ? 'ies' : 'y'} and remove their
+              data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-red-600 text-destructive-foreground hover:bg-red-700"
               onClick={handleDelete}
             >
-              {isDeleting ? 'Deleting...' : 'Delete'}
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Button variant="outline" size="sm" className="h-8">
+        Copy
+        <CopyIcon className="ml-2 size-4" />
+      </Button>
+      <Button variant="outline" size="sm" className="h-8">
+        Export
+        <DownloadIcon className="ml-2 size-4" />
+      </Button>
     </div>
   )
 }

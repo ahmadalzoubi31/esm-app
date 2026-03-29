@@ -18,10 +18,10 @@ import { CaseCommentsService } from './case-comments.service';
 import { CreateCaseCommentDto } from './dto/create-case-comment.dto';
 import { UpdateCaseCommentDto } from './dto/update-case-comment.dto';
 import { CaseComment } from './entities/case-comment.entity';
-import { PoliciesGuard } from 'src/common/guards/policies-guard.guard';
-import { CheckPolicies } from 'src/common/decorators/check-policies.decorator';
-import { AppAbility } from 'src/core/casl/casl-ability.factory';
-import { ACTION_ENUM } from 'src/core/casl/constants/action.constant';
+import { PoliciesGuard } from '../../common/guards/policies-guard.guard';
+import { CheckPolicies } from '../../common/decorators/check-policies.decorator';
+import { AppAbility } from '../../core/casl/casl-ability.factory';
+import { ACTION_ENUM } from '../../core/casl/constants/action.constant';
 
 @ApiTags('Cases - Comments')
 @ApiBearerAuth()

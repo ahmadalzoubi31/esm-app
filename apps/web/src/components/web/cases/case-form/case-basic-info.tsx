@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { CategoryMenu } from '@/components/web/common/menus/category-menu'
-import { SubcategoryMenu } from '@/components/web/common/menus/subcategory-menu'
 import { BusinessLineMenu } from '@/components/web/common/menus/business-line-menu'
 import { CaseSchema } from '@/schemas/case.schema'
 import { CasePriority, CaseStatus, FormInstance } from '@/types'
@@ -198,6 +197,7 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
                   <CategoryMenu
                     id={field.name}
                     value={field.state.value}
+                    tier={1}
                     onChange={(val) => {
                       field.handleChange(val)
                       form.setFieldValue('subcategoryId', '')
@@ -221,10 +221,11 @@ export function CaseBasicInfo({ form }: CaseBasicInfoProps) {
                   return (
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>Subcategory</FieldLabel>
-                      <SubcategoryMenu
+                      <CategoryMenu
                         id={field.name}
                         value={field.state.value}
-                        categoryId={categoryId}
+                        tier={2}
+                        parentId={categoryId}
                         onChange={(val) => field.handleChange(val)}
                         isInvalid={isInvalid}
                       />

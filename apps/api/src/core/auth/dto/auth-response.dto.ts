@@ -1,3 +1,3 @@
 export class AuthResponse {
-  access_token: string;
+  accessToken: string;
 }

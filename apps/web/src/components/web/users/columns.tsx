@@ -45,7 +45,7 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'display_name',
+    accessorKey: 'displayName',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Display Name" />
     ),
@@ -129,12 +129,12 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'auth_source',
+    accessorKey: 'authSource',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Auth Source" />
     ),
     cell: ({ row }) => {
-      const authSource = row.original.auth_source
+      const authSource = row.original.authSource
 
       return (
         <div className="w-32 text-base">
@@ -156,7 +156,7 @@ export const columns: ColumnDef<User>[] = [
       <AppDataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const isActive = row.original.is_active
+      const isActive = row.original.isActive
       return (
         <div className="w-32 text-base">
           <Badge variant="outline" className="text-muted-foreground px-1.5">
@@ -178,12 +178,12 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'external_id',
+    accessorKey: 'externalId',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="External ID" />
     ),
     cell: ({ row }) => {
-      const externalId = row.original.external_id
+      const externalId = row.original.externalId
       return externalId ? (
         <div className="flex items-center gap-2">
           <span className="text-muted-foreground text-sm">{externalId}</span>
@@ -196,25 +196,25 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'last_login_at',
+    accessorKey: 'lastLoginAt',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Last Login At" />
     ),
     cell: ({ row }) => (
       <div className="text-sm">
-        {row.original.last_login_at && formatDate(row.original.last_login_at)}
+        {row.original.lastLoginAt && formatDate(row.original.lastLoginAt)}
       </div>
     ),
     enableSorting: false,
     enableHiding: true,
   },
   {
-    accessorKey: 'is_licensed',
+    accessorKey: 'isLicensed',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Is Licensed" />
     ),
     cell: ({ row }) => {
-      const isLicensed = row.original.is_licensed
+      const isLicensed = row.original.isLicensed
       return (
         <div className="w-32 text-base">
           <Badge variant="outline" className="text-muted-foreground px-1.5">
@@ -231,25 +231,6 @@ export const columns: ColumnDef<User>[] = [
     enableSorting: false,
     enableHiding: true,
   },
-  // {
-  //   accessorKey: 'createdByName',
-  //   header: ({ column }) => (
-  //     <AppDataTableColumnHeader column={column} title="Created By" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const createdBy = row.original.createdByName
-  //     return (
-  //       <div className="flex items-center gap-2">
-  //         <UserIcon className="h-3.5 w-3.5 text-muted-foreground" />
-  //         <span className="text-muted-foreground text-sm">
-  //           {createdBy || 'System'}
-  //         </span>
-  //       </div>
-  //     )
-  //   },
-  //   enableSorting: true,
-  //   enableHiding: true,
-  // },
   {
     accessorKey: 'createdAt',
     header: ({ column }) => (
@@ -263,25 +244,6 @@ export const columns: ColumnDef<User>[] = [
     enableSorting: true,
     enableHiding: true,
   },
-  // {
-  //   accessorKey: 'updatedByName',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Updated By" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const updatedBy = row.original.updatedByName
-  //     return (
-  //       <div className="flex items-center gap-2">
-  //         <UserIcon className="h-3.5 w-3.5 text-muted-foreground" />
-  //         <span className="text-muted-foreground text-sm">
-  //           {updatedBy || 'System'}
-  //         </span>
-  //       </div>
-  //     )
-  //   },
-  //   enableSorting: true,
-  //   enableHiding: true,
-  // },
   {
     accessorKey: 'updatedAt',
     header: ({ column }) => (

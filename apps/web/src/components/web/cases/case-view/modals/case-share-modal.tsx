@@ -39,7 +39,7 @@ export function CaseShareModal({ caseNumber, trigger }: CaseShareModalProps) {
         {trigger || (
           <Button size="sm" variant="outline" className="ml-auto h-8 lg:flex">
             <ShareIcon className="h-3.5 w-3.5" />
-            <span className="font-semibold">Share Case</span>
+            <span className="font-medium">Share Case</span>
           </Button>
         )}
       </DialogTrigger>

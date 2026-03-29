@@ -15,7 +15,7 @@ export interface SignInDto {
 }
 
 export interface ResetPasswordDto {
-  user_id: string
+  userId: string
   password?: string
 }
 

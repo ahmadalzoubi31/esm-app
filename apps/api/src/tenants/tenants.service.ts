@@ -23,11 +23,11 @@ export class TenantsService {
     const activationUser = this.em.create(User, {
       username: `admin@${tenant.slug}`,
       email: `admin@${tenant.slug}.local`,
-      first_name: 'Activation',
-      last_name: 'User',
-      auth_source: AuthSource.LOCAL,
-      is_active: true,
-      is_licensed: true,
+      firstName: 'Activation',
+      lastName: 'User',
+      authSource: AuthSource.LOCAL,
+      isActive: true,
+      isLicensed: true,
       password: rawPassword,
       tenant: tenant,
     });

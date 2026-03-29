@@ -18,9 +18,9 @@ import { InfoItem } from './info-item'
 interface CaseIntelligenceProps {
   caseRecord: {
     assignee?: {
-      display_name?: string
-      first_name?: string
-      last_name?: string
+      displayName?: string
+      firstName?: string
+      lastName?: string
     }
     assignmentGroup: {
       name: string
@@ -59,8 +59,8 @@ export function CaseIntelligence({ caseRecord }: CaseIntelligenceProps) {
               caseRecord.assignee ? (
                 <div className="flex items-center gap-2">
                   <span>
-                    {caseRecord.assignee.display_name ||
-                      `${caseRecord.assignee.first_name} ${caseRecord.assignee.last_name}`}
+                    {caseRecord.assignee.displayName ||
+                      `${caseRecord.assignee.firstName} ${caseRecord.assignee.lastName}`}
                   </span>
                 </div>
               ) : (
@@ -96,3 +96,4 @@ export function CaseIntelligence({ caseRecord }: CaseIntelligenceProps) {
     </Card>
   )
 }
+

@@ -15,11 +15,19 @@ export class GroupSeeder extends Seeder {
     const tenantRef = em.getReference(Tenant, tenantId);
 
     // Get dependencies
-    const itBusinessLine = await businessLineRepo.findOne({ key: 'it', tenant: tenantId }, { filters: { tenant: false } });
-    const itDepartment = await departmentRepo.findOne({ code: 'information-technology', tenant: tenantId }, { filters: { tenant: false } });
+    const itBusinessLine = await businessLineRepo.findOne(
+      { key: 'it', tenant: tenantId },
+      { filters: { tenant: false } },
+    );
+    const itDepartment = await departmentRepo.findOne(
+      { code: 'information-technology', tenant: tenantId },
+      { filters: { tenant: false } },
+    );
 
     if (!itBusinessLine || !itDepartment) {
-      console.warn('⚠ Could not find IT Business Line or IT Department. Skipping Group seeding for IT.');
+      console.warn(
+        '⚠ Could not find IT Business Line or IT Department. Skipping Group seeding for IT.',
+      );
     } else {
       const groups = [
         {
@@ -45,10 +53,13 @@ export class GroupSeeder extends Seeder {
       ];
 
       for (const groupData of groups) {
-        const existing = await groupRepo.findOne({
-          name: groupData.name,
-          tenant: tenantId,
-        }, { filters: { tenant: false } });
+        const existing = await groupRepo.findOne(
+          {
+            name: groupData.name,
+            tenant: tenantId,
+          },
+          { filters: { tenant: false } },
+        );
 
         if (existing) {
           console.log(`✔ Group ${groupData.name} already exists, skipping.`);
@@ -64,7 +75,7 @@ export class GroupSeeder extends Seeder {
           department: itDepartment,
           tenant: tenantRef,
         } as any);
-        
+
         console.log(`✔ Created group: ${groupData.name}`);
       }
     }

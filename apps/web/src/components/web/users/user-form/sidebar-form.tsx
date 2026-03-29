@@ -44,7 +44,7 @@ export function SideBarForm({ form }: SideBarFormProps) {
                     User Preview
                   </CardTitle>
                   <div className="flex gap-2">
-                    {user.is_active && (
+                    {user.isActive && (
                       <Badge
                         variant="outline"
                         className="bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20"
@@ -52,7 +52,7 @@ export function SideBarForm({ form }: SideBarFormProps) {
                         Active
                       </Badge>
                     )}
-                    {user.is_licensed && (
+                    {user.isLicensed && (
                       <Badge
                         variant="outline"
                         className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 border-blue-500/20"
@@ -79,8 +79,8 @@ export function SideBarForm({ form }: SideBarFormProps) {
                   </div>
                   <div className="grid gap-0.5 overflow-hidden">
                     <h3 className="font-semibold leading-none truncate">
-                      {user.first_name || user.last_name
-                        ? `${user.first_name} ${user.last_name}`
+                      {user.firstName || user.lastName
+                        ? `${user.firstName} ${user.lastName}`
                         : 'New User'}
                     </h3>
                     <p className="text-sm text-muted-foreground truncate">
@@ -105,13 +105,13 @@ export function SideBarForm({ form }: SideBarFormProps) {
                     </div>
                     <Badge
                       variant={
-                        user.auth_source === AuthSource.LDAP
+                        user.authSource === AuthSource.LDAP
                           ? 'secondary'
                           : 'outline'
                       }
                       className="capitalize"
                     >
-                      {user.auth_source?.toLowerCase() || 'Local'}
+                      {user.authSource?.toLowerCase() || 'Local'}
                     </Badge>
                   </div>
 
@@ -170,3 +170,4 @@ export function SideBarForm({ form }: SideBarFormProps) {
     </div>
   )
 }
+

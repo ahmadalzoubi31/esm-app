@@ -39,7 +39,7 @@ export function CaseHeader({ caseRecord }: CaseHeaderProps) {
         >
           <Link to="/cases/$caseId" params={{ caseId: caseRecord.id }}>
             <ArrowLeft className="h-4 w-4" />
-            <span className="font-semibold tracking-tight">
+            <span className="font-medium tracking-tight">
               Back to Workspace
             </span>
           </Link>
@@ -57,7 +57,7 @@ export function CaseHeader({ caseRecord }: CaseHeaderProps) {
               className="gap-2"
             >
               <Edit className="h-3.5 w-3.5" />
-              <span className="font-semibold">Modify Case</span>
+              <span className="font-medium">Modify Case</span>
             </Link>
           </Button>
           <CaseStatusModal
@@ -74,13 +74,13 @@ export function CaseHeader({ caseRecord }: CaseHeaderProps) {
 
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
         <div className="space-y-3">
-          <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-foreground font-sans leading-none">
+          <h1 className="text-2xl font-medium tracking-tight text-foreground font-sans leading-none">
             {caseRecord.title}
           </h1>
           <div className="flex items-center gap-3">
             <Badge
               variant="outline"
-              className="bg-primary/5 border border-primary/20 text-[11px] text-primary font-bold"
+              className="bg-primary/5 border border-primary/20 text-[11px] text-primary font-medium"
             >
               {caseRecord.number}
             </Badge>
@@ -90,7 +90,7 @@ export function CaseHeader({ caseRecord }: CaseHeaderProps) {
             <Badge
               variant="outline"
               className={cn(
-                'flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider',
+                'flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider',
                 getPriorityColor(caseRecord.priority),
               )}
             >
@@ -101,19 +101,19 @@ export function CaseHeader({ caseRecord }: CaseHeaderProps) {
         </div>
         <div className="flex items-center gap-6 text-sm text-muted-foreground lg:mb-1">
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">
+            <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground/60">
               Submission Date
             </span>
-            <span className="font-semibold text-foreground">
+            <span className="font-medium text-foreground">
               {formatDate(caseRecord.createdAt)}
             </span>
           </div>
           <Separator orientation="vertical" className="h-8 bg-border/40" />
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">
+            <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground/60">
               Last Activity
             </span>
-            <span className="font-semibold text-foreground">
+            <span className="font-medium text-foreground">
               {formatDate(caseRecord.updatedAt)}
             </span>
           </div>

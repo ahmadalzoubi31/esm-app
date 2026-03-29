@@ -26,7 +26,7 @@ async function getStats() {
 
     return {
       totalTenants: tenantsList.length,
-      activeUsers: usersList.filter((u: any) => u.is_active !== false).length,
+      activeUsers: usersList.filter((u: any) => u.isActive !== false).length,
     };
   } catch (error) {
     return { totalTenants: 0, activeUsers: 0 };
@@ -68,3 +68,4 @@ export default async function Home() {
     </div>
   );
 }
+

@@ -7,12 +7,14 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -36,8 +38,13 @@ export class CategoriesController {
 
   @Get()
   @ApiOperation({ summary: 'Get all Categories' })
-  findAll() {
-    return this.categoriesService.findAll();
+  @ApiQuery({ name: 'tier', required: false, type: Number })
+  @ApiQuery({ name: 'parentId', required: false, type: String })
+  findAll(@Query('tier') tier?: number, @Query('parentId') parentId?: string) {
+    return this.categoriesService.findAll(
+      tier ? Number(tier) : undefined,
+      parentId,
+    );
   }
 
   @Get(':id')

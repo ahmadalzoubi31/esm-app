@@ -51,7 +51,7 @@ export function CaseStatusModal({
         {trigger || (
           <Button size="sm" variant="outline" className="ml-auto h-8 lg:flex">
             <ArrowRightLeftIcon className="h-3.5 w-3.5" />
-            <span className="font-semibold">Change Case Status</span>
+            <span className="font-medium">Change Case Status</span>
           </Button>
         )}
       </DialogTrigger>

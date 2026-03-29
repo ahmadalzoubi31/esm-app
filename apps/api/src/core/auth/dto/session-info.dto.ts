@@ -5,23 +5,23 @@ export class SessionInfoDto {
   id: number;
 
   @ApiProperty({ description: 'Device name extracted from user agent' })
-  device_name: string;
+  deviceName: string;
 
   @ApiProperty({ description: 'IP address', required: false })
-  ip_address?: string;
+  ipAddress?: string;
 
   @ApiProperty({ description: 'Last activity timestamp' })
-  last_activity: Date;
+  lastActivity: Date;
 
   @ApiProperty({ description: 'Session creation timestamp' })
-  created_at: Date;
+  createdAt: Date;
 
   @ApiProperty({ description: 'Whether this is the current session' })
-  is_current: boolean;
+  isCurrent: boolean;
 
   @ApiProperty({ description: 'Session expiration timestamp' })
-  expires_at: Date;
+  expiresAt: Date;
 
   @ApiProperty({ description: 'User ID associated with the session' })
-  user_id: string;
+  userId: string;
 }

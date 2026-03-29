@@ -1,8 +1,8 @@
 // src/modules/auth/auth.constants.ts
 import { CookieOptions } from 'express';
 
-export const REFRESH_COOKIE_NAME = 'refresh_token';
-export const ACCESS_COOKIE_NAME = 'access_token';
+export const REFRESH_COOKIE_NAME = 'refreshToken';
+export const ACCESS_COOKIE_NAME = 'accessToken';
 
 const isProd = process.env.NODE_ENV === 'production';
 

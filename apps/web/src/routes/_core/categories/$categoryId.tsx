@@ -17,24 +17,30 @@ function EditCategoryPage() {
   const { categoryId } = Route.useParams()
   const navigate = useNavigate()
 
-  const { data: categoryResponse, isLoading: categoryLoading } =
+  const { data: category, isLoading: categoryLoading } =
     useCategoryQuery(categoryId)
   const updateMutation = useUpdateCategoryMutation()
-
-  const category = categoryResponse?.data || categoryResponse
 
   const form = useForm({
     defaultValues: {
       name: category?.name || '',
       description: category?.description || '',
+      parentId: category?.parent?.id || '',
     } as z.infer<typeof CategorySchema>,
     validators: {
       onSubmit: CategorySchema,
     },
     onSubmit: async ({ value }) => {
-      const categoryData = {
+      const categoryData: any = {
         name: value.name,
         description: value.description,
+      }
+      if (value.parentId) {
+        categoryData.parentId = value.parentId
+        categoryData.tier = 2
+      } else {
+        categoryData.tier = 1
+        categoryData.parentId = null
       }
 
       await updateMutation.mutateAsync({

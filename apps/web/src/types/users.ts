@@ -12,21 +12,21 @@ export type AuthSource = (typeof AuthSource)[keyof typeof AuthSource]
 
 export interface User {
   id: string
-  first_name: string
-  last_name: string
+  firstName: string
+  lastName: string
   username: string
   email?: string
-  display_name?: string
+  displayName?: string
   avatar?: string
-  auth_source: AuthSource
+  authSource: AuthSource
   department?: Department
   phone?: string
   manager?: string
   password?: string
-  external_id?: string
-  is_active: boolean
-  last_login_at?: Date
-  is_licensed: boolean
+  externalId?: string
+  isActive: boolean
+  lastLoginAt?: Date
+  isLicensed: boolean
   roles?: Role[]
   permissions?: Permission[]
   groups?: Group[]
@@ -50,19 +50,19 @@ export interface UserMetadata {
 }
 
 export interface CreateUserDto {
-  first_name: string
-  last_name: string
+  firstName: string
+  lastName: string
   username: string
   email?: string
   avatar?: string
   phone?: string
   manager?: string
-  auth_source: AuthSource
+  authSource: AuthSource
   department?: string
-  external_id?: string
+  externalId?: string
   password?: string
-  is_active: boolean
-  is_licensed: boolean
+  isActive: boolean
+  isLicensed: boolean
   metadata?: UserMetadata
   roles?: string[]
   permissions?: string[]

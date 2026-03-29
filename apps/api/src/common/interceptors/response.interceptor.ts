@@ -33,7 +33,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<
           meta,
           ...rest
         } = data && typeof data === 'object' && !Array.isArray(data)
-          ? (data as any)
+          ? data
           : { data };
 
         const response: ApiSuccessResponse<T> = {
@@ -44,7 +44,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<
         if (message) response.message = message;
         response.meta = {
           ...(meta || {}),
-          requestId: (request as any).id, // i have middleware requestId
+          requestId: request.id, // i have middleware requestId
           // requestId: (request as any).id || this.generateRequestId(), // if you have request-id middleware
         };
         return response;

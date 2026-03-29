@@ -16,6 +16,13 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@repo/shared": ["../../packages/shared/src/index.ts"]
+    // }
+  },
+  // "references": [
+  //   { "path": "../../packages/shared" }
+  // ]
 }

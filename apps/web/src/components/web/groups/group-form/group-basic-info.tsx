@@ -211,11 +211,11 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
                           </CommandEmpty>
                           <CommandGroup>
                             {users
-                              .filter((u) => u.is_active)
+                              .filter((u) => u.isActive)
                               .map((user) => (
                                 <CommandItem
                                   key={user.id}
-                                  value={`${user.first_name} ${user.last_name} ${user.username}`}
+                                  value={`${user.firstName} ${user.lastName} ${user.username}`}
                                   onSelect={() => {
                                     field.handleChange(
                                       field.state.value === user.id
@@ -233,7 +233,7 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
                                         : 'opacity-0',
                                     )}
                                   />
-                                  {user.first_name} {user.last_name} (
+                                  {user.firstName} {user.lastName} (
                                   {user.username})
                                 </CommandItem>
                               ))}
@@ -294,3 +294,4 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
     </Card>
   )
 }
+

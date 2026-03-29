@@ -139,4 +139,12 @@ export const API_ENDPOINTS = {
     PREVIEW: '/ldap/preview',
     SCHEDULE: '/ldap/schedule',
   },
+  // SLA endpoints
+  SLA: {
+    LIST: '/sla/targets',
+    DETAIL: (id: string) => `/sla/targets/${id}`,
+    CREATE: '/sla/targets',
+    UPDATE: (id: string) => `/sla/targets/${id}`,
+    DELETE: (id: string) => `/sla/targets/${id}`,
+  },
 } as const

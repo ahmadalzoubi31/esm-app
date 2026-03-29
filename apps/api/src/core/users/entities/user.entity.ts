@@ -23,10 +23,10 @@ import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 @Entity({ tableName: 'users' })
 export class User extends TenantBaseEntity {
   @Property()
-  first_name!: string;
+  firstName!: string;
 
   @Property()
-  last_name!: string;
+  lastName!: string;
 
   @Property({ length: 80, unique: true })
   @Index()
@@ -37,7 +37,7 @@ export class User extends TenantBaseEntity {
   email?: string;
 
   @Property({ length: 150 })
-  display_name?: string;
+  displayName?: string;
 
   @Property()
   avatar?: string;
@@ -52,22 +52,22 @@ export class User extends TenantBaseEntity {
   manager?: string;
 
   @Enum({ items: () => ['local', 'ldap'] })
-  auth_source!: AuthSource;
+  authSource!: AuthSource;
 
   @Property({ nullable: true })
-  external_id?: string; // AD GUID
+  externalId?: string; // AD GUID
 
   @Property({ nullable: true, hidden: true })
   password?: string; // only for 'local' users
 
   @Property({ default: false })
-  is_active: boolean = false;
+  isActive: boolean = false;
 
   @Property({ nullable: true })
-  last_login_at?: Date;
+  lastLoginAt?: Date;
 
   @Property({ default: false })
-  is_licensed: boolean = false;
+  isLicensed: boolean = false;
 
   @Property({ type: 'json', nullable: true })
   metadata?: {
@@ -107,6 +107,6 @@ export class User extends TenantBaseEntity {
   @BeforeCreate()
   @BeforeUpdate()
   async updateDisplayName() {
-    this.display_name = `${this.first_name} ${this.last_name}`;
+    this.displayName = `${this.firstName} ${this.lastName}`;
   }
 }

@@ -18,10 +18,10 @@ import {
 } from '@nestjs/swagger';
 import { CaseAttachmentsService } from './case-attachments.service';
 import { CaseAttachment } from './entities/case-attachment.entity';
-import { PoliciesGuard } from 'src/common/guards/policies-guard.guard';
-import { CheckPolicies } from 'src/common/decorators/check-policies.decorator';
-import { AppAbility } from 'src/core/casl/casl-ability.factory';
-import { ACTION_ENUM } from 'src/core/casl/constants/action.constant';
+import { PoliciesGuard } from '../../common/guards/policies-guard.guard';
+import { CheckPolicies } from '../../common/decorators/check-policies.decorator';
+import { AppAbility } from '../../core/casl/casl-ability.factory';
+import { ACTION_ENUM } from '../../core/casl/constants/action.constant';
 
 @ApiTags('Cases - Attachments')
 @ApiBearerAuth()

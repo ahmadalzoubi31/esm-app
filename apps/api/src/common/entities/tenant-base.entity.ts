@@ -14,7 +14,7 @@ export abstract class TenantBaseEntity {
   @ManyToOne(() => Tenant, {
     index: true,
     nullable: false,
-    fieldNames: ['tenant_id'],
+    fieldNames: ['tenantId'],
     deleteRule: 'cascade',
   })
   tenant!: Tenant;

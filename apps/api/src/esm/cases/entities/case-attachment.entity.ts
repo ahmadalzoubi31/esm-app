@@ -4,7 +4,7 @@ import { Case } from './case.entity';
 
 @Entity({ tableName: 'case_attachments' })
 export class CaseAttachment extends TenantBaseEntity {
-  @ManyToOne(() => Case, { deleteRule: 'cascade', fieldName: 'case_id' })
+  @ManyToOne(() => Case, { deleteRule: 'cascade', fieldName: 'caseId' })
   case!: Case;
 
   @Property()

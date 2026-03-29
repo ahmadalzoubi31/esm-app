@@ -104,7 +104,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
         <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-3">
           {/* First Name */}
           <form.Field
-            name="first_name"
+            name="firstName"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -128,7 +128,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
 
           {/* Last Name */}
           <form.Field
-            name="last_name"
+            name="lastName"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -256,7 +256,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
 
           {/* Auth Source */}
           <form.Subscribe
-            selector={(state: any) => [state.values.auth_source]}
+            selector={(state: any) => [state.values.authSource]}
             children={([authSource]: any) => {
               return (
                 <Field>
@@ -284,7 +284,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
 
           {/* Password */}
           <form.Subscribe
-            selector={(state: any) => [state.values.auth_source]}
+            selector={(state: any) => [state.values.authSource]}
             children={([authSource]: any) => {
               return authSource === AuthSource.LOCAL ? (
                 <form.Field
@@ -421,11 +421,11 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                           </CommandEmpty>
                           <CommandGroup>
                             {users
-                              .filter((u) => u.is_active)
+                              .filter((u) => u.isActive)
                               .map((user) => (
                                 <CommandItem
                                   key={user.id}
-                                  value={`${user.first_name} ${user.last_name} ${user.username}`}
+                                  value={`${user.firstName} ${user.lastName} ${user.username}`}
                                   onSelect={() => {
                                     field.handleChange(
                                       field.state.value === user.username
@@ -443,7 +443,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                                         : 'opacity-0',
                                     )}
                                   />
-                                  {user.first_name} {user.last_name} (
+                                  {user.firstName} {user.lastName} (
                                   {user.username})
                                 </CommandItem>
                               ))}
@@ -473,7 +473,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                     disabled
                     value={
                       managerDetails
-                        ? `${managerDetails.first_name} ${managerDetails.last_name}`
+                        ? `${managerDetails.firstName} ${managerDetails.lastName}`
                         : ''
                     }
                     placeholder="Auto-filled"
@@ -510,3 +510,4 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
     </Card>
   )
 }
+

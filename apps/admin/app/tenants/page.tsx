@@ -227,8 +227,8 @@ export default function TenantsPage() {
                         </div>
                         {userFromApi && (
                           <div className="text-xs text-muted-foreground">
-                            {userFromApi.first_name} {userFromApi.last_name} |{" "}
-                            {userFromApi.is_active ? "Active" : "Inactive"}
+                            {userFromApi.firstName} {userFromApi.lastName} |{" "}
+                            {userFromApi.isActive ? "Active" : "Inactive"}
                           </div>
                         )}
                       </div>
@@ -318,3 +318,4 @@ export default function TenantsPage() {
     </div>
   );
 }
+

@@ -18,10 +18,10 @@ import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
 import { Case } from './entities/case.entity';
-import { PoliciesGuard } from 'src/common/guards/policies-guard.guard';
-import { CheckPolicies } from 'src/common/decorators/check-policies.decorator';
-import { AppAbility } from 'src/core/casl/casl-ability.factory';
-import { ACTION_ENUM } from 'src/core/casl/constants/action.constant';
+import { PoliciesGuard } from '../../common/guards/policies-guard.guard';
+import { CheckPolicies } from '../../common/decorators/check-policies.decorator';
+import { AppAbility } from '../../core/casl/casl-ability.factory';
+import { ACTION_ENUM } from '../../core/casl/constants/action.constant';
 
 @ApiTags('Cases')
 @ApiBearerAuth()

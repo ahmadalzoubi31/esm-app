@@ -2,21 +2,21 @@ import z from 'zod'
 import { AuthSource } from '@/types/users'
 
 export const UserSchema = z.object({
-  first_name: z.string().min(1, 'First name is required'),
-  last_name: z.string().min(1, 'Last name is required'),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
   username: z.string().min(3, 'Username must be at least 3 characters'),
   email: z
     .union([z.email('Invalid email address'), z.literal('')])
     .transform((e) => (e === '' ? undefined : e)),
   avatar: z.string().optional(),
-  auth_source: z.enum([AuthSource.LOCAL, AuthSource.LDAP]),
+  authSource: z.enum([AuthSource.LOCAL, AuthSource.LDAP]),
   department: z.string().optional(),
   phone: z.string().optional(),
   manager: z.string().optional(),
   password: z.string().optional(),
-  external_id: z.string().optional(),
-  is_active: z.boolean(),
-  is_licensed: z.boolean(),
+  externalId: z.string().optional(),
+  isActive: z.boolean(),
+  isLicensed: z.boolean(),
   roles: z.array(z.string()).default([]).optional(),
   permissions: z.array(z.string()).default([]).optional(),
   groups: z.array(z.string()).default([]).optional(),
@@ -39,7 +39,7 @@ export const UserSchema = z.object({
 })
 
 export const CreateUserSchema = UserSchema.superRefine((data, ctx) => {
-  if (data.auth_source === AuthSource.LOCAL && !data.password) {
+  if (data.authSource === AuthSource.LOCAL && !data.password) {
     ctx.addIssue({
       code: 'custom',
       message: 'Password is required for local authentication',

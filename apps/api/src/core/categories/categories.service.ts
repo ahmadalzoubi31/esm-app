@@ -4,7 +4,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Category } from './entities/category.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Tenant } from 'src/tenants/entities/tenant.entity';
+import { Tenant } from '../../tenants/entities/tenant.entity';
 
 @Injectable()
 export class CategoriesService {
@@ -23,24 +23,40 @@ export class CategoriesService {
     // 3: Get Tenant Reference
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
-    // 4: Create Category
+    // 4: Map DTO to Entity data
+    // Create new dto without parentId, map parentId to parent reference
+    const { parentId, ...rest } = createDto;
+
+    // 5: Create Category
     const category = this.categoryRepo.create({
-      ...createDto,
+      ...rest,
+      tier: rest.tier ?? 1,
       tenant: tenantRef,
+      ...(parentId ? { parent: parentId } : {}),
     });
 
-    // 5: Persist and Flush
+    // 6: Persist and Flush
     await this.categoryRepo.getEntityManager().persistAndFlush(category);
 
     return category;
   }
 
-  async findAll(): Promise<Category[]> {
-    return this.categoryRepo.findAll({ populate: ['subcategories'] });
+  async findAll(tier?: number, parentId?: string): Promise<Category[]> {
+    const where: any = {};
+    if (tier !== undefined) {
+      where.tier = tier;
+    }
+    if (parentId !== undefined) {
+      where.parent = parentId;
+    }
+    return this.categoryRepo.find(where, { populate: ['children', 'parent'] });
   }
 
   async findOne(id: string): Promise<Category> {
-    const category = await this.categoryRepo.findOne({ id }, { populate: ['subcategories'] });
+    const category = await this.categoryRepo.findOne(
+      { id },
+      { populate: ['children', 'parent'] },
+    );
     if (!category) {
       throw new NotFoundException(`category with ID ${id} not found`);
     }
@@ -51,10 +67,17 @@ export class CategoriesService {
     // 1: Find Category
     const category = await this.findOne(id);
 
-    // 2: Assign Category
-    this.categoryRepo.assign(category, updateDto);
+    // 2: Map parentId to parent if needed
+    const { parentId, ...rest } = updateDto as any;
+    const updates: any = { ...rest };
+    if (parentId !== undefined) {
+      updates.parent = parentId;
+    }
 
-    // 3: Persist and Flush
+    // 3: Assign Category
+    this.categoryRepo.assign(category, updates);
+
+    // 4: Persist and Flush
     await this.categoryRepo.getEntityManager().flush();
 
     return category;

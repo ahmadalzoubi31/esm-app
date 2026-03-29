@@ -29,7 +29,7 @@ Authentication is handled via **JWT (JSON Web Tokens)**.
 1.  **Login**: User provides credentials (username/password) to `/auth/login`.
 2.  **Tokens**: Server validates credentials and issues:
     - **Access Token** (Short-lived, e.g., 15m). Used for API Authorization.
-    - **Refresh Token** (Long-lived, e.g., 7d). Stored in DB (`refresh_token` table) and used to obtain new Access Tokens.
+    - **Refresh Token** (Long-lived, e.g., 7d). Stored in DB (`refreshToken` table) and used to obtain new Access Tokens.
 3.  **Requests**: Client sends Access Token in `Authorization: Bearer <token>` header.
 4.  **Guard**: `JwtAuthGuard` validates the token signature and expiration.
 

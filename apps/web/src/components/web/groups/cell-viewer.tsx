@@ -77,7 +77,7 @@ export function TableCellViewer({ item }: { item: Group }) {
                 <DetailItem
                   label="Team Leader"
                   value={
-                    item.teamLeader?.display_name ||
+                    item.teamLeader?.displayName ||
                     item.teamLeader?.username ||
                     '-'
                   }
@@ -104,7 +104,7 @@ export function TableCellViewer({ item }: { item: Group }) {
                       variant="secondary"
                       className="h-5 px-1.5 text-[10px]"
                     >
-                      {user.display_name || user.username}
+                      {user.displayName || user.username}
                     </Badge>
                   ))
                 ) : (
@@ -227,3 +227,4 @@ function DetailItem({
     </div>
   )
 }
+

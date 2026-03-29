@@ -7,7 +7,7 @@ The `UsersModule` handles the lifecycle of user identities.
 The `User` entity supports:
 
 - **Local Auth**: Password stored in DB.
-- **External Auth**: Source tagged as `ldap` or `azure_ad` with `external_id`.
+- **External Auth**: Source tagged as `ldap` or `azure_ad` with `externalId`.
 - **Metadata**: JSONB column for flexible synced attributes.
 
 ## API Operations & Permissions
@@ -37,3 +37,4 @@ All endpoints require a valid **JWT Access Token**. The `PoliciesGuard` enforces
 1. **Client** sends `PATCH /users` with `{ ids: string[], data: UpdateUserDto }`.
 2. **Guard** checks `can(Update, User)`.
 3. **Service** executes `update` on all matching IDs.
+

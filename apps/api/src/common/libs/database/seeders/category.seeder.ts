@@ -8,22 +8,69 @@ export class CategorySeeder extends Seeder {
     {
       name: 'Hardware',
       description: 'Physical equipment and devices.',
+      subcategories: [
+        { name: 'Laptop', description: 'Issues with company laptops.' },
+        { name: 'Desktop', description: 'Issues with company desktops.' },
+        { name: 'Printer', description: 'Printing and scanning issues.' },
+        { name: 'Mobile Device', description: 'Phones and tablets.' },
+      ],
     },
     {
       name: 'Software',
       description: 'Application and system software issues.',
+      subcategories: [
+        {
+          name: 'Operating System',
+          description: 'Windows, macOS, Linux issues.',
+        },
+        {
+          name: 'Microsoft Office',
+          description: 'Word, Excel, PowerPoint, etc.',
+        },
+        {
+          name: 'Specialized Software',
+          description: 'Industry-specific applications.',
+        },
+      ],
     },
     {
       name: 'Access Management',
       description: 'User accounts, permissions, and security access.',
+      subcategories: [
+        {
+          name: 'Password Reset',
+          description: 'Account lockout or password change.',
+        },
+        {
+          name: 'New Account Setup',
+          description: 'Onboarding new user accounts.',
+        },
+        {
+          name: 'Permission Modification',
+          description: 'Requesting access to systems/files.',
+        },
+      ],
     },
     {
       name: 'Network',
       description: 'Connectivity, internet, and VPN issues.',
+      subcategories: [
+        { name: 'Wi-Fi', description: 'Wireless internet connectivity.' },
+        { name: 'VPN', description: 'Virtual Private Network access.' },
+        {
+          name: 'Wired Connection',
+          description: 'Ethernet connectivity issues.',
+        },
+      ],
     },
     {
       name: 'Email & Collaboration',
       description: 'Outlook, Teams, and other communication tools.',
+      subcategories: [
+        { name: 'Outlook', description: 'Email client and server issues.' },
+        { name: 'Teams', description: 'Chat, meetings, and calls.' },
+        { name: 'SharePoint', description: 'Document sharing and intranet.' },
+      ],
     },
   ];
 
@@ -33,27 +80,57 @@ export class CategorySeeder extends Seeder {
     const tenantRef = em.getReference(Tenant, tenantId);
 
     for (const catData of this.data) {
-      const existing = await categoryRepo.findOne(
+      let parent = await categoryRepo.findOne(
         {
           name: catData.name,
           tenant: tenantId,
+          tier: 1,
         },
         { filters: { tenant: false } },
       );
 
-      if (existing) {
+      if (!parent) {
+        parent = em.create(Category, {
+          id: crypto.randomUUID(),
+          name: catData.name,
+          description: catData.description,
+          tenant: tenantRef,
+          tier: 1,
+        } as any);
+        console.log(`✔ Created category: ${catData.name}`);
+      } else {
         console.log(`✔ Category ${catData.name} already exists, skipping.`);
-        continue;
       }
 
-      em.create(Category, {
-        id: crypto.randomUUID(),
-        name: catData.name,
-        description: catData.description,
-        tenant: tenantRef,
-      } as any);
+      if (catData.subcategories) {
+        for (const subCatData of catData.subcategories) {
+          const subExisting = await categoryRepo.findOne(
+            {
+              name: subCatData.name,
+              parent: parent.id,
+              tenant: tenantId,
+              tier: 2,
+            },
+            { filters: { tenant: false } },
+          );
 
-      console.log(`✔ Created case category: ${catData.name}`);
+          if (!subExisting) {
+            em.create(Category, {
+              id: crypto.randomUUID(),
+              name: subCatData.name,
+              description: subCatData.description,
+              tenant: tenantRef,
+              tier: 2,
+              parent: parent,
+            } as any);
+            console.log(`  └─ ✔ Created subcategory: ${subCatData.name}`);
+          } else {
+            console.log(
+              `  └─ ✔ Subcategory ${subCatData.name} already exists, skipping.`,
+            );
+          }
+        }
+      }
     }
 
     await em.flush();

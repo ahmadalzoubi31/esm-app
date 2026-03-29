@@ -69,7 +69,7 @@ export function CaseDetailsOverview({ caseRecord }: CaseDetailsOverviewProps) {
         <div className="space-y-2 mt-5">
           <div className="flex items-center gap-2">
             <div className="h-1 w-6 rounded-full bg-primary/40" />
-            <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <h3 className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
               Description
             </h3>
           </div>
@@ -85,7 +85,7 @@ export function CaseDetailsOverview({ caseRecord }: CaseDetailsOverviewProps) {
           <div className="space-y-2 mt-5">
             <div className="flex items-center gap-2">
               <div className="h-1 w-6 rounded-full bg-primary/40" />
-              <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              <h3 className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
                 Questions and Answers
               </h3>
             </div>

@@ -51,7 +51,9 @@ export class BusinessLineService {
     id: string,
     updateBusinessLineDto: UpdateBusinessLineDto,
   ): Promise<BusinessLine> {
-    const businessLine = await this.businessLineRepository.findOneOrFail({ id });
+    const businessLine = await this.businessLineRepository.findOneOrFail({
+      id,
+    });
     this.businessLineRepository.assign(businessLine, updateBusinessLineDto);
     await this.businessLineRepository.getEntityManager().flush();
     return businessLine;

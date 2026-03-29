@@ -30,11 +30,14 @@ export class DepartmentSeeder extends Seeder {
 
     for (const deptData of this.data) {
       const code = deptData.name.toLowerCase().replace(/\s+/g, '-');
-      
-      const existing = await departmentRepo.findOne({
-        code,
-        tenant: tenantId,
-      }, { filters: { tenant: false } });
+
+      const existing = await departmentRepo.findOne(
+        {
+          code,
+          tenant: tenantId,
+        },
+        { filters: { tenant: false } },
+      );
 
       if (existing) {
         console.log(`✔ Department ${deptData.name} already exists, skipping.`);
@@ -49,7 +52,7 @@ export class DepartmentSeeder extends Seeder {
         active: true,
         tenant: tenantRef,
       } as any);
-      
+
       console.log(`✔ Created department: ${deptData.name}`);
     }
 

@@ -26,14 +26,14 @@ erDiagram
         uuid id
         string username
         string email
-        string display_name
-        enum auth_source "local, ldap, azure_ad"
-        string external_id "AD GUID"
+        string displayName
+        enum authSource "local, ldap, azure_ad"
+        string externalId "AD GUID"
         string password "hashed (local only)"
-        boolean is_active
-        boolean is_licensed
+        boolean isActive
+        boolean isLicensed
         json metadata "LDAP attributes"
-        datetime last_login_at
+        datetime lastLoginAt
         datetime createdAt
         datetime updatedAt
     }
@@ -84,11 +84,11 @@ erDiagram
 
     RefreshToken {
         number id
-        string user_id "No FK constraint"
+        string userId "No FK constraint"
         string token
-        datetime expires_at
-        boolean is_revoked
-        datetime created_at
+        datetime expiresAt
+        boolean isRevoked
+        datetime createdAt
     }
 ```
 
@@ -98,10 +98,10 @@ erDiagram
 
 | Entity           | Description                                                                                            | Key Fields                            |
 | :--------------- | :----------------------------------------------------------------------------------------------------- | :------------------------------------ |
-| **User**         | Represents a system user. Can be sourced locally or synced from External Identity Providers (AD/LDAP). | `username`, `auth_source`, `metadata` |
+| **User**         | Represents a system user. Can be sourced locally or synced from External Identity Providers (AD/LDAP). | `username`, `authSource`, `metadata` |
 | **Role**         | A standard RBAC role that bundles permissions. Can be assigned to Users or Groups.                     | `key`, `name`                         |
 | **Permission**   | A granular capability definition consisting of an Action and a Subject.                                | `action`, `subject`, `conditions`     |
-| **RefreshToken** | Long-lived tokens used to refresh JWT access tokens.                                                   | `token`, `expires_at`                 |
+| **RefreshToken** | Long-lived tokens used to refresh JWT access tokens.                                                   | `token`, `expiresAt`                 |
 
 ### Organization
 
@@ -109,3 +109,4 @@ erDiagram
 | :--------------- | :---------------------------------------------------------------------------- | :------------- |
 | **Group**        | Represents a Team or Department. Used for hierarchical permission assignment. | `name`, `type` |
 | **BusinessLine** | High-level organizational division (e.g., IT, HR, Finance).                   | `key`, `name`  |
+

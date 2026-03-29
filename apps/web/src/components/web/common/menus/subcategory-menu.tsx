@@ -6,8 +6,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { useSearchSubcategoriesQuery } from '@/lib/queries'
-import { Subcategory } from '@/types'
+import { useCategoriesQuery } from '@/lib/queries/categories.query'
+import type { Category } from '@/types'
 
 export interface SubcategoryMenuProps {
   value?: string | null
@@ -24,8 +24,9 @@ export function SubcategoryMenu({
   id,
   categoryId,
 }: SubcategoryMenuProps) {
-  const { data: subcategoriesItem, isLoading } = useSearchSubcategoriesQuery(
-    categoryId ? { categoryId } : '',
+  const { data: subcategoriesItem, isLoading } = useCategoriesQuery(
+    2,
+    categoryId,
     {
       enabled: !!categoryId,
     },
@@ -61,7 +62,7 @@ export function SubcategoryMenu({
             <Separator className="my-1" />
           </>
         )}
-        {subcategories.map((sub: Subcategory) => (
+        {subcategories.map((sub: Category) => (
           <SelectItem key={sub.id} value={sub.id}>
             {sub.name}
           </SelectItem>
