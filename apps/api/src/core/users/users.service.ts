@@ -33,12 +33,15 @@ export class UsersService {
     const user = this.userRepository.create({
       ...userDataToCreate,
       tenant: tenantRef,
+      roles: '',
+      permissions: '',
+      groups: '',
     });
 
     // 5: Handle roles collection
     if (roles && roles.length > 0) {
       const roleRefs = roles.map((roleId) => em.getReference(Role, roleId));
-      user.roles.set(roleRefs);
+      user.roles.push(...roleRefs);
     }
 
     // 5: Handle permissions collection
@@ -46,7 +49,7 @@ export class UsersService {
       const permRefs = permissions.map((permId) =>
         em.getReference(Permission, permId),
       );
-      user.permissions.set(permRefs);
+      user.permissions.push(...permRefs);
     }
 
     // 6: Handle groups collection
@@ -54,7 +57,7 @@ export class UsersService {
       const groupRefs = groups.map((groupId) =>
         em.getReference(Group, groupId),
       );
-      user.groups.set(groupRefs);
+      user.groups.push(...groupRefs);
     }
 
     // 7: Save user and return
@@ -198,9 +201,9 @@ export class UsersService {
     if (roles !== undefined) {
       if (roles.length > 0) {
         const roleRefs = roles.map((roleId) => em.getReference(Role, roleId));
-        user.roles.set(roleRefs);
+        user.roles.push(...roleRefs);
       } else {
-        user.roles.removeAll();
+        user.roles = [];
       }
     }
 
@@ -210,9 +213,9 @@ export class UsersService {
         const permRefs = permissions.map((permId) =>
           em.getReference(Permission, permId),
         );
-        user.permissions.set(permRefs);
+        user.permissions.push(...permRefs);
       } else {
-        user.permissions.removeAll();
+        user.permissions = [];
       }
     }
 
@@ -222,9 +225,9 @@ export class UsersService {
         const groupRefs = groups.map((groupId) =>
           em.getReference(Group, groupId),
         );
-        user.groups.set(groupRefs);
+        user.groups.push(...groupRefs);
       } else {
-        user.groups.removeAll();
+        user.groups = [];
       }
     }
 
@@ -233,8 +236,8 @@ export class UsersService {
 
     // 8: If isLicensed is set to false (or remains false), ensure roles/permissions are removed
     if (user.isLicensed === false) {
-      user.roles.removeAll();
-      user.permissions.removeAll();
+      user.roles = [];
+      user.permissions = [];
     }
 
     // 9: Save user

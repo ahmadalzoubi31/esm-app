@@ -10,9 +10,12 @@ import { Role } from '../../roles/entities/role.entity';
 import { User } from '../../users/entities/user.entity';
 import { Group } from '../../groups/entities/group.entity';
 import { randomUUID } from 'crypto';
+import type { PermissionDto } from '@repo/shared';
+
 
 @Entity({ tableName: 'permissions' })
-export class Permission {
+export class Permission implements PermissionDto {
+
   @PrimaryKey({ type: 'uuid' })
   id: string = randomUUID();
 

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { GroupSchema } from '@/schemas/group.schema'
+import { Group, GroupDto } from '@repo/shared'
 import {
   Card,
   CardContent,
@@ -26,7 +26,7 @@ export function SideBarForm({ form }: SideBarFormProps) {
         })}
       >
         {({ values, errors, isSubmitting, isValid }: any) => {
-          const group = values as z.infer<typeof GroupSchema>
+          const group = values as GroupDto
           const hasErrors = errors.length > 0 || !isValid
 
           return (

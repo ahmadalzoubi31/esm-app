@@ -1,5 +1,5 @@
 import type { DataTableConfig } from '@/components/web/common/app-table'
-import { Group } from '@/types'
+import { Group } from '@repo/shared'
 
 export const tableConfig: DataTableConfig<Group> = {
   emptyMessage: 'No groups found.',

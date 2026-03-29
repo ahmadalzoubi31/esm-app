@@ -58,7 +58,7 @@ export class AuthService {
     const userWithRelations = await this.usersService.findOne(user.id);
     if (!userWithRelations) throw new UnauthorizedException();
 
-    const roles = userWithRelations.roles.getItems().map((role) => ({
+    const roles = userWithRelations.roles.map((role) => ({
       id: role.id,
       key: role.key,
       name: role.name,
@@ -72,7 +72,7 @@ export class AuthService {
       email: user.email,
       avatar: user.avatar,
       roles,
-      groups: user.groups.getItems(),
+      groups: user.groups,
       tenantId: user.tenant.id,
       tenantName: user.tenant.name,
     };
@@ -220,9 +220,7 @@ export class AuthService {
     if (!user) throw new UnauthorizedException('User not found');
 
     // 6. Load collections and adjust the roles object
-    await user.roles.loadItems();
-    await user.groups.loadItems();
-    const roles = user.roles.getItems().map((role) => ({
+    const roles = user.roles.map((role) => ({
       id: role.id,
       key: role.key,
       name: role.name,
@@ -236,7 +234,7 @@ export class AuthService {
       email: user.email,
       avatar: user.avatar,
       roles,
-      groups: user.groups.getItems(),
+      groups: user.groups,
       tenantId: user.tenant.id,
       tenantName: user.tenant.name,
     };

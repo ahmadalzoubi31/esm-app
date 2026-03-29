@@ -4,7 +4,7 @@ import { api } from '@/lib/api'
 import { roleKeys, useRolesQuery } from '@/lib/queries/roles.query'
 import { usePermissionsQuery } from '@/lib/queries/permissions.query'
 import type { ApiResponse } from '@/types/api'
-import type { Permission } from '@/types'
+import type { GroupDto, Permission } from '@repo/shared'
 import {
   Card,
   CardContent,
@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+
 import {
   Shield,
   ShieldCheck,
@@ -45,11 +46,9 @@ import {
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { FormInstance } from '@/types'
-import { z } from 'zod'
-import { GroupSchema } from '@/schemas/group.schema'
 
 interface GroupPermissionsProps {
-  form: FormInstance<z.infer<typeof GroupSchema>>
+  form: FormInstance<GroupDto>
 }
 
 export function GroupPermissions({ form }: GroupPermissionsProps) {

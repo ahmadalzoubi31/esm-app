@@ -1,7 +1,4 @@
-import { User } from './users'
-import { Group } from './groups'
-import { BusinessLine } from './business-lines'
-import { Category } from './categories'
+import { User, Group, Category, BusinessLine } from '@repo/shared'
 import {
   Circle,
   UserCheck,

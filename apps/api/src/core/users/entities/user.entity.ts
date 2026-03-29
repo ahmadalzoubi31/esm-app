@@ -11,7 +11,7 @@ import {
   BeforeUpdate,
   Enum,
 } from '@mikro-orm/core';
-import { AuthSource } from '../constants/auth-source.constant';
+import { AuthSource } from '@repo/shared';
 import { Role } from '../../roles/entities/role.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { Group } from '../../groups/entities/group.entity';
@@ -20,8 +20,10 @@ import { Department } from '../../departments/entities/department.entity';
 import { hash } from 'argon2';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
+import { UserSchema } from '@repo/shared';
+
 @Entity({ tableName: 'users' })
-export class User extends TenantBaseEntity {
+export class User extends TenantBaseEntity implements UserSchema {
   @Property()
   firstName!: string;
 
@@ -89,13 +91,13 @@ export class User extends TenantBaseEntity {
   };
 
   @ManyToMany(() => Role, (role) => role.users)
-  roles = new Collection<Role>(this);
+  roles: Role[] = [];
 
   @ManyToMany(() => Permission, (permission) => permission.users)
-  permissions = new Collection<Permission>(this);
+  permissions: Permission[] = [];
 
   @ManyToMany(() => Group, (group) => group.users)
-  groups = new Collection<Group>(this);
+  groups: Group[] = [];
 
   @BeforeCreate()
   @BeforeUpdate()

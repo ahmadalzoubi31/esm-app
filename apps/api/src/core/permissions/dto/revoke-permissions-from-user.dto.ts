@@ -1,8 +1,9 @@
-// src/modules/iam/permissions/dto/grant-permission-to-user.dto.ts
-import { IsObject, IsString, IsUUID } from 'class-validator';
+import { IsObject, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import type { RevokePermissionsFromUserDto as IRevokePermissionFromUserDto } from '@repo/shared';
 
-export class RevokePermissionsFromUserDto {
+export class RevokePermissionsFromUserDto implements IRevokePermissionFromUserDto {
+
   @ApiProperty({
     format: 'uuid',
     description: 'Permission IDs to grant to user.',

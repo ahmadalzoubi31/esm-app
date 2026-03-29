@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { UserSchema } from '@/schemas/user.schema'
 import {
   Card,
   CardContent,
@@ -17,7 +16,7 @@ import {
   UserIcon,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { AuthSource } from '@/types'
+import { AuthSourceEnum, UserDto } from '@repo/shared'
 import { FieldError } from '@/components/ui/field'
 import { SideBarFormProps } from '@/types/form'
 
@@ -33,7 +32,7 @@ export function SideBarForm({ form }: SideBarFormProps) {
         })}
       >
         {({ values, errors, isSubmitting, isValid }: any) => {
-          const user = values as z.infer<typeof UserSchema>
+          const user = values as UserDto
           const hasErrors = errors.length > 0 || !isValid
 
           return (
@@ -105,7 +104,7 @@ export function SideBarForm({ form }: SideBarFormProps) {
                     </div>
                     <Badge
                       variant={
-                        user.authSource === AuthSource.LDAP
+                        user.authSource === AuthSourceEnum.ldap
                           ? 'secondary'
                           : 'outline'
                       }
@@ -170,4 +169,3 @@ export function SideBarForm({ form }: SideBarFormProps) {
     </div>
   )
 }
-

@@ -27,15 +27,14 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useSearchUsersQuery } from '@/lib/queries/users.query'
 import { useState, useEffect } from 'react'
-import { FormInstance } from '@/types'
-import { z } from 'zod'
-import { GroupSchema } from '@/schemas/group.schema'
+import { GroupDto, GroupType } from '@repo/shared'
 import { GroupTypeMenu } from '@/components/web/common/menus/group-type-menu'
 import { BusinessLineMenu } from '@/components/web/common/menus/business-line-menu'
 import { DepartmentMenu } from '@/components/web/common/menus/department-menu'
+import { FormInstance } from '@/types'
 
 interface GroupBasicInfoProps {
-  form: FormInstance<z.infer<typeof GroupSchema>>
+  form: FormInstance<GroupDto>
 }
 
 export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
@@ -122,7 +121,7 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
                   <GroupTypeMenu
                     id={field.name}
                     value={field.state.value}
-                    onChange={(val) => field.handleChange(val)}
+                    onChange={(val) => field.handleChange(val as GroupType)}
                     isInvalid={isInvalid}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -260,7 +259,7 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
                   <BusinessLineMenu
                     id={field.name}
                     value={field.state.value}
-                    onChange={(val) => field.handleChange(val)}
+                    onChange={(val) => field.handleChange(val as string)}
                     isInvalid={isInvalid}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -294,4 +293,3 @@ export function GroupBasicInfo({ form }: GroupBasicInfoProps) {
     </Card>
   )
 }
-

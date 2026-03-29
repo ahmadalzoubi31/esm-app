@@ -2,8 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, ValidateNested } from 'class-validator';
 import { UpdateUserDto } from './update-user.dto';
+import { BulkUserDto } from '@repo/shared';
 
-export class BulkUpdateUserDto {
+export class BulkUpdateUserDto implements BulkUserDto {
   @ApiProperty({
     description: 'Array of user IDs to update',
     example: ['uuid-1', 'uuid-2', 'uuid-3'],

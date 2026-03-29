@@ -1,7 +1,7 @@
 import type { DataTableConfig } from '@/components/web/common/app-table'
-import { Role } from '@repo/shared'
+import { RoleSchema } from '@repo/shared'
 
-export const tableConfig: DataTableConfig<Role> = {
+export const tableConfig: DataTableConfig<RoleSchema> = {
   emptyMessage: 'No roles found.',
 
   defaultColumnVisibility: {

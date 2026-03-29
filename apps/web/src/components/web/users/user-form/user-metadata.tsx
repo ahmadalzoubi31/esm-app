@@ -22,11 +22,10 @@ import {
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { FormInstance } from '@/types'
-import { z } from 'zod'
-import { UserSchema } from '@/schemas/user.schema'
+import { UserDto } from '@repo/shared'
 
 interface UserMetadataProps {
-  form: FormInstance<z.infer<typeof UserSchema>>
+  form: FormInstance<UserDto>
 }
 
 const KNOWN_KEYS = [

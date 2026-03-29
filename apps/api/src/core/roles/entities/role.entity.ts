@@ -13,11 +13,11 @@ import { User } from '../../users/entities/user.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { Group } from '../../groups/entities/group.entity';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
-import { RoleDto } from '@repo/shared';
+import { RoleSchema } from '@repo/shared';
 
 @Entity({ tableName: 'roles' })
 @Unique({ properties: ['key', 'tenant'] })
-export class Role extends TenantBaseEntity implements RoleDto {
+export class Role extends TenantBaseEntity implements RoleSchema {
   @Property()
   @Index()
   key!: string;
@@ -29,10 +29,10 @@ export class Role extends TenantBaseEntity implements RoleDto {
   description?: string;
 
   @Property({ default: 0 })
-  permissionCount?: number = 0;
+  permissionCount: number = 0;
 
   @Property({ default: 0 })
-  userCount?: number = 0;
+  userCount: number = 0;
 
   @ManyToMany(() => User, (user) => user.roles, {
     owner: true,

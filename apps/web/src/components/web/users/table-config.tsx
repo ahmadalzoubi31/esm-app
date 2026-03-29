@@ -1,7 +1,7 @@
 import type { DataTableConfig } from '@/components/web/common/app-table'
-import { AuthSource, User } from '@/types'
+import { UserSchema, AuthSourceEnum } from '@repo/shared'
 
-export const tableConfig: DataTableConfig<User> = {
+export const tableConfig: DataTableConfig<UserSchema> = {
   emptyMessage: 'No users found.',
 
   defaultColumnVisibility: {
@@ -33,8 +33,8 @@ export const tableConfig: DataTableConfig<User> = {
       columnKey: 'authSource',
       title: 'Auth Source',
       options: [
-        { label: 'Local', value: AuthSource.LOCAL },
-        { label: 'LDAP', value: AuthSource.LDAP },
+        { label: 'Local', value: AuthSourceEnum.local },
+        { label: 'LDAP', value: AuthSourceEnum.ldap },
       ] as const,
     },
     {
@@ -51,4 +51,3 @@ export const tableConfig: DataTableConfig<User> = {
   loadingColumnCount: 7,
   enableRowSelection: true,
 } as const
-

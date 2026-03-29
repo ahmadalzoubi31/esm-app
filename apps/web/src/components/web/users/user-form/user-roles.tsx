@@ -26,11 +26,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { FormInstance } from '@/types'
-import { z } from 'zod'
-import { UserSchema } from '@/schemas/user.schema'
+import { UserDto } from '@repo/shared'
 
 interface UserRolesProps {
-  form: FormInstance<z.infer<typeof UserSchema>>
+  form: FormInstance<UserDto>
 }
 
 export function UserRoles({ form }: UserRolesProps) {

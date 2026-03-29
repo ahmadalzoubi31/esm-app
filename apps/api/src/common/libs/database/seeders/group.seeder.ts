@@ -1,10 +1,10 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
 import { Group } from '../../../../core/groups/entities/group.entity';
-import { GROUP_TYPE_ENUM } from '../../../../core/groups/constants/group-type.constant';
 import { BusinessLine } from '../../../../core/business-lines/entities/business-line.entity';
 import { Department } from '../../../../core/departments/entities/department.entity';
 import { Tenant } from '../../../../tenants/entities/tenant.entity';
+import { GroupTypeEnum } from '@repo/shared';
 
 export class GroupSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
@@ -32,22 +32,22 @@ export class GroupSeeder extends Seeder {
       const groups = [
         {
           name: 'IT Service Desk',
-          type: GROUP_TYPE_ENUM.HELP_DESK,
+          type: GroupTypeEnum['help-desk'],
           description: 'First point of contact for IT issues.',
         },
         {
           name: 'Network Operations',
-          type: GROUP_TYPE_ENUM.TIER_2,
+          type: GroupTypeEnum['tier-2'],
           description: 'Manages network infrastructure and connectivity.',
         },
         {
           name: 'Security Operations',
-          type: GROUP_TYPE_ENUM.TIER_2,
+          type: GroupTypeEnum['tier-2'],
           description: 'Handles security monitoring and incident response.',
         },
         {
           name: 'App Support Tier 1',
-          type: GROUP_TYPE_ENUM.TIER_1,
+          type: GroupTypeEnum['tier-1'],
           description: 'Intermediate support for enterprise applications.',
         },
       ];

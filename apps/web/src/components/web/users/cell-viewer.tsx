@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { User } from '@/types'
+import { UserSchema } from '@repo/shared'
 import {
   Drawer,
   DrawerClose,
@@ -28,7 +28,7 @@ import {
   DatabaseIcon,
 } from 'lucide-react'
 
-export function TableCellViewer({ item }: { item: User }) {
+export function TableCellViewer({ item }: { item: UserSchema }) {
   const isMobile = useIsMobile()
 
   const directPermissions = item.permissions || []
@@ -152,7 +152,15 @@ export function TableCellViewer({ item }: { item: User }) {
                 <DetailItem label="First Name" value={item.firstName} />
                 <DetailItem label="Last Name" value={item.lastName} />
                 <DetailItem label="Display Name" value={item.displayName} />
-                <DetailItem label="Department" value={typeof item.department === 'object' && item.department !== null ? (item.department as any).name : item.department} />
+                <DetailItem
+                  label="Department"
+                  value={
+                    typeof item.department === 'object' &&
+                    item.department !== null
+                      ? (item.department as any).name
+                      : item.department
+                  }
+                />
                 <DetailItem label="Phone" value={item.phone} />
                 <DetailItem label="Manager" value={item.manager} />
               </div>
@@ -397,4 +405,3 @@ function DetailItem({
     </div>
   )
 }
-

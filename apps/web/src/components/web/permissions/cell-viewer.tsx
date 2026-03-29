@@ -1,4 +1,4 @@
-import { Permission } from '@/types'
+import { PermissionSchema } from '@repo/shared'
 import { useIsMobile } from '@/hooks/use-mobile'
 import {
   Drawer,

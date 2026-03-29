@@ -31,7 +31,7 @@ function CreateGroupPage() {
       roles: [],
       permissions: [],
       users: [],
-    } as z.infer<typeof GroupSchema>,
+    } as GroupDto,
     validators: {
       onSubmit: CreateGroupSchema,
     },

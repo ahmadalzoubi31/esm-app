@@ -1,10 +1,10 @@
 import { Entity, Property, Index } from '@mikro-orm/core';
-import type { SlaTargetDto, SlaTargetRules, SlaType } from '@repo/shared';
+import type { SlaTargetSchema, SlaTargetRules, SlaType } from '@repo/shared';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
 @Entity({ tableName: 'sla_targets' })
 @Index({ properties: ['name'], options: { unique: true } })
-export class SlaTarget extends TenantBaseEntity implements SlaTargetDto {
+export class SlaTarget extends TenantBaseEntity implements SlaTargetSchema {
   @Property({ type: 'string' })
   type!: SlaType;
 

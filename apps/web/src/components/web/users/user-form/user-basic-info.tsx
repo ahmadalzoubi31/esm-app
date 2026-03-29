@@ -38,14 +38,14 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useSearchUsersQuery } from '@/lib/queries/users.query'
 import { useState, useEffect } from 'react'
-import { AuthSource, FormInstance } from '@/types'
+import { FormInstance } from '@/types'
 import { usersApi } from '@/lib/api/users.api'
 import { z } from 'zod'
-import { UserSchema } from '@/schemas/user.schema'
 import { DepartmentMenu } from '@/components/web/common/menus/department-menu'
+import { AuthSourceEnum, UserDto } from '@repo/shared'
 
 interface UserBasicInfoProps {
-  form: FormInstance<z.infer<typeof UserSchema>>
+  form: FormInstance<UserDto>
 }
 
 export function UserBasicInfo({ form }: UserBasicInfoProps) {
@@ -186,7 +186,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                   <Input
                     type="email"
                     name={field.name}
-                    value={field.state.value}
+                    value={field.state.value ?? ''}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
@@ -266,10 +266,10 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
                   </FieldLabel>
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary" className="text-sm">
-                      {authSource === AuthSource.LDAP ? 'LDAP' : 'Local'}
+                      {authSource === AuthSourceEnum.ldap ? 'LDAP' : 'Local'}
                     </Badge>
                     <span className="text-xs text-muted-foreground">
-                      {authSource === AuthSource.LDAP
+                      {authSource === AuthSourceEnum.ldap
                         ? 'Set automatically for LDAP users'
                         : 'Set automatically for manually created users'}
                     </span>
@@ -286,7 +286,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
           <form.Subscribe
             selector={(state: any) => [state.values.authSource]}
             children={([authSource]: any) => {
-              return authSource === AuthSource.LOCAL ? (
+              return authSource === AuthSourceEnum.local ? (
                 <form.Field
                   name="password"
                   children={(field) => {
@@ -318,7 +318,7 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
 
           {/* Department */}
           <form.Field
-            name="department"
+            name="departmentId"
             children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -510,4 +510,3 @@ export function UserBasicInfo({ form }: UserBasicInfoProps) {
     </Card>
   )
 }
-

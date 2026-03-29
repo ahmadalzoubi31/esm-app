@@ -5,7 +5,8 @@ import { SlaTarget } from './entities/sla-target.entity';
 import { SlaTimer } from './entities/sla-timer.entity';
 import { SlaRulesEngineService } from './sla-rules-engine.service';
 import { Tenant } from '../../tenants/entities/tenant.entity';
-import { SlaTargetWriteDto } from './dto/write-target.dto';
+import { CreateSlaTargetDto } from './dto/create-target.dto';
+import { UpdateSlaTargetDto } from './dto/update-target.dto';
 
 @Injectable()
 export class SlaService {
@@ -345,7 +346,7 @@ export class SlaService {
    * Create an SLA target
    * used in sla.controller.ts
    */
-  async createTarget(dto: SlaTargetWriteDto) {
+  async createTarget(dto: CreateSlaTargetDto) {
     // 1: Get entity manager
     const em = this.targetRepo.getEntityManager();
 
@@ -390,7 +391,7 @@ export class SlaService {
    * Update an SLA target
    * used in sla.controller.ts
    */
-  async updateTarget(id: string, dto: SlaTargetWriteDto) {
+  async updateTarget(id: string, dto: UpdateSlaTargetDto) {
     // 1: Get entity manager
     const em = this.targetRepo.getEntityManager();
 

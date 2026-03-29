@@ -28,7 +28,7 @@ export class BusinessLineService {
     // create business line
     const businessLine = this.businessLineRepository.create({
       ...createBusinessLineDto,
-      active: true,
+      isActive: true,
       tenant: tenantRef,
     });
     // save business line

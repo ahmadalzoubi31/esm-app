@@ -93,7 +93,7 @@ function EditUserForm({
       permissions: user.permissions?.map((p) => p.id) || [],
       groups: user.groups?.map((g) => g.id) || [],
       metadata: user.metadata,
-    } as z.infer<typeof UserSchema>,
+    } as UserDto,
     validators: {
       onSubmit: UpdateUserSchema,
     },
@@ -224,4 +224,3 @@ function EditUserForm({
     </>
   )
 }
-

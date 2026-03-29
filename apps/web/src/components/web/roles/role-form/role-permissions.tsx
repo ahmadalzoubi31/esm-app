@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { usePermissionsQuery } from '@/lib/queries/permissions.query'
 import type { ApiResponse } from '@/types/api'
-import type { Permission } from '@/types'
+
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { FormInstance } from '@/types'
-import { RoleDto } from '@repo/shared'
+import { Permission, RoleDto } from '@repo/shared'
 
 interface RolePermissionsProps {
   form: FormInstance<RoleDto>

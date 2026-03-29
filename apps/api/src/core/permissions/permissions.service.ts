@@ -162,8 +162,7 @@ export class PermissionsService {
     }
 
     // 3. Assign permissions to user
-    await user.permissions.loadItems();
-    permissions.forEach((perm) => user.permissions.add(perm));
+    permissions.forEach((perm) => user.permissions.push(perm));
 
     await this.permissionRepository.getEntityManager().flush();
     return true;
@@ -186,11 +185,12 @@ export class PermissionsService {
     }
 
     // 2. Remove permissions from user
-    await user.permissions.loadItems();
-    const permsToRemove = user.permissions
-      .getItems()
-      .filter((p) => permissionIds.includes(p.id));
-    permsToRemove.forEach((perm) => user.permissions.remove(perm));
+    const permsToRemove = user.permissions.filter((p) =>
+      permissionIds.includes(p.id),
+    );
+    permsToRemove.forEach((permToRemove) =>
+      user.permissions.filter((perm) => perm.id !== permToRemove.id),
+    );
 
     await this.permissionRepository.getEntityManager().flush();
     return true;

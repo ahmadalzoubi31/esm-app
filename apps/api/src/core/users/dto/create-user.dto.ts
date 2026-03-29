@@ -8,10 +8,11 @@ import {
   IsString,
   IsStrongPassword,
 } from 'class-validator';
-import { AuthSource } from '../constants/auth-source.constant';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUserDto {
+import { AuthSource, UserDto } from '@repo/shared';
+
+export class CreateUserDto implements UserDto {
   @ApiProperty({ example: 'John' })
   @IsString()
   firstName: string;
@@ -51,7 +52,7 @@ export class CreateUserDto {
   @ApiProperty({ example: 'IT' })
   @IsString()
   @IsOptional()
-  department?: string;
+  departmentId?: string;
 
   @ApiProperty({ example: '123456' })
   @IsString()

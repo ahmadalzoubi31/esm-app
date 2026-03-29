@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Group } from '@/types'
+import { Group } from '@repo/shared'
 import {
   Drawer,
   DrawerClose,
@@ -227,4 +227,3 @@ function DetailItem({
     </div>
   )
 }
-

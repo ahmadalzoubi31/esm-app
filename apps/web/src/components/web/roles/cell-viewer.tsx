@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Role } from '@repo/shared'
+import { RoleSchema } from '@repo/shared'
 import { useRolePermissionsQuery } from '@/lib/queries'
 import { formatDate } from '@/lib/format-date'
 import {
@@ -26,7 +26,7 @@ import {
   FingerprintIcon,
 } from 'lucide-react'
 
-export function TableCellViewer({ item }: { item: Role }) {
+export function TableCellViewer({ item }: { item: RoleSchema }) {
   const isMobile = useIsMobile()
   const { data: permissionsResponse, isLoading: isLoadingPermissions } =
     useRolePermissionsQuery(item.id)

@@ -2,8 +2,9 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { AppDataTableColumnHeader } from '@/components/web/common/app-table'
-import { Group } from '@/types'
+import { Group } from '@repo/shared'
 import { TableCellViewer } from './cell-viewer'
+
 
 export const columns: ColumnDef<Group>[] = [
   {

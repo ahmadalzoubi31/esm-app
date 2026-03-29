@@ -11,11 +11,11 @@ import {
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 import { User } from '../../users/entities/user.entity';
 import { Group } from '../../groups/entities/group.entity';
-import type { DepartmentDto } from '@repo/shared';
+import type { DepartmentSchema } from '@repo/shared';
 
 @Entity({ tableName: 'departments' })
 @Unique({ properties: ['key', 'tenant'] })
-export class Department extends TenantBaseEntity implements DepartmentDto {
+export class Department extends TenantBaseEntity implements DepartmentSchema {
   @Property()
   @Index()
   key!: string;
@@ -27,7 +27,7 @@ export class Department extends TenantBaseEntity implements DepartmentDto {
   description?: string;
 
   @Property({ default: true })
-  active: boolean = true;
+  isActive: boolean = true;
 
   @OneToMany(() => User, (user) => user.department)
   users = new Collection<User>(this);

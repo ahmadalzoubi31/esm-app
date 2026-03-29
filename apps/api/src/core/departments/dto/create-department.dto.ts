@@ -16,5 +16,5 @@ export class CreateDepartmentDto implements DepartmentDto {
   @ApiPropertyOptional({ example: true })
   @IsBoolean()
   @IsOptional()
-  active: boolean = true;
+  isActive: boolean = true;
 }

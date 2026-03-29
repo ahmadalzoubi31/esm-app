@@ -26,12 +26,11 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { FormInstance } from '@/types'
-import { z } from 'zod'
-import { GroupSchema } from '@/schemas/group.schema'
 import { useSearchUsersQuery } from '@/lib/queries/users.query'
+import { GroupDto } from '@repo/shared'
 
 interface GroupUsersProps {
-  form: FormInstance<z.infer<typeof GroupSchema>>
+  form: FormInstance<GroupDto>
 }
 
 export function GroupUsers({ form }: GroupUsersProps) {
@@ -211,4 +210,3 @@ export function GroupUsers({ form }: GroupUsersProps) {
     </Card>
   )
 }
-

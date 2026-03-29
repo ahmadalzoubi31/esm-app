@@ -16,7 +16,8 @@ import { CheckPolicies } from '../../common/decorators/check-policies.decorator'
 import { AppAbility } from '../casl/casl-ability.factory';
 import { ACTION_ENUM } from '../casl/constants/action.constant';
 import { SlaTarget } from './entities/sla-target.entity';
-import { SlaTargetWriteDto } from './dto/write-target.dto';
+import { CreateSlaTargetDto } from './dto/create-target.dto';
+import { UpdateSlaTargetDto } from './dto/update-target.dto';
 
 @ApiTags('SLA')
 @ApiBearerAuth()
@@ -34,7 +35,7 @@ export class SlaController {
   @CheckPolicies((ability: AppAbility) =>
     ability.can(ACTION_ENUM.Create, SlaTarget),
   )
-  createTarget(@Body() dto: SlaTargetWriteDto) {
+  createTarget(@Body() dto: CreateSlaTargetDto) {
     this.logger.log('Creating SLA target');
     return this.slaService.createTarget(dto);
   }
@@ -64,7 +65,7 @@ export class SlaController {
   @CheckPolicies((ability: AppAbility) =>
     ability.can(ACTION_ENUM.Update, SlaTarget),
   )
-  updateTarget(@Param('id') id: string, @Body() dto: SlaTargetWriteDto) {
+  updateTarget(@Param('id') id: string, @Body() dto: UpdateSlaTargetDto) {
     this.logger.log(`Updating SLA target ${id}`);
     return this.slaService.updateTarget(id, dto);
   }

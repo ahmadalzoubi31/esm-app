@@ -1,6 +1,7 @@
+import { BusinessLineDto } from '@repo/shared';
 import { IsString, IsOptional, IsBoolean } from 'class-validator';
 
-export class CreateBusinessLineDto {
+export class CreateBusinessLineDto implements BusinessLineDto {
   @IsString()
   key: string;
 
@@ -12,6 +13,5 @@ export class CreateBusinessLineDto {
   description?: string;
 
   @IsBoolean()
-  @IsOptional()
-  active?: boolean;
+  isActive: boolean;
 }

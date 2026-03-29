@@ -13,7 +13,7 @@ import { Type } from 'class-transformer';
 import type { SlaTargetDto, SlaType } from '@repo/shared';
 import { SlaTargetRulesDto } from './sla-target-rules.dto';
 
-export class SlaTargetWriteDto implements SlaTargetDto {
+export class CreateSlaTargetDto implements SlaTargetDto {
   @ApiProperty({ example: 'respond' })
   @IsEnum(['respond', 'resolution'])
   type!: SlaType;

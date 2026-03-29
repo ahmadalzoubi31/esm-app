@@ -26,11 +26,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { FormInstance } from '@/types'
-import { z } from 'zod'
-import { GroupSchema } from '@/schemas/group.schema'
+import { GroupDto } from '@repo/shared'
 
 interface GroupRolesProps {
-  form: FormInstance<z.infer<typeof GroupSchema>>
+  form: FormInstance<GroupDto>
 }
 
 export function GroupRoles({ form }: GroupRolesProps) {

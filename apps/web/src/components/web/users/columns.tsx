@@ -5,10 +5,10 @@ import { Mail, PhoneIcon, User as UserIcon } from 'lucide-react'
 import { AppDataTableColumnHeader } from '@/components/web/common/app-table'
 import { TableCellViewer } from './cell-viewer'
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react'
-import { User } from '@/types'
+import { UserSchema } from '@repo/shared'
 import { formatDate } from '@/lib/format-date'
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<UserSchema>[] = [
   {
     id: 'select',
     header: ({ table }) => (

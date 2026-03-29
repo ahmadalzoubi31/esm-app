@@ -3,7 +3,7 @@ export interface BusinessLine {
   name: string
   key: string
   description?: string
-  active: boolean
+  isActive: boolean
   createdAt: string
   updatedAt: string
 }

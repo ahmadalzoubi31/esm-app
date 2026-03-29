@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsUUID } from 'class-validator';
+import type { AssignUserPermissionsDto as IAssignUserPermissionsDto } from '@repo/shared';
 
-export class AssignUserPermissionsDto {
+export class AssignUserPermissionsDto implements IAssignUserPermissionsDto {
+
   @ApiProperty({
     description: 'Array of permission IDs to assign',
     example: [

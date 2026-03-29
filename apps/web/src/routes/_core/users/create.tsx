@@ -18,8 +18,7 @@ import { UserPermissions } from '@/components/web/users/user-form/user-permissio
 import { UserMetadata } from '@/components/web/users/user-form/user-metadata'
 import { SideBarForm } from '@/components/web/users/user-form/sidebar-form'
 import { useCreateUserMutation } from '@/lib/mutations'
-import { UserSchema, CreateUserSchema } from '@/schemas/user.schema'
-import { AuthSource } from '@/types/users'
+import { AuthSourceEnum } from '@repo/shared'
 import z from 'zod'
 
 export const Route = createFileRoute('/_core/users/create')({
@@ -37,8 +36,8 @@ function CreateUserPage() {
       username: '',
       email: '',
       avatar: '',
-      authSource: AuthSource.LOCAL as AuthSource,
-      department: '',
+      authSource: AuthSourceEnum.local,
+      departmentId: '',
       phone: '',
       manager: '',
       password: '',
@@ -49,7 +48,7 @@ function CreateUserPage() {
       permissions: [] as string[],
       groups: [] as string[],
       metadata: {},
-    } as z.infer<typeof UserSchema>,
+    } as UserDto,
     validators: {
       onSubmit: CreateUserSchema,
     },
@@ -176,4 +175,3 @@ function CreateUserPage() {
     </>
   )
 }
-

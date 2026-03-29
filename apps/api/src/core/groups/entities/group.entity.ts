@@ -6,22 +6,21 @@ import {
   ManyToMany,
   Collection,
 } from '@mikro-orm/core';
-import { GROUP_TYPE_ENUM } from '../constants/group-type.constant';
 import { BusinessLine } from '../../business-lines/entities/business-line.entity';
 import { User } from '../../users/entities/user.entity';
 import { Role } from '../../roles/entities/role.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
-import { randomUUID } from 'crypto';
 import { Department } from '../../departments/entities/department.entity';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
+import { GroupSchema, GroupType } from '@repo/shared';
 
 @Entity({ tableName: 'groups' })
-export class Group extends TenantBaseEntity {
+export class Group extends TenantBaseEntity implements GroupSchema {
   @Property({ length: 120 })
   name!: string;
 
   @Property({ type: 'string' })
-  type!: GROUP_TYPE_ENUM;
+  type!: GroupType;
 
   @Property({ nullable: true })
   description?: string;
@@ -38,10 +37,10 @@ export class Group extends TenantBaseEntity {
   department?: Department;
 
   @ManyToMany(() => Role, (role) => role.groups)
-  roles = new Collection<Role>(this);
+  roles: Role[];
 
   @ManyToMany(() => Permission, (permission) => permission.groups)
-  permissions = new Collection<Permission>(this);
+  permissions: Permission[];
 
   @ManyToMany(() => User, (user) => user.groups, {
     owner: true,
@@ -49,5 +48,5 @@ export class Group extends TenantBaseEntity {
     joinColumn: 'groupId',
     inverseJoinColumn: 'userId',
   })
-  users = new Collection<User>(this);
+  users: string[];
 }

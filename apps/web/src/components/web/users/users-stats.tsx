@@ -6,10 +6,10 @@ import {
   DatabaseIcon,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { AuthSource, User } from '@/types'
+import { UserSchema, AuthSourceEnum } from '@repo/shared'
 
 interface UsersStatsProps {
-  users: User[]
+  users: UserSchema[]
 }
 
 export function UsersStats({ users }: UsersStatsProps) {
@@ -17,10 +17,10 @@ export function UsersStats({ users }: UsersStatsProps) {
   const activeUsers = users.filter((u) => u.isActive).length
   const inactiveUsers = users.filter((u) => !u.isActive).length
   const ldapUsers = users.filter(
-    (u) => u.authSource === AuthSource.LDAP,
+    (u) => u.authSource === AuthSourceEnum.ldap,
   ).length
   const localUsers = users.filter(
-    (u) => u.authSource === AuthSource.LOCAL,
+    (u) => u.authSource === AuthSourceEnum.local,
   ).length
 
   return (
@@ -82,4 +82,3 @@ export function UsersStats({ users }: UsersStatsProps) {
     </div>
   )
 }
-

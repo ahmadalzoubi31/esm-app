@@ -4,7 +4,7 @@ import { api } from '@/lib/api'
 import { roleKeys, useRolesQuery } from '@/lib/queries/roles.query'
 import { usePermissionsQuery } from '@/lib/queries/permissions.query'
 import type { ApiResponse } from '@/types/api'
-import type { Permission } from '@/types'
+
 import {
   Card,
   CardContent,
@@ -45,11 +45,10 @@ import {
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { FormInstance } from '@/types'
-import { z } from 'zod'
-import { UserSchema } from '@/schemas/user.schema'
+import { Permission, UserDto } from '@repo/shared'
 
 interface UserPermissionsProps {
-  form: FormInstance<z.infer<typeof UserSchema>>
+  form: FormInstance<UserDto>
 }
 
 export function UserPermissions({ form }: UserPermissionsProps) {

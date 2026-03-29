@@ -26,22 +26,16 @@ export class GroupsService {
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
     // 4: Destructure createGroupDto
-    const {
-      businessLineId,
-      teamLeaderId,
-      departmentId,
-      roles,
-      permissions,
-      users,
-      ...rest
-    } = createGroupDto;
+    const { businessLineId, teamLeaderId, departmentId, ...rest } =
+      createGroupDto;
 
     // 5: Create group and set references
     const group = this.groupRepository.create({
       ...rest,
       businessLine: businessLineId,
-      teamLeader: teamLeaderId as string,
-      department: departmentId as string,
+      roles: '',
+      permissions: '',
+      users: [],
       tenant: tenantRef,
     });
 

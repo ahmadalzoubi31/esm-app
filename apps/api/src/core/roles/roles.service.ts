@@ -38,8 +38,10 @@ export class RolesService {
     // 5: Create role
     const role = this.roleRepository.create({
       key: '', // auto generate on DB level
-      ...roleData,
+      permissionCount: 0,
+      userCount: 0,
       tenant: tenantRef,
+      ...roleData,
     });
 
     // 6. Save role
@@ -179,7 +181,7 @@ export class RolesService {
     }
 
     // 3. Assign roles to user
-    await user.roles.loadItems();
+    roles.forEach((role) => user.roles.push(role));
 
     // 4. Save and return
     await this.roleRepository.getEntityManager().flush();
@@ -197,10 +199,8 @@ export class RolesService {
     }
 
     // 2. Remove roles from user
-    await user.roles.loadItems();
-    const rolesToRemove = user.roles
-      .getItems()
-      .filter((r) => roleIds.includes(r.id));
+    const rolesToRemove = user.roles.filter((r) => roleIds.includes(r.id));
+    rolesToRemove.forEach((role) => user.roles.filter((r) => r.id !== role.id));
 
     // 3. Save and return
     await this.roleRepository.getEntityManager().flush();

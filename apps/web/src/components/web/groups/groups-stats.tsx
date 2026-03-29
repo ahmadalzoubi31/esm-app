@@ -6,7 +6,7 @@ import {
   DatabaseIcon,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Group } from '@/types'
+import { Group } from '@repo/shared'
 
 interface GroupsStatsProps {
   groups: Group[]

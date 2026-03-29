@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsOptional, IsObject } from 'class-validator';
-import GraphQLJSON from 'graphql-type-json';
-export class CreatePermissionDto {
+import type { PermissionDto } from '@repo/shared';
+
+export class CreatePermissionDto implements PermissionDto {
+
   @ApiProperty({
     description: 'Unique permission key',
     example: 'case:read:own',
