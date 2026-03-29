@@ -12,7 +12,7 @@ import { PlusIcon } from 'lucide-react'
 import { SlaStats } from '@/components/web/sla/sla-stats'
 import { SlaTableSelectionActions } from '@/components/web/sla/table-selection-actions'
 
-export const Route = createFileRoute('/_esm/sla/')({
+export const Route = createFileRoute('/_core/sla/')({
   component: RouteComponent,
 })
 

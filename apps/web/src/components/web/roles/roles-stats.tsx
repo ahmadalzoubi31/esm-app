@@ -1,6 +1,6 @@
 import { ShieldIcon, UsersIcon, LockIcon } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Role } from '@/types/roles'
+import { Role } from '@repo/shared'
 
 interface RolesStatsProps {
   roles: Role[]

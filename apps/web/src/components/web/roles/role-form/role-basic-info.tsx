@@ -11,11 +11,10 @@ import {
 } from '@/components/ui/card'
 import { UserCog as RoleIcon } from 'lucide-react'
 import { FormInstance } from '@/types'
-import { RoleSchema } from '@/schemas/role.schema'
-import { z } from 'zod'
+import { RoleDto } from '@repo/shared'
 
 interface RoleBasicInfoProps {
-  form: FormInstance<z.infer<typeof RoleSchema>>
+  form: FormInstance<RoleDto>
 }
 
 export function RoleBasicInfo({ form }: RoleBasicInfoProps) {

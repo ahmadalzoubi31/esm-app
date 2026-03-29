@@ -11,8 +11,14 @@ import {
 import { Field, FieldLabel, FieldError } from '@/components/ui/field'
 import { Separator } from '@/components/ui/separator'
 import { LayoutGridIcon } from 'lucide-react'
+import { FormInstance } from '@/types'
+import { DepartmentDto } from '@repo/shared'
 
-export function DepartmentBasicInfo({ form }: { form: any }) {
+interface DepartmentBasicInfoProps {
+  form: FormInstance<DepartmentDto>
+}
+
+export function DepartmentBasicInfo({ form }: DepartmentBasicInfoProps) {
   return (
     <Card>
       <CardHeader>

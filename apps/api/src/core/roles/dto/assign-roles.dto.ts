@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsUUID } from 'class-validator';
+import { RoleAssignRolesDto } from '@repo/shared';
 
-export class AssignRolesDto {
+export class AssignRolesDto implements RoleAssignRolesDto {
   @ApiProperty({
     description: 'Array of role IDs to assign',
     example: [

@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Role } from '@/types'
+import { Role } from '@repo/shared'
 import { AppDataTableColumnHeader } from '@/components/web/common/app-table'
 import { TableCellViewer } from './cell-viewer'
 

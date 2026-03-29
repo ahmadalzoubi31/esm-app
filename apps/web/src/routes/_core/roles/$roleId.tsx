@@ -14,8 +14,7 @@ import {
   useRoleQuery,
   useRolePermissionsQuery,
 } from '@/lib/queries/roles.query'
-import { RoleSchema } from '@/schemas/role.schema'
-import z from 'zod'
+import { RoleDto, RoleWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/roles/$roleId')({
   component: EditRolePage,
@@ -41,10 +40,10 @@ function EditRolePage() {
       description: roleResponse?.data.description || '',
       permissionCount: roleResponse?.data.permissionCount || 0,
       userCount: roleResponse?.data.userCount || 0,
-      permissions: permsResponse?.data?.map((p: any) => p.id) || [],
-    } as z.infer<typeof RoleSchema>,
+      permissionIds: permsResponse?.data?.map((p: any) => p.id) || [],
+    } as RoleDto,
     validators: {
-      onSubmit: RoleSchema,
+      onSubmit: RoleWriteSchema,
     },
     onSubmit: async ({ value }) => {
       // 1. Update basic info
@@ -58,11 +57,12 @@ function EditRolePage() {
 
       // 2. Sync permissions
       const currentPermIds = permsResponse?.data?.map((p: any) => p.id) || []
-      const newPermIds = value.permissions
+      const newPermIds = value.permissionIds
 
-      const permsToAdd = newPermIds.filter((id) => !currentPermIds.includes(id))
+      const permsToAdd =
+        newPermIds?.filter((id) => !currentPermIds.includes(id)) || []
       const permsToRemove = currentPermIds.filter(
-        (id) => !newPermIds.includes(id),
+        (id) => !newPermIds?.includes(id),
       )
 
       if (permsToAdd.length > 0) {

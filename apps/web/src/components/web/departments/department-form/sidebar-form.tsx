@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DepartmentSchema } from '@/schemas/department.schema'
+import { DepartmentDto } from '@repo/shared'
 import {
   Card,
   CardContent,
@@ -26,7 +26,7 @@ export function SideBarForm({ form }: SideBarFormProps) {
         })}
       >
         {({ values, errors, isSubmitting, isValid }: any) => {
-          const department = values as z.infer<typeof DepartmentSchema>
+          const department = values as DepartmentDto
           const hasErrors = errors.length > 0 || !isValid
 
           return (

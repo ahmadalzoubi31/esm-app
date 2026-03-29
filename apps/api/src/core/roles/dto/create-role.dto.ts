@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, IsArray } from 'class-validator';
+import { RoleDto } from '@repo/shared';
 
-export class CreateRoleDto {
+export class CreateRoleDto implements RoleDto {
   @ApiProperty({
     description: 'Role name',
     example: 'Admin',

@@ -1,5 +1,5 @@
 import type { DataTableConfig } from '@/components/web/common/app-table'
-import { Role } from '@/types/roles'
+import { Role } from '@repo/shared'
 
 export const tableConfig: DataTableConfig<Role> = {
   emptyMessage: 'No roles found.',

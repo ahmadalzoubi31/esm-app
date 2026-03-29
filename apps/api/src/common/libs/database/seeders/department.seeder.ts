@@ -29,11 +29,11 @@ export class DepartmentSeeder extends Seeder {
     const tenantRef = em.getReference(Tenant, tenantId);
 
     for (const deptData of this.data) {
-      const code = deptData.name.toLowerCase().replace(/\s+/g, '-');
+      const key = deptData.name.toLowerCase().replace(/\s+/g, '-');
 
       const existing = await departmentRepo.findOne(
         {
-          code,
+          key,
           tenant: tenantId,
         },
         { filters: { tenant: false } },
@@ -46,7 +46,7 @@ export class DepartmentSeeder extends Seeder {
 
       em.create(Department, {
         id: crypto.randomUUID(),
-        code,
+        key,
         name: deptData.name,
         description: deptData.description,
         active: true,

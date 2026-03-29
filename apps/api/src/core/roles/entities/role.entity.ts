@@ -7,15 +7,17 @@ import {
   Index,
   BeforeCreate,
   Unique,
+  BeforeUpdate,
 } from '@mikro-orm/core';
 import { User } from '../../users/entities/user.entity';
 import { Permission } from '../../permissions/entities/permission.entity';
 import { Group } from '../../groups/entities/group.entity';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
+import { RoleDto } from '@repo/shared';
 
 @Entity({ tableName: 'roles' })
 @Unique({ properties: ['key', 'tenant'] })
-export class Role extends TenantBaseEntity {
+export class Role extends TenantBaseEntity implements RoleDto {
   @Property()
   @Index()
   key!: string;
@@ -57,7 +59,8 @@ export class Role extends TenantBaseEntity {
   permissions = new Collection<Permission>(this);
 
   @BeforeCreate()
-  beforeInsert() {
+  @BeforeUpdate()
+  generateKey() {
     this.key = this.name.toLowerCase().replace(/\s/g, '-');
   }
 }

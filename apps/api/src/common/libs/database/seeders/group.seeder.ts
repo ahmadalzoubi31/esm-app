@@ -20,7 +20,7 @@ export class GroupSeeder extends Seeder {
       { filters: { tenant: false } },
     );
     const itDepartment = await departmentRepo.findOne(
-      { code: 'information-technology', tenant: tenantId },
+      { key: 'information-technology', tenant: tenantId },
       { filters: { tenant: false } },
     );
 

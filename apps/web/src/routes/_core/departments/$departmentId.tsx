@@ -6,8 +6,7 @@ import { DepartmentBasicInfo } from '@/components/web/departments/department-for
 import { SideBarForm } from '@/components/web/departments/department-form/sidebar-form'
 import { useDepartmentQuery } from '@/lib/queries/departments.query'
 import { useUpdateDepartmentMutation } from '@/lib/mutations/departments.mutation'
-import { DepartmentSchema } from '@/schemas/department.schema'
-import z from 'zod'
+import { DepartmentDto, DepartmentWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/departments/$departmentId')({
   component: EditDepartmentPage,
@@ -29,9 +28,9 @@ function EditDepartmentPage() {
       name: department?.name || '',
       description: department?.description || '',
       active: department?.active ?? true,
-    } as z.infer<typeof DepartmentSchema>,
+    } as DepartmentDto,
     validators: {
-      onSubmit: DepartmentSchema,
+      onSubmit: DepartmentWriteSchema,
     },
     onSubmit: async ({ value }) => {
       const departmentData = {

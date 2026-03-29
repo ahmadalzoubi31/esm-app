@@ -5,18 +5,20 @@ import {
   Entity,
   OneToMany,
   Collection,
+  Index,
+  Unique,
 } from '@mikro-orm/core';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 import { User } from '../../users/entities/user.entity';
 import { Group } from '../../groups/entities/group.entity';
 import type { DepartmentDto } from '@repo/shared';
 
-
 @Entity({ tableName: 'departments' })
+@Unique({ properties: ['key', 'tenant'] })
 export class Department extends TenantBaseEntity implements DepartmentDto {
-
   @Property()
-  code!: string;
+  @Index()
+  key!: string;
 
   @Property()
   name!: string;
@@ -35,9 +37,9 @@ export class Department extends TenantBaseEntity implements DepartmentDto {
 
   @BeforeCreate()
   @BeforeUpdate()
-  generateCode() {
+  generateKey() {
     if (this.name) {
-      this.code = this.name.toLowerCase().replace(/\s+/g, '-');
+      this.key = this.name.toLowerCase().replace(/\s+/g, '-');
     }
   }
 }

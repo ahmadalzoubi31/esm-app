@@ -5,8 +5,7 @@ import { ArrowLeft } from 'lucide-react'
 import { DepartmentBasicInfo } from '@/components/web/departments/department-form/department-basic-info'
 import { SideBarForm } from '@/components/web/departments/department-form/sidebar-form'
 import { useCreateDepartmentMutation } from '@/lib/mutations'
-import { DepartmentSchema } from '@/schemas/department.schema'
-import z from 'zod'
+import { DepartmentDto, DepartmentWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/departments/create')({
   component: CreateDepartmentPage,
@@ -21,9 +20,9 @@ function CreateDepartmentPage() {
       name: '',
       description: '',
       active: true,
-    } as z.infer<typeof DepartmentSchema>,
+    } as DepartmentDto,
     validators: {
-      onSubmit: DepartmentSchema,
+      onSubmit: DepartmentWriteSchema,
     },
     onSubmit: async ({ value }) => {
       const departmentData = {

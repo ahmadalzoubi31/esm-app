@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { RoleSchema } from '@/schemas/role.schema'
+import { RoleAssignPermissionsDto, RoleDto } from '@repo/shared'
 import {
   Card,
   CardContent,
@@ -26,7 +26,8 @@ export function SideBarForm({ form }: SideBarFormProps) {
         })}
       >
         {({ values, errors, isSubmitting, isValid }: any) => {
-          const role = values as z.infer<typeof RoleSchema>
+          const role = values as RoleDto
+          const permissions = values as RoleAssignPermissionsDto
           const hasErrors = errors.length > 0 || !isValid
 
           return (
@@ -61,7 +62,7 @@ export function SideBarForm({ form }: SideBarFormProps) {
                       <span>Permissions</span>
                     </div>
                     <Badge variant="secondary" className="capitalize">
-                      {role.permissions?.length || 0}
+                      {permissions?.permissionIds?.length || 0}
                     </Badge>
                   </div>
                 </div>

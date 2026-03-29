@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Role } from '@/types'
+import { Role } from '@repo/shared'
 import { useRolePermissionsQuery } from '@/lib/queries'
 import { formatDate } from '@/lib/format-date'
 import {

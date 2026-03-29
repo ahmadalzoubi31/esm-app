@@ -3,8 +3,6 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import type { DepartmentDto } from '@repo/shared';
 
 export class CreateDepartmentDto implements DepartmentDto {
-
-
   @ApiProperty({ example: 'Human Resources' })
   @IsString()
   @IsNotEmpty()
@@ -19,5 +17,4 @@ export class CreateDepartmentDto implements DepartmentDto {
   @IsBoolean()
   @IsOptional()
   active: boolean = true;
-
 }

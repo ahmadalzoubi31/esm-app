@@ -5,7 +5,7 @@ import { useUpdateSlaTargetMutation } from '@/lib/mutations'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
 
-export const Route = createFileRoute('/_esm/sla/$slaId')({
+export const Route = createFileRoute('/_core/sla/$slaId')({
   component: RouteComponent,
 })
 

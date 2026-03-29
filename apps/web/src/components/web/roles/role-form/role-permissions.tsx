@@ -14,11 +14,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { FormInstance } from '@/types'
-import { RoleSchema } from '@/schemas/role.schema'
-import { z } from 'zod'
+import { RoleDto } from '@repo/shared'
 
 interface RolePermissionsProps {
-  form: FormInstance<z.infer<typeof RoleSchema>>
+  form: FormInstance<RoleDto>
 }
 
 export function RolePermissions({ form }: RolePermissionsProps) {
@@ -60,7 +59,7 @@ export function RolePermissions({ form }: RolePermissionsProps) {
           </div>
         ) : (
           <form.Field
-            name="permissions"
+            name="permissionIds"
             children={(field: any) => (
               <PermissionCheckboxes
                 field={field}

@@ -3,7 +3,7 @@ import { SlaForm } from '@/components/web/sla/sla-form'
 import { useCreateSlaTargetMutation } from '@/lib/mutations'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-export const Route = createFileRoute('/_esm/sla/create')({
+export const Route = createFileRoute('/_core/sla/create')({
   component: RouteComponent,
 })
 

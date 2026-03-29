@@ -6,8 +6,7 @@ import { RoleBasicInfo } from '@/components/web/roles/role-form/role-basic-info'
 import { RolePermissions } from '@/components/web/roles/role-form/role-permissions'
 import { SideBarForm } from '@/components/web/roles/role-form/sidebar-form'
 import { useCreateRoleMutation } from '@/lib/mutations'
-import { RoleSchema } from '@/schemas/role.schema'
-import z from 'zod'
+import { RoleDto, RoleWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/roles/create')({
   component: CreateRolePage,
@@ -23,17 +22,19 @@ function CreateRolePage() {
       description: '',
       permissionCount: 0,
       userCount: 0,
-      permissions: [],
-    } as z.infer<typeof RoleSchema>,
+      permissionIds: [],
+    } as RoleDto,
     validators: {
-      onSubmit: RoleSchema,
+      onSubmit: RoleWriteSchema,
     },
     onSubmit: async ({ value }) => {
       const roleData = {
         name: value.name,
         description: value.description,
         permissionIds:
-          value.permissions.length > 0 ? value.permissions : undefined,
+          value.permissionIds?.length && value.permissionIds?.length > 0
+            ? value.permissionIds
+            : undefined,
       }
 
       await createMutation.mutateAsync(roleData as any)

@@ -14,9 +14,9 @@ import { Route as EsmRouteRouteImport } from './routes/_esm/route'
 import { Route as CoreRouteRouteImport } from './routes/_core/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as EsmSlaIndexRouteImport } from './routes/_esm/sla/index'
 import { Route as EsmCasesIndexRouteImport } from './routes/_esm/cases/index'
 import { Route as CoreUsersIndexRouteImport } from './routes/_core/users/index'
+import { Route as CoreSlaIndexRouteImport } from './routes/_core/sla/index'
 import { Route as CoreSettingsIndexRouteImport } from './routes/_core/settings/index'
 import { Route as CoreRolesIndexRouteImport } from './routes/_core/roles/index'
 import { Route as CorePermissionsIndexRouteImport } from './routes/_core/permissions/index'
@@ -25,11 +25,11 @@ import { Route as CoreDepartmentsIndexRouteImport } from './routes/_core/departm
 import { Route as CoreDashboardIndexRouteImport } from './routes/_core/dashboard/index'
 import { Route as CoreCategoriesIndexRouteImport } from './routes/_core/categories/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
-import { Route as EsmSlaCreateRouteImport } from './routes/_esm/sla/create'
-import { Route as EsmSlaSlaIdRouteImport } from './routes/_esm/sla/$slaId'
 import { Route as EsmCasesCreateRouteImport } from './routes/_esm/cases/create'
 import { Route as CoreUsersCreateRouteImport } from './routes/_core/users/create'
 import { Route as CoreUsersUserIdRouteImport } from './routes/_core/users/$userId'
+import { Route as CoreSlaCreateRouteImport } from './routes/_core/sla/create'
+import { Route as CoreSlaSlaIdRouteImport } from './routes/_core/sla/$slaId'
 import { Route as CoreRolesCreateRouteImport } from './routes/_core/roles/create'
 import { Route as CoreRolesRoleIdRouteImport } from './routes/_core/roles/$roleId'
 import { Route as CoreGroupsCreateRouteImport } from './routes/_core/groups/create'
@@ -64,11 +64,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EsmSlaIndexRoute = EsmSlaIndexRouteImport.update({
-  id: '/sla/',
-  path: '/sla/',
-  getParentRoute: () => EsmRouteRoute,
-} as any)
 const EsmCasesIndexRoute = EsmCasesIndexRouteImport.update({
   id: '/cases/',
   path: '/cases/',
@@ -77,6 +72,11 @@ const EsmCasesIndexRoute = EsmCasesIndexRouteImport.update({
 const CoreUsersIndexRoute = CoreUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
+const CoreSlaIndexRoute = CoreSlaIndexRouteImport.update({
+  id: '/sla/',
+  path: '/sla/',
   getParentRoute: () => CoreRouteRoute,
 } as any)
 const CoreSettingsIndexRoute = CoreSettingsIndexRouteImport.update({
@@ -119,16 +119,6 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const EsmSlaCreateRoute = EsmSlaCreateRouteImport.update({
-  id: '/sla/create',
-  path: '/sla/create',
-  getParentRoute: () => EsmRouteRoute,
-} as any)
-const EsmSlaSlaIdRoute = EsmSlaSlaIdRouteImport.update({
-  id: '/sla/$slaId',
-  path: '/sla/$slaId',
-  getParentRoute: () => EsmRouteRoute,
-} as any)
 const EsmCasesCreateRoute = EsmCasesCreateRouteImport.update({
   id: '/cases/create',
   path: '/cases/create',
@@ -142,6 +132,16 @@ const CoreUsersCreateRoute = CoreUsersCreateRouteImport.update({
 const CoreUsersUserIdRoute = CoreUsersUserIdRouteImport.update({
   id: '/users/$userId',
   path: '/users/$userId',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
+const CoreSlaCreateRoute = CoreSlaCreateRouteImport.update({
+  id: '/sla/create',
+  path: '/sla/create',
+  getParentRoute: () => CoreRouteRoute,
+} as any)
+const CoreSlaSlaIdRoute = CoreSlaSlaIdRouteImport.update({
+  id: '/sla/$slaId',
+  path: '/sla/$slaId',
   getParentRoute: () => CoreRouteRoute,
 } as any)
 const CoreRolesCreateRoute = CoreRolesCreateRouteImport.update({
@@ -213,11 +213,11 @@ export interface FileRoutesByFullPath {
   '/groups/create': typeof CoreGroupsCreateRoute
   '/roles/$roleId': typeof CoreRolesRoleIdRoute
   '/roles/create': typeof CoreRolesCreateRoute
+  '/sla/$slaId': typeof CoreSlaSlaIdRoute
+  '/sla/create': typeof CoreSlaCreateRoute
   '/users/$userId': typeof CoreUsersUserIdRoute
   '/users/create': typeof CoreUsersCreateRoute
   '/cases/create': typeof EsmCasesCreateRoute
-  '/sla/$slaId': typeof EsmSlaSlaIdRoute
-  '/sla/create': typeof EsmSlaCreateRoute
   '/login/': typeof AuthLoginIndexRoute
   '/categories/': typeof CoreCategoriesIndexRoute
   '/dashboard/': typeof CoreDashboardIndexRoute
@@ -226,9 +226,9 @@ export interface FileRoutesByFullPath {
   '/permissions/': typeof CorePermissionsIndexRoute
   '/roles/': typeof CoreRolesIndexRoute
   '/settings/': typeof CoreSettingsIndexRoute
+  '/sla/': typeof CoreSlaIndexRoute
   '/users/': typeof CoreUsersIndexRoute
   '/cases/': typeof EsmCasesIndexRoute
-  '/sla/': typeof EsmSlaIndexRoute
   '/settings/ldap/': typeof CoreSettingsLdapIndexRoute
   '/cases/$caseId/': typeof EsmCasesCaseIdIndexRoute
   '/cases/$caseId/edit/': typeof EsmCasesCaseIdEditIndexRoute
@@ -244,11 +244,11 @@ export interface FileRoutesByTo {
   '/groups/create': typeof CoreGroupsCreateRoute
   '/roles/$roleId': typeof CoreRolesRoleIdRoute
   '/roles/create': typeof CoreRolesCreateRoute
+  '/sla/$slaId': typeof CoreSlaSlaIdRoute
+  '/sla/create': typeof CoreSlaCreateRoute
   '/users/$userId': typeof CoreUsersUserIdRoute
   '/users/create': typeof CoreUsersCreateRoute
   '/cases/create': typeof EsmCasesCreateRoute
-  '/sla/$slaId': typeof EsmSlaSlaIdRoute
-  '/sla/create': typeof EsmSlaCreateRoute
   '/login': typeof AuthLoginIndexRoute
   '/categories': typeof CoreCategoriesIndexRoute
   '/dashboard': typeof CoreDashboardIndexRoute
@@ -257,9 +257,9 @@ export interface FileRoutesByTo {
   '/permissions': typeof CorePermissionsIndexRoute
   '/roles': typeof CoreRolesIndexRoute
   '/settings': typeof CoreSettingsIndexRoute
+  '/sla': typeof CoreSlaIndexRoute
   '/users': typeof CoreUsersIndexRoute
   '/cases': typeof EsmCasesIndexRoute
-  '/sla': typeof EsmSlaIndexRoute
   '/settings/ldap': typeof CoreSettingsLdapIndexRoute
   '/cases/$caseId': typeof EsmCasesCaseIdIndexRoute
   '/cases/$caseId/edit': typeof EsmCasesCaseIdEditIndexRoute
@@ -279,11 +279,11 @@ export interface FileRoutesById {
   '/_core/groups/create': typeof CoreGroupsCreateRoute
   '/_core/roles/$roleId': typeof CoreRolesRoleIdRoute
   '/_core/roles/create': typeof CoreRolesCreateRoute
+  '/_core/sla/$slaId': typeof CoreSlaSlaIdRoute
+  '/_core/sla/create': typeof CoreSlaCreateRoute
   '/_core/users/$userId': typeof CoreUsersUserIdRoute
   '/_core/users/create': typeof CoreUsersCreateRoute
   '/_esm/cases/create': typeof EsmCasesCreateRoute
-  '/_esm/sla/$slaId': typeof EsmSlaSlaIdRoute
-  '/_esm/sla/create': typeof EsmSlaCreateRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_core/categories/': typeof CoreCategoriesIndexRoute
   '/_core/dashboard/': typeof CoreDashboardIndexRoute
@@ -292,9 +292,9 @@ export interface FileRoutesById {
   '/_core/permissions/': typeof CorePermissionsIndexRoute
   '/_core/roles/': typeof CoreRolesIndexRoute
   '/_core/settings/': typeof CoreSettingsIndexRoute
+  '/_core/sla/': typeof CoreSlaIndexRoute
   '/_core/users/': typeof CoreUsersIndexRoute
   '/_esm/cases/': typeof EsmCasesIndexRoute
-  '/_esm/sla/': typeof EsmSlaIndexRoute
   '/_core/settings/ldap/': typeof CoreSettingsLdapIndexRoute
   '/_esm/cases/$caseId/': typeof EsmCasesCaseIdIndexRoute
   '/_esm/cases/$caseId/edit/': typeof EsmCasesCaseIdEditIndexRoute
@@ -312,11 +312,11 @@ export interface FileRouteTypes {
     | '/groups/create'
     | '/roles/$roleId'
     | '/roles/create'
+    | '/sla/$slaId'
+    | '/sla/create'
     | '/users/$userId'
     | '/users/create'
     | '/cases/create'
-    | '/sla/$slaId'
-    | '/sla/create'
     | '/login/'
     | '/categories/'
     | '/dashboard/'
@@ -325,9 +325,9 @@ export interface FileRouteTypes {
     | '/permissions/'
     | '/roles/'
     | '/settings/'
+    | '/sla/'
     | '/users/'
     | '/cases/'
-    | '/sla/'
     | '/settings/ldap/'
     | '/cases/$caseId/'
     | '/cases/$caseId/edit/'
@@ -343,11 +343,11 @@ export interface FileRouteTypes {
     | '/groups/create'
     | '/roles/$roleId'
     | '/roles/create'
+    | '/sla/$slaId'
+    | '/sla/create'
     | '/users/$userId'
     | '/users/create'
     | '/cases/create'
-    | '/sla/$slaId'
-    | '/sla/create'
     | '/login'
     | '/categories'
     | '/dashboard'
@@ -356,9 +356,9 @@ export interface FileRouteTypes {
     | '/permissions'
     | '/roles'
     | '/settings'
+    | '/sla'
     | '/users'
     | '/cases'
-    | '/sla'
     | '/settings/ldap'
     | '/cases/$caseId'
     | '/cases/$caseId/edit'
@@ -377,11 +377,11 @@ export interface FileRouteTypes {
     | '/_core/groups/create'
     | '/_core/roles/$roleId'
     | '/_core/roles/create'
+    | '/_core/sla/$slaId'
+    | '/_core/sla/create'
     | '/_core/users/$userId'
     | '/_core/users/create'
     | '/_esm/cases/create'
-    | '/_esm/sla/$slaId'
-    | '/_esm/sla/create'
     | '/_auth/login/'
     | '/_core/categories/'
     | '/_core/dashboard/'
@@ -390,9 +390,9 @@ export interface FileRouteTypes {
     | '/_core/permissions/'
     | '/_core/roles/'
     | '/_core/settings/'
+    | '/_core/sla/'
     | '/_core/users/'
     | '/_esm/cases/'
-    | '/_esm/sla/'
     | '/_core/settings/ldap/'
     | '/_esm/cases/$caseId/'
     | '/_esm/cases/$caseId/edit/'
@@ -443,13 +443,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_esm/sla/': {
-      id: '/_esm/sla/'
-      path: '/sla'
-      fullPath: '/sla/'
-      preLoaderRoute: typeof EsmSlaIndexRouteImport
-      parentRoute: typeof EsmRouteRoute
-    }
     '/_esm/cases/': {
       id: '/_esm/cases/'
       path: '/cases'
@@ -462,6 +455,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users/'
       preLoaderRoute: typeof CoreUsersIndexRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
+    '/_core/sla/': {
+      id: '/_core/sla/'
+      path: '/sla'
+      fullPath: '/sla/'
+      preLoaderRoute: typeof CoreSlaIndexRouteImport
       parentRoute: typeof CoreRouteRoute
     }
     '/_core/settings/': {
@@ -520,20 +520,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_esm/sla/create': {
-      id: '/_esm/sla/create'
-      path: '/sla/create'
-      fullPath: '/sla/create'
-      preLoaderRoute: typeof EsmSlaCreateRouteImport
-      parentRoute: typeof EsmRouteRoute
-    }
-    '/_esm/sla/$slaId': {
-      id: '/_esm/sla/$slaId'
-      path: '/sla/$slaId'
-      fullPath: '/sla/$slaId'
-      preLoaderRoute: typeof EsmSlaSlaIdRouteImport
-      parentRoute: typeof EsmRouteRoute
-    }
     '/_esm/cases/create': {
       id: '/_esm/cases/create'
       path: '/cases/create'
@@ -553,6 +539,20 @@ declare module '@tanstack/react-router' {
       path: '/users/$userId'
       fullPath: '/users/$userId'
       preLoaderRoute: typeof CoreUsersUserIdRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
+    '/_core/sla/create': {
+      id: '/_core/sla/create'
+      path: '/sla/create'
+      fullPath: '/sla/create'
+      preLoaderRoute: typeof CoreSlaCreateRouteImport
+      parentRoute: typeof CoreRouteRoute
+    }
+    '/_core/sla/$slaId': {
+      id: '/_core/sla/$slaId'
+      path: '/sla/$slaId'
+      fullPath: '/sla/$slaId'
+      preLoaderRoute: typeof CoreSlaSlaIdRouteImport
       parentRoute: typeof CoreRouteRoute
     }
     '/_core/roles/create': {
@@ -656,6 +656,8 @@ interface CoreRouteRouteChildren {
   CoreGroupsCreateRoute: typeof CoreGroupsCreateRoute
   CoreRolesRoleIdRoute: typeof CoreRolesRoleIdRoute
   CoreRolesCreateRoute: typeof CoreRolesCreateRoute
+  CoreSlaSlaIdRoute: typeof CoreSlaSlaIdRoute
+  CoreSlaCreateRoute: typeof CoreSlaCreateRoute
   CoreUsersUserIdRoute: typeof CoreUsersUserIdRoute
   CoreUsersCreateRoute: typeof CoreUsersCreateRoute
   CoreCategoriesIndexRoute: typeof CoreCategoriesIndexRoute
@@ -665,6 +667,7 @@ interface CoreRouteRouteChildren {
   CorePermissionsIndexRoute: typeof CorePermissionsIndexRoute
   CoreRolesIndexRoute: typeof CoreRolesIndexRoute
   CoreSettingsIndexRoute: typeof CoreSettingsIndexRoute
+  CoreSlaIndexRoute: typeof CoreSlaIndexRoute
   CoreUsersIndexRoute: typeof CoreUsersIndexRoute
   CoreSettingsLdapIndexRoute: typeof CoreSettingsLdapIndexRoute
 }
@@ -678,6 +681,8 @@ const CoreRouteRouteChildren: CoreRouteRouteChildren = {
   CoreGroupsCreateRoute: CoreGroupsCreateRoute,
   CoreRolesRoleIdRoute: CoreRolesRoleIdRoute,
   CoreRolesCreateRoute: CoreRolesCreateRoute,
+  CoreSlaSlaIdRoute: CoreSlaSlaIdRoute,
+  CoreSlaCreateRoute: CoreSlaCreateRoute,
   CoreUsersUserIdRoute: CoreUsersUserIdRoute,
   CoreUsersCreateRoute: CoreUsersCreateRoute,
   CoreCategoriesIndexRoute: CoreCategoriesIndexRoute,
@@ -687,6 +692,7 @@ const CoreRouteRouteChildren: CoreRouteRouteChildren = {
   CorePermissionsIndexRoute: CorePermissionsIndexRoute,
   CoreRolesIndexRoute: CoreRolesIndexRoute,
   CoreSettingsIndexRoute: CoreSettingsIndexRoute,
+  CoreSlaIndexRoute: CoreSlaIndexRoute,
   CoreUsersIndexRoute: CoreUsersIndexRoute,
   CoreSettingsLdapIndexRoute: CoreSettingsLdapIndexRoute,
 }
@@ -697,20 +703,14 @@ const CoreRouteRouteWithChildren = CoreRouteRoute._addFileChildren(
 
 interface EsmRouteRouteChildren {
   EsmCasesCreateRoute: typeof EsmCasesCreateRoute
-  EsmSlaSlaIdRoute: typeof EsmSlaSlaIdRoute
-  EsmSlaCreateRoute: typeof EsmSlaCreateRoute
   EsmCasesIndexRoute: typeof EsmCasesIndexRoute
-  EsmSlaIndexRoute: typeof EsmSlaIndexRoute
   EsmCasesCaseIdIndexRoute: typeof EsmCasesCaseIdIndexRoute
   EsmCasesCaseIdEditIndexRoute: typeof EsmCasesCaseIdEditIndexRoute
 }
 
 const EsmRouteRouteChildren: EsmRouteRouteChildren = {
   EsmCasesCreateRoute: EsmCasesCreateRoute,
-  EsmSlaSlaIdRoute: EsmSlaSlaIdRoute,
-  EsmSlaCreateRoute: EsmSlaCreateRoute,
   EsmCasesIndexRoute: EsmCasesIndexRoute,
-  EsmSlaIndexRoute: EsmSlaIndexRoute,
   EsmCasesCaseIdIndexRoute: EsmCasesCaseIdIndexRoute,
   EsmCasesCaseIdEditIndexRoute: EsmCasesCaseIdEditIndexRoute,
 }
