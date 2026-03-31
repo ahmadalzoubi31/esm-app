@@ -16,7 +16,7 @@ export class GroupSeeder extends Seeder {
 
     // Get dependencies
     const itBusinessLine = await businessLineRepo.findOne(
-      { name: 'it', tenant: tenantId },
+      { name: 'IT', tenant: tenantId },
       { filters: { tenant: false } },
     );
     const itDepartment = await departmentRepo.findOne(

@@ -1,6 +1,6 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20260331105613 extends Migration {
+export class Migration20260331205807 extends Migration {
 
   override async up(): Promise<void> {
     this.addSql(`create table "permissions" ("id" uuid not null, "key" varchar(255) not null, "subject" varchar(255) not null, "action" varchar(255) not null, "conditions" jsonb null, "category" varchar(255) not null, "description" varchar(255) null, "createdAt" timestamptz null, "updatedAt" timestamptz null, constraint "permissions_pkey" primary key ("id"));`);
@@ -33,7 +33,7 @@ export class Migration20260331105613 extends Migration {
     this.addSql(`create index "departments_tenantId_index" on "departments" ("tenantId");`);
     this.addSql(`alter table "departments" add constraint "departments_name_tenantId_unique" unique ("name", "tenantId");`);
 
-    this.addSql(`create table "categories" ("id" varchar(255) not null, "tenantId" varchar(255) not null, "createdAt" timestamptz null default CURRENT_TIMESTAMP, "updatedAt" timestamptz null default CURRENT_TIMESTAMP, "isActive" boolean not null default true, "name" varchar(255) not null, "description" varchar(255) null, "tier" int not null default 1, "parent" varchar(255) null, constraint "categories_pkey" primary key ("id"));`);
+    this.addSql(`create table "categories" ("id" varchar(255) not null, "tenantId" varchar(255) not null, "createdAt" timestamptz null default CURRENT_TIMESTAMP, "updatedAt" timestamptz null default CURRENT_TIMESTAMP, "isActive" boolean not null default true, "name" varchar(255) not null, "description" varchar(255) null, "tier" int not null default 1, "parentId" varchar(255) null, constraint "categories_pkey" primary key ("id"));`);
     this.addSql(`create index "categories_tenantId_index" on "categories" ("tenantId");`);
 
     this.addSql(`create table "business_lines" ("id" varchar(255) not null, "tenantId" varchar(255) not null, "createdAt" timestamptz null default CURRENT_TIMESTAMP, "updatedAt" timestamptz null default CURRENT_TIMESTAMP, "isActive" boolean not null default true, "name" varchar(255) not null, "description" varchar(255) null, constraint "business_lines_pkey" primary key ("id"));`);
@@ -94,7 +94,7 @@ export class Migration20260331105613 extends Migration {
     this.addSql(`alter table "departments" add constraint "departments_tenantId_foreign" foreign key ("tenantId") references "tenants" ("id") on update cascade on delete cascade;`);
 
     this.addSql(`alter table "categories" add constraint "categories_tenantId_foreign" foreign key ("tenantId") references "tenants" ("id") on update cascade on delete cascade;`);
-    this.addSql(`alter table "categories" add constraint "categories_parent_foreign" foreign key ("parent") references "categories" ("id") on update cascade on delete set null;`);
+    this.addSql(`alter table "categories" add constraint "categories_parentId_foreign" foreign key ("parentId") references "categories" ("id") on update cascade on delete set null;`);
 
     this.addSql(`alter table "business_lines" add constraint "business_lines_tenantId_foreign" foreign key ("tenantId") references "tenants" ("id") on update cascade on delete cascade;`);
 

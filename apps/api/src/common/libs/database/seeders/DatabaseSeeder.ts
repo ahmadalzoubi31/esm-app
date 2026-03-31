@@ -22,10 +22,10 @@ export class DatabaseSeeder extends Seeder {
       RoleSeeder,
       BusinessLineSeeder,
       DepartmentSeeder,
-      GroupSeeder,
       CategorySeeder,
       SlaTargetSeeder,
       UserSeeder,
+      GroupSeeder,
     ]);
 
     console.log('\n✅ Database seeding completed successfully!');

@@ -11,9 +11,11 @@ import 'dotenv/config';
 export const databaseConfig = registerAs('database', () =>
   defineConfig({
     highlighter: new SqlHighlighter(),
-    // clientUrl: process.env.DATABASE_URL,
     clientUrl:
-      'postgresql://postgres.cjunkhxcenvybixlumgt:5ZAgoMPZxSrhG5So@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres',
+      process.env.DATABASE_URL ||
+      'postgresql://postgres:P@ssw0rd@localhost:5432/postgres',
+    // clientUrl:
+    // 'postgresql://postgres.cjunkhxcenvybixlumgt:5ZAgoMPZxSrhG5So@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres',
     // folder-based discovery setup, using common filename suffix
     entities: ['./dist/**/*.entity.js'],
     entitiesTs: ['./src/**/*.entity.ts'],
@@ -21,7 +23,7 @@ export const databaseConfig = registerAs('database', () =>
     // check the documentation for their differences: https://mikro-orm.io/docs/metadata-providers
     metadataProvider: TsMorphMetadataProvider,
     // enable debug mode to log SQL queries and discovery information
-    debug: false,
+    debug: true,
     // Enable extensions
     extensions: [Migrator, EntityGenerator, SeedManager],
 
