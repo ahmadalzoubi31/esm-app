@@ -3,9 +3,6 @@ import { createMiddleware, createStart } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
 import { AuthUser } from './types'
 import { api } from './lib/api'
-import { useProfileQuery } from './lib/queries'
-import { useQuery } from '@tanstack/react-query'
-import { getProfileFn } from './server/auth'
 
 // ### Public paths
 const public_paths = [

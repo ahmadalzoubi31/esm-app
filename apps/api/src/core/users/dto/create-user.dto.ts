@@ -93,17 +93,17 @@ export class CreateUserDto implements UserDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  roles?: string[];
+  roleIds?: string[];
 
   @ApiProperty({ example: ['uuid-1', 'uuid-2'] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  permissions?: string[];
+  permissionIds?: string[];
 
   @ApiProperty({ example: ['uuid-1', 'uuid-2'] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  groups?: string[];
+  groupIds?: string[];
 }

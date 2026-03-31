@@ -21,12 +21,11 @@ export class AuthService {
     private usersService: UsersService,
     @InjectRepository(RefreshToken)
     private refreshTokenRepository: EntityRepository<RefreshToken>,
-    private configService: ConfigService,
   ) {}
 
   async validateUser(username: string, pass: string): Promise<User | null> {
     // 1. Find user by username
-    const user = await this.usersService.findOneByUsernameForAuth(username);
+    const user = await this.usersService.findOneByUsername(username);
 
     // 2. Check if user exists and password is correct
     if (user && user.password) {
@@ -60,7 +59,6 @@ export class AuthService {
 
     const roles = userWithRelations.roles.map((role) => ({
       id: role.id,
-      key: role.key,
       name: role.name,
     }));
 
@@ -222,7 +220,6 @@ export class AuthService {
     // 6. Load collections and adjust the roles object
     const roles = user.roles.map((role) => ({
       id: role.id,
-      key: role.key,
       name: role.name,
     }));
 

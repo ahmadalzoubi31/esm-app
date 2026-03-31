@@ -16,8 +16,7 @@ import { GroupUsers } from '@/components/web/groups/group-form/group-users'
 import { SideBarForm } from '@/components/web/groups/group-form/sidebar-form'
 import { useGroupQuery } from '@/lib/queries/groups.query'
 import { useUpdateGroupMutation } from '@/lib/mutations/groups.mutation'
-import { UpdateGroupSchema } from '@/schemas/group.schema'
-import { Group } from '@/types'
+import { GroupSchema, GroupWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/groups/$groupId')({
   component: EditGroupPage,
@@ -68,7 +67,7 @@ function EditGroupForm({
   navigate,
   mutation,
 }: {
-  group: Group
+  group: GroupSchema
   groupId: string
   navigate: any
   mutation: any
@@ -81,12 +80,12 @@ function EditGroupForm({
       teamLeaderId: group.teamLeader?.id || '',
       businessLineId: group.businessLine?.id || '',
       departmentId: (group as any).department?.id || '',
-      roles: group.roles?.map((r) => r.id) || [],
-      permissions: group.permissions?.map((p) => p.id) || [],
-      users: group.users?.map((u) => u.id) || [],
+      roleIds: group.roles?.map((r: { id: string }) => r.id) || [],
+      permissionIds: group.permissions?.map((p: { id: string }) => p.id) || [],
+      userIds: group.users?.map((u: { id: string }) => u.id) || [],
     } as any, // Quick type assertion due to partial vs full schema matching in zod
     validators: {
-      onSubmit: UpdateGroupSchema,
+      onSubmit: GroupWriteSchema,
     },
     onSubmit: async ({ value }) => {
       const submitData = { ...value }

@@ -31,4 +31,7 @@ export abstract class TenantBaseEntity {
     onUpdate: () => new Date(),
   })
   updatedAt?: Date = new Date();
+
+  @Property({ default: true })
+  isActive: boolean = true;
 }

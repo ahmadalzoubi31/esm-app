@@ -12,10 +12,8 @@ import { Group } from '../../groups/entities/group.entity';
 import { randomUUID } from 'crypto';
 import type { PermissionDto } from '@repo/shared';
 
-
 @Entity({ tableName: 'permissions' })
 export class Permission implements PermissionDto {
-
   @PrimaryKey({ type: 'uuid' })
   id: string = randomUUID();
 
@@ -38,28 +36,27 @@ export class Permission implements PermissionDto {
   @Property({ nullable: true })
   description?: string;
 
-  @ManyToMany(() => Role, (role) => role.permissions)
+  // INVERSE SIDE: Points back to Role.permissions
+  @ManyToMany(() => Role, (role) => role.permissions, {
+    mappedBy: 'permissions',
+  })
   roles = new Collection<Role>(this);
 
-  @ManyToMany(() => User, (user) => user.permissions, {
-    owner: true,
-    pivotTable: 'user_permissions',
-    joinColumn: 'permission_id',
-    inverseJoinColumn: 'user_id',
-  })
-  users = new Collection<User>(this);
-
+  // INVERSE SIDE: Points back to Group.permissions
   @ManyToMany(() => Group, (group) => group.permissions, {
-    owner: true,
-    pivotTable: 'group_permissions',
-    joinColumn: 'permission_id',
-    inverseJoinColumn: 'group_id',
+    mappedBy: 'permissions',
   })
   groups = new Collection<Group>(this);
 
+  // INVERSE SIDE: Points back to User.permissions
+  @ManyToMany(() => User, (user) => user.permissions, {
+    mappedBy: 'permissions',
+  })
+  users = new Collection<User>(this);
+
   @Property({ onCreate: () => new Date() })
-  createdAt: Date = new Date();
+  createdAt?: Date = new Date();
 
   @Property({ onCreate: () => new Date(), onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
+  updatedAt?: Date = new Date();
 }

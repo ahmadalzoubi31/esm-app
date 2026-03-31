@@ -33,7 +33,7 @@ export class DepartmentSeeder extends Seeder {
 
       const existing = await departmentRepo.findOne(
         {
-          key,
+          name: deptData.name,
           tenant: tenantId,
         },
         { filters: { tenant: false } },

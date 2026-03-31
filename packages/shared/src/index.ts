@@ -1,3 +1,6 @@
+// Removed MikroORM import to prevent browser errors (os.platform is not a function)
+// import { Collection } from "@mikro-orm/core";
+
 // *************************
 // ** sla **
 // *************************
@@ -76,8 +79,9 @@ export type SlaTargetDto = z.infer<typeof SlaTargetWriteSchema>;
 
 export const SlaTargetReadSchema = SlaTargetWriteSchema.extend({
   id: z.uuid(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  // Use .coerce to turn ISO strings from the API back into JS Dates
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 export type SlaTargetSchema = z.infer<typeof SlaTargetReadSchema>;
 
@@ -98,9 +102,9 @@ export type DepartmentDto = z.infer<typeof DepartmentWriteSchema>;
 
 export const DepartmentReadSchema = DepartmentWriteSchema.extend({
   id: z.uuid(),
-  key: z.string(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  // Use .coerce to turn ISO strings from the API back into JS Dates
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 export type DepartmentSchema = z.infer<typeof DepartmentReadSchema>;
 
@@ -113,9 +117,9 @@ export type DepartmentSchema = z.infer<typeof DepartmentReadSchema>;
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const RoleWriteSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  name: z.string().min(2, "Name must be at least 2 characters."),
   description: z.string().optional(),
-  permissionIds: z.array(z.string()).optional(),
+  permissionIds: z.array(z.uuid()).optional(),
 });
 export type RoleDto = z.infer<typeof RoleWriteSchema>;
 
@@ -127,11 +131,12 @@ export const RoleReadSchema = RoleWriteSchema.omit({
   permissionIds: true,
 }).extend({
   id: z.uuid(),
-  key: z.string(),
-  permissionCount: z.number(),
-  userCount: z.number(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  permissionCount: z.number().nonnegative().optional(),
+  userCount: z.number().nonnegative().optional(),
+
+  // Use .coerce to turn ISO strings from the API back into JS Dates
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 export type RoleSchema = z.infer<typeof RoleReadSchema>;
 
@@ -174,21 +179,22 @@ export type PermissionDto = z.infer<typeof PermissionWriteSchema>;
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const PermissionReadSchema = PermissionWriteSchema.extend({
-  id: z.string().uuid(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  id: z.uuid(),
+  // Use .coerce to turn ISO strings from the API back into JS Dates
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 export type PermissionSchema = z.infer<typeof PermissionReadSchema>;
 
 export const AssignUserPermissionsSchema = z.object({
-  permissionIds: z.array(z.string().uuid()),
+  permissionIds: z.array(z.uuid()),
 });
 export type AssignUserPermissionsDto = z.infer<
   typeof AssignUserPermissionsSchema
 >;
 
 export const RevokePermissionsFromUserSchema = z.object({
-  permissionIds: z.array(z.string().uuid()),
+  permissionIds: z.array(z.uuid()),
   metadata: z.record(z.string(), z.any()),
 });
 export type RevokePermissionsFromUserDto = z.infer<
@@ -223,43 +229,41 @@ export const UserWriteSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   username: z.string().min(3, "Username must be at least 3 characters"),
-  email: z.string().email("Invalid email address").optional().nullable(),
+  email: z.email("Invalid email address").optional().nullable(),
   avatar: z.string().optional(),
-  authSource: AuthSourceEnumSchema,
-  departmentId: z.string().uuid().optional(),
   phone: z.string().optional(),
   manager: z.string().optional(),
-  password: z.string().optional(),
+  authSource: AuthSourceEnumSchema,
+  departmentId: z.uuid().optional(),
   externalId: z.string().optional(),
+  password: z.string().optional(),
   isActive: z.boolean(),
   isLicensed: z.boolean(),
   metadata: UserMetadataSchema.optional(),
-  roles: z.array(z.string().uuid()).optional(),
-  permissions: z.array(z.string().uuid()).optional(),
-  groups: z.array(z.string().uuid()).optional(),
+  roleIds: z.array(z.uuid()).optional(),
+  permissionIds: z.array(z.uuid()).optional(),
+  groupIds: z.array(z.uuid()).optional(),
 });
 export type UserDto = z.infer<typeof UserWriteSchema>;
 
 export const UserReadSchema = UserWriteSchema.omit({
-  roles: true,
-  permissions: true,
-  groups: true,
-  password: true,
+  roleIds: true,
+  permissionIds: true,
+  groupIds: true,
 }).extend({
-  id: z.string().uuid(),
+  id: z.uuid(),
   displayName: z.string().optional(),
   department: DepartmentReadSchema.optional(),
-  roles: z.array(RoleReadSchema).optional(),
-  permissions: z.array(PermissionReadSchema).optional(),
-  groups: z.array(z.lazy(() => GroupReadSchema)).optional(),
-  lastLoginAt: z.date().optional().nullable(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+
+  lastLoginAt: z.coerce.date().nullable().optional(),
+  // Use .coerce to turn ISO strings from the API back into JS Dates
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 export type UserSchema = z.infer<typeof UserReadSchema>;
 
 export const BulkUserSchema = z.object({
-  ids: z.array(z.string().uuid()),
+  ids: z.array(z.uuid()),
   data: UserWriteSchema.partial(),
 });
 export type BulkUserDto = z.infer<typeof BulkUserSchema>;
@@ -270,16 +274,16 @@ export type BulkUserDto = z.infer<typeof BulkUserSchema>;
 
 export const BusinessLineWriteSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  key: z.string().min(1, "Key is required"),
   description: z.string().optional(),
-  isActive: z.boolean().optional(),
+  isActive: z.boolean(),
 });
 export type BusinessLineDto = z.infer<typeof BusinessLineWriteSchema>;
 
 export const BusinessLineReadSchema = BusinessLineWriteSchema.extend({
-  id: z.string().uuid(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  id: z.uuid(),
+  // Use .coerce to turn ISO strings from the API back into JS Dates
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 export type BusinessLineSchema = z.infer<typeof BusinessLineReadSchema>;
 
@@ -307,16 +311,16 @@ export const GroupTypeEnum = GroupTypeEnumSchema.enum;
 export const GroupWriteSchema = z.object({
   name: z
     .string()
-    .min(1, { message: "Name is required." })
-    .max(120, { message: "Name must be at most 120 characters." }),
+    .min(1, "Name is required.")
+    .max(120, "Name must be at most 120 characters."),
   type: GroupTypeEnumSchema,
   description: z.string().optional(),
   teamLeaderId: z.uuid().optional(),
-  departmentId: z.uuid().optional(),
   businessLineId: z.uuid(),
-  roles: z.array(z.uuid()).optional(),
-  permissions: z.array(PermissionReadSchema).optional(),
-  users: z.array(UserReadSchema).optional(),
+  roleIds: z.array(z.uuid()).default([]).optional(),
+  permissionIds: z.array(z.uuid()).default([]).optional(),
+  userIds: z.array(z.uuid()).default([]).optional(),
+  isActive: z.boolean(),
 });
 export type GroupDto = z.infer<typeof GroupWriteSchema>;
 
@@ -324,15 +328,50 @@ export type GroupDto = z.infer<typeof GroupWriteSchema>;
 // Read model (what the API returns — write model + server-generated fields)
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const GroupReadSchema: z.ZodType<any> = GroupWriteSchema.extend({
+// Circular Dependency: Good job using z.lazy(() => UserReadSchema).
+// Groups contain Users, and Users contain Groups.
+// Without z.lazy, your code would crash with
+// a "ReferenceError: Cannot access UserReadSchema before initialization."
+
+export const GroupReadSchema = GroupWriteSchema.omit({
+  roleIds: true,
+  permissionIds: true,
+  teamLeaderId: true,
+  businessLineId: true,
+  userIds: true,
+}).extend({
   id: z.uuid(),
-  teamLeader: z.lazy(() => UserReadSchema).optional(),
-  department: DepartmentReadSchema.optional(),
-  businessLine: BusinessLineReadSchema.optional(),
-  roles: RoleReadSchema.array(),
-  permissions: PermissionReadSchema.array(),
-  users: z.lazy(() => UserReadSchema.array()).optional(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  teamLeader: UserReadSchema.optional(),
+  businessLine: BusinessLineReadSchema,
+  // Use .coerce to turn ISO strings from the API back into JS Dates
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
 });
 export type GroupSchema = z.infer<typeof GroupReadSchema>;
+
+// *************************
+// ** categories **
+// *************************
+
+export const CategoryWriteSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional(),
+  tier: z.number().default(1),
+  parentId: z.uuid().optional(),
+  isActive: z.boolean(),
+});
+export type CategoryDto = z.infer<typeof CategoryWriteSchema>;
+
+export const CategoryReadSchema: z.ZodType<any> = CategoryWriteSchema.omit({
+  parentId: true,
+}).extend({
+  id: z.uuid(),
+  description: z.string().optional(),
+  tier: z.number(),
+  parent: z.lazy(() => CategoryReadSchema).optional(),
+  children: z.lazy(() => z.array(CategoryReadSchema)).optional(),
+  // Use .coerce to turn ISO strings from the API back into JS Dates
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+});
+export type CategorySchema = z.infer<typeof CategoryReadSchema>;

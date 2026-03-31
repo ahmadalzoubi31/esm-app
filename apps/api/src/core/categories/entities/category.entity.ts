@@ -6,9 +6,10 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
+import { CategorySchema } from '@repo/shared';
 
 @Entity({ tableName: 'categories' })
-export class Category extends TenantBaseEntity {
+export class Category extends TenantBaseEntity implements CategorySchema {
   @Property()
   name!: string;
 
@@ -18,9 +19,9 @@ export class Category extends TenantBaseEntity {
   @Property({ default: 1 })
   tier: number = 1;
 
-  @ManyToOne(() => Category, { nullable: true })
+  @ManyToOne(() => Category, { nullable: true, fieldName: 'parentId' })
   parent?: Category;
 
   @OneToMany(() => Category, (c) => c.parent)
-  children = new Collection<Category>(this);
+  children? = new Collection<Category>(this);
 }

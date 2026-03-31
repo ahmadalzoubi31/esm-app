@@ -19,9 +19,7 @@ import { UserMetadata } from '@/components/web/users/user-form/user-metadata'
 import { SideBarForm } from '@/components/web/users/user-form/sidebar-form'
 import { useUserQuery } from '@/lib/queries/users.query'
 import { useUpdateUserMutation } from '@/lib/mutations/users.mutation'
-import { UserSchema, UpdateUserSchema } from '@/schemas/user.schema'
-import { User } from '@/types'
-import z from 'zod'
+import { UserDto, UserSchema, UserWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/users/$userId')({
   component: EditUserPage,
@@ -69,7 +67,7 @@ function EditUserForm({
   navigate,
   mutation,
 }: {
-  user: User
+  user: UserSchema
   userId: string
   navigate: any
   mutation: any
@@ -89,13 +87,13 @@ function EditUserForm({
       externalId: user.externalId,
       isActive: user.isActive,
       isLicensed: user.isLicensed,
-      roles: user.roles?.map((r) => r.id) || [],
-      permissions: user.permissions?.map((p) => p.id) || [],
-      groups: user.groups?.map((g) => g.id) || [],
+      roleIds: user.roles?.map((r) => r.id) || [],
+      permissionIds: user.permissions?.map((p) => p.id) || [],
+      groupIds: user.groups?.map((g) => g.id) || [],
       metadata: user.metadata,
     } as UserDto,
     validators: {
-      onSubmit: UpdateUserSchema,
+      onSubmit: UserWriteSchema,
     },
     onSubmit: async ({ value }) => {
       const submitData = { ...value }

@@ -1,4 +1,4 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { SlaTargetWriteDto } from './create-target.dto';
+import { CreateSlaTargetDto } from './create-target.dto';
 
-export class UpdateSlaTargetDto extends PartialType(SlaTargetWriteDto) {}
+export class UpdateSlaTargetDto extends PartialType(CreateSlaTargetDto) {}

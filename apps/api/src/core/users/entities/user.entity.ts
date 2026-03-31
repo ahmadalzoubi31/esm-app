@@ -59,7 +59,7 @@ export class User extends TenantBaseEntity implements UserSchema {
   @Property({ nullable: true })
   externalId?: string; // AD GUID
 
-  @Property({ nullable: true, hidden: true })
+  @Property({ nullable: true })
   password?: string; // only for 'local' users
 
   @Property({ default: false })
@@ -90,14 +90,17 @@ export class User extends TenantBaseEntity implements UserSchema {
     [key: string]: any;
   };
 
-  @ManyToMany(() => Role, (role) => role.users)
-  roles: Role[] = [];
+  // OWNER: User "owns" their assigned roles
+  @ManyToMany(() => Role)
+  roles = new Collection<Role>(this);
 
-  @ManyToMany(() => Permission, (permission) => permission.users)
-  permissions: Permission[] = [];
+  // INVERSE SIDE: Group manages membership
+  @ManyToMany(() => Group, (group) => group.members, { mappedBy: 'members' })
+  groups = new Collection<Group>(this);
 
-  @ManyToMany(() => Group, (group) => group.users)
-  groups: Group[] = [];
+  // OWNER: User "owns" their direct permissions
+  @ManyToMany(() => Permission)
+  permissions = new Collection<Permission>(this);
 
   @BeforeCreate()
   @BeforeUpdate()

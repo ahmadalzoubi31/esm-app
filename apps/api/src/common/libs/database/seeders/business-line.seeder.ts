@@ -6,19 +6,16 @@ import { Tenant } from '../../../../tenants/entities/tenant.entity';
 export class BusinessLineSeeder extends Seeder {
   data = [
     {
-      key: 'hr',
       name: 'HR',
       description:
         'The HR business line is responsible for managing human resources and ensuring the smooth operation of the organization.',
     },
     {
-      key: 'finance',
       name: 'Finance',
       description:
         "The Finance business line is responsible for managing the organization's financial resources and ensuring the smooth operation of the organization.",
     },
     {
-      key: 'it',
       name: 'IT',
       description:
         "The IT business line is responsible for managing the organization's IT resources and ensuring the smooth operation of the organization.",
@@ -37,7 +34,7 @@ export class BusinessLineSeeder extends Seeder {
       // 2. Check if any business lines already exist for this tenant
       const existingBusinessLines = await businessLineRepo.find(
         {
-          key: { $in: this.data.map((d) => this.generateKey(d.name)) },
+          name: { $in: this.data.map((d) => this.generateKey(d.name)) },
           tenant: tenantId,
         },
         { filters: { tenant: false } },
@@ -55,12 +52,11 @@ export class BusinessLineSeeder extends Seeder {
       for (const blData of this.data) {
         em.create(BusinessLine, {
           id: crypto.randomUUID(),
-          key: this.generateKey(blData.name),
           name: blData.name,
           description: blData.description,
-          active: true,
+          isActive: true,
           tenant: tenantRef,
-        } as any);
+        });
         console.log(
           `✔ Created business line: ${blData.name} for tenant ${tenantId}`,
         );

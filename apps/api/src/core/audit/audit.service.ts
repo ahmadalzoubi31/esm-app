@@ -32,6 +32,7 @@ export class AuditService {
       event: params.event,
       payload: params.payload,
       tenant: tenantRef,
+      isActive: true,
     });
 
     // 5: Persist and Flush

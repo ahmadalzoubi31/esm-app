@@ -1,138 +1,99 @@
-import {
-  Injectable,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Role } from './entities/role.entity';
 import { EntityRepository } from '@mikro-orm/core';
-import { Permission } from '../permissions/entities/permission.entity';
+import { Role } from './entities/role.entity';
 import { PermissionsService } from '../permissions/permissions.service';
 import { UsersService } from '../users/users.service';
 import { Tenant } from '../../tenants/entities/tenant.entity';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class RolesService {
   constructor(
-    @InjectRepository(Role)
-    private readonly roleRepository: EntityRepository<Role>,
-    private permissionsService: PermissionsService,
+    @InjectRepository(Role) private readonly roleRepo: EntityRepository<Role>,
+    private readonly permissionsService: PermissionsService,
     private readonly usersService: UsersService,
   ) {}
 
-  async create(createRoleDto: CreateRoleDto): Promise<Role> {
-    // 1:   Destructure permissionIds from createRoleDto
-    const { permissionIds, ...roleData } = createRoleDto;
+  // --- CRUD ---
 
-    // 2: Get EntityManager
-    const em = this.roleRepository.getEntityManager();
+  async create(dto: CreateRoleDto): Promise<Role> {
+    const { permissionIds, ...roleData } = dto;
+    const em = this.roleRepo.getEntityManager();
 
-    // 3: Get Tenant ID from Filter
+    // 1. Safe Tenant Handling
     const tenantFilter = em.getFilterParams('tenant');
-
-    // 4: Get Tenant Reference
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
-    // 5: Create role
-    const role = this.roleRepository.create({
-      key: '', // auto generate on DB level
-      permissionCount: 0,
-      userCount: 0,
+    // 2. Create and persist
+    const role = this.roleRepo.create({
+      ...dto,
       tenant: tenantRef,
-      ...roleData,
+      isActive: true,
     });
+    await em.persist(role).flush();
 
-    // 6. Save role
-    await this.roleRepository.getEntityManager().persist(role).flush();
-
-    // 7. Assign permissions if present
-    if (permissionIds && permissionIds.length > 0) {
+    // 4. Assign permissions if present
+    if (permissionIds?.length) {
       await this.assignPermissions(role.id, permissionIds);
     }
 
-    // 8: Return role
     return role;
   }
 
-  async findAll({ where }: { where?: any }): Promise<Role[]> {
-    // 1: Find roles and populate permissions
-    return await this.roleRepository.find(where || {}, {
+  async findAll({ where }: { where?: any } = {}): Promise<Role[]> {
+    return this.roleRepo.find(where || {}, {
       populate: ['permissions'],
-      filters: { tenant: false },
+      filters: { tenant: false }, // Broad lookup usually ignores standard tenant scoping
     });
   }
 
-  async findOne(id: string): Promise<Role | null> {
-    // 1: Find role by id and populate permissions
-    return await this.roleRepository.findOne(
+  async findOne(id: string): Promise<Role> {
+    return this.roleRepo.findOneOrFail(
       { id },
       { populate: ['permissions'], filters: { tenant: false } },
     );
   }
 
   async update(id: string, dto: UpdateRoleDto): Promise<Role> {
-    // 1: Find role by id
-    const role = await this.roleRepository.findOneOrFail(
-      { id },
-      { populate: ['permissions'], filters: { tenant: false } },
-    );
-
-    // 2: Update role
-    this.roleRepository.assign(role, dto);
-
-    // 3: Save role
-    await this.roleRepository.getEntityManager().flush();
-
-    // 4: Return role
+    const role = await this.findOne(id);
+    this.roleRepo.assign(role, dto);
+    await this.roleRepo.getEntityManager().flush();
     return role;
   }
 
   async remove(id: string): Promise<void> {
-    // 1: Remove role
-    await this.roleRepository.nativeDelete({ id });
+    await this.roleRepo.nativeDelete({ id });
   }
 
-  async findPermissions(id: string): Promise<Permission[]> {
-    // 1: Find permissions
-    return await this.permissionsService.findAll({
-      where: { roles: { id } },
-    });
-  }
+  // --- Permission Management (Lazy Loading Pattern) ---
 
   async assignPermissions(
     roleId: string,
     permissionIds: string[],
   ): Promise<Role> {
-    // 1. Find Role from database
-    const role = await this.roleRepository.findOne(
+    // 1. Lean Fetch
+    const role = await this.roleRepo.findOneOrFail(
       { id: roleId },
-      { populate: ['permissions'], filters: { tenant: false } },
+      { filters: { tenant: false } },
     );
 
-    // 2. Check if the role exists, if not throw error
-    if (!role) {
-      throw new NotFoundException('Role not found');
-    }
-
-    // 3. Find Permissions from database using permissionIds
+    // 2. Verify Permissions
     const permissions = await this.permissionsService.findAll({
       where: { id: { $in: permissionIds } },
     });
 
-    // 4. Check if all permissions exist, if not throw error
     if (permissions.length !== permissionIds.length) {
       throw new NotFoundException('One or more permissions not found');
     }
 
-    // 5. Assign permissions to role
+    // 3. Load for modification
     await role.permissions.loadItems();
     permissions.forEach((perm) => role.permissions.add(perm));
     role.permissionCount = role.permissions.length;
 
-    // 6. Save role and return it
-    await this.roleRepository.getEntityManager().flush();
+    await this.roleRepo.getEntityManager().flush();
     return role;
   }
 
@@ -140,51 +101,43 @@ export class RolesService {
     roleId: string,
     permissionIds: string[],
   ): Promise<Role> {
-    // 1. Find Role from database
-    const role = await this.roleRepository.findOne(
+    const role = await this.roleRepo.findOneOrFail(
       { id: roleId },
-      { populate: ['permissions'], filters: { tenant: false } },
+      { filters: { tenant: false } },
     );
 
-    // 2. Check if the role exists, if not throw error
-    if (!role) {
-      throw new NotFoundException('Role not found');
-    }
-
-    // 3. Remove permissions from role
     await role.permissions.loadItems();
-    const permsToRemove = role.permissions
+    role.permissions
       .getItems()
-      .filter((p) => permissionIds.includes(p.id));
-    permsToRemove.forEach((perm) => role.permissions.remove(perm));
+      .filter((p) => permissionIds.includes(p.id))
+      .forEach((p) => role.permissions.remove(p));
+
     role.permissionCount = role.permissions.length;
 
-    // 4. Save role and return it
-    await this.roleRepository.getEntityManager().flush();
+    await this.roleRepo.getEntityManager().flush();
     return role;
   }
 
-  async assignRolesToUser(userId: string, roleIds: string[]): Promise<boolean> {
-    // 1. Find User
-    const user = await this.usersService.findOne(userId);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+  // --- User-Role Assignments ---
 
-    // 2. Check roles existence
-    const roles = await this.roleRepository.find(
+  async assignRolesToUser(userId: string, roleIds: string[]): Promise<boolean> {
+    const user = await this.usersService.findOne(userId);
+    if (!user) throw new NotFoundException('User not found');
+
+    const roles = await this.roleRepo.find(
       { id: { $in: roleIds } },
       { filters: { tenant: false } },
     );
+
     if (roles.length !== roleIds.length) {
       throw new NotFoundException('One or more roles not found');
     }
 
-    // 3. Assign roles to user
-    roles.forEach((role) => user.roles.push(role));
+    // MikroORM Collection add handles duplicates automatically
+    await user.roles.loadItems();
+    roles.forEach((role) => user.roles.add(role));
 
-    // 4. Save and return
-    await this.roleRepository.getEntityManager().flush();
+    await this.roleRepo.getEntityManager().flush();
     return true;
   }
 
@@ -192,22 +145,20 @@ export class RolesService {
     userId: string,
     roleIds: string[],
   ): Promise<boolean> {
-    // 1. Find User
     const user = await this.usersService.findOne(userId);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    if (!user) throw new NotFoundException('User not found');
 
-    // 2. Remove roles from user
-    const rolesToRemove = user.roles.filter((r) => roleIds.includes(r.id));
-    rolesToRemove.forEach((role) => user.roles.filter((r) => r.id !== role.id));
+    await user.roles.loadItems();
+    user.roles
+      .getItems()
+      .filter((r) => roleIds.includes(r.id))
+      .forEach((role) => user.roles.remove(role));
 
-    // 3. Save and return
-    await this.roleRepository.getEntityManager().flush();
+    await this.roleRepo.getEntityManager().flush();
     return true;
   }
 
   async deleteBulk(ids: string[]): Promise<number> {
-    return await this.roleRepository.nativeDelete({ id: { $in: ids } });
+    return this.roleRepo.nativeDelete({ id: { $in: ids } });
   }
 }

@@ -18,8 +18,7 @@ import { UserPermissions } from '@/components/web/users/user-form/user-permissio
 import { UserMetadata } from '@/components/web/users/user-form/user-metadata'
 import { SideBarForm } from '@/components/web/users/user-form/sidebar-form'
 import { useCreateUserMutation } from '@/lib/mutations'
-import { AuthSourceEnum } from '@repo/shared'
-import z from 'zod'
+import { AuthSourceEnum, UserDto, UserWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/users/create')({
   component: CreateUserPage,
@@ -44,13 +43,13 @@ function CreateUserPage() {
       externalId: '',
       isActive: true,
       isLicensed: false,
-      roles: [] as string[],
-      permissions: [] as string[],
-      groups: [] as string[],
+      roleIds: [] as string[],
+      permissionIds: [] as string[],
+      groupIds: [] as string[],
       metadata: {},
     } as UserDto,
     validators: {
-      onSubmit: CreateUserSchema,
+      onSubmit: UserWriteSchema,
     },
     onSubmit: async ({ value }) => {
       await mutation.mutateAsync(value)

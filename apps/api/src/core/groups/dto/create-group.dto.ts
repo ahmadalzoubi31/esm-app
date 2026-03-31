@@ -1,13 +1,17 @@
-import { IsArray, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   GroupTypeEnumSchema,
   type GroupDto,
   type GroupType,
 } from '@repo/shared';
-import { Role } from 'src/core/roles/entities/role.entity';
-import { Permission } from 'src/core/permissions/entities/permission.entity';
-import { User } from 'src/core/users/entities/user.entity';
 
 export class CreateGroupDto implements GroupDto {
   @ApiProperty({ example: 'Network' })
@@ -41,17 +45,21 @@ export class CreateGroupDto implements GroupDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  roles?: string[];
+  roleIds?: string[];
 
   @ApiProperty({ example: ['uuid-1', 'uuid-2'] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  permissions?: Permission[];
+  permissionIds?: string[];
 
   @ApiProperty({ example: ['uuid-1', 'uuid-2'] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  users?: User[];
+  memberIds?: string[];
+
+  @ApiProperty({ example: true })
+  @IsBoolean()
+  isActive: boolean;
 }

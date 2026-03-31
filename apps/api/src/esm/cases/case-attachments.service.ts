@@ -78,6 +78,7 @@ export class CaseAttachmentsService {
       mimeType: file.mimetype,
       size: file.size,
       storagePath: publicUrl,
+      isActive: true,
     });
 
     // 11: Persist attachment to database

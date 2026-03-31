@@ -3,63 +3,59 @@ import { CreateBusinessLineDto } from './dto/create-business-line.dto';
 import { UpdateBusinessLineDto } from './dto/update-business-line.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BusinessLine } from './entities/business-line.entity';
-import { EntityRepository, RequiredEntityData } from '@mikro-orm/core';
+import {
+  EntityRepository,
+  QueryOrder,
+  RequiredEntityData,
+} from '@mikro-orm/core';
 import { Tenant } from '../../tenants/entities/tenant.entity';
 
 @Injectable()
 export class BusinessLineService {
   constructor(
     @InjectRepository(BusinessLine)
-    private readonly businessLineRepository: EntityRepository<BusinessLine>,
+    private readonly repo: EntityRepository<BusinessLine>,
   ) {}
 
-  async create(
-    createBusinessLineDto: CreateBusinessLineDto,
-  ): Promise<BusinessLine> {
-    // 1: Get EntityManager
-    const em = this.businessLineRepository.getEntityManager();
+  // --- CRUD Operations ---
 
-    // 2: Get Tenant ID from Filter
+  async create(dto: CreateBusinessLineDto): Promise<BusinessLine> {
+    const em = this.repo.getEntityManager();
+
+    // 1. Safe Tenant Handling
     const tenantFilter = em.getFilterParams('tenant');
-
-    // 3: Get Tenant Reference
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
-    // create business line
-    const businessLine = this.businessLineRepository.create({
-      ...createBusinessLineDto,
-      isActive: true,
+    // 2. Create and persist
+    const category = this.repo.create({
+      ...dto,
       tenant: tenantRef,
     });
-    // save business line
-    await this.businessLineRepository
-      .getEntityManager()
-      .persist(businessLine)
-      .flush();
-    return businessLine;
+    await em.persist(category).flush();
+    return category;
   }
 
-  async findAll({ where }: { where?: any }): Promise<BusinessLine[]> {
-    return await this.businessLineRepository.find(where || {});
+  async findAll(where: any = {}): Promise<BusinessLine[]> {
+    return this.repo.find(where, { orderBy: { name: QueryOrder.ASC } });
   }
 
-  async findOne(id: string): Promise<BusinessLine | null> {
-    return await this.businessLineRepository.findOne({ id });
+  async findOne(id: string): Promise<BusinessLine> {
+    // Standardizing on findOneOrFail for consistent 404 behavior
+    return this.repo.findOneOrFail({ id });
   }
 
-  async update(
-    id: string,
-    updateBusinessLineDto: UpdateBusinessLineDto,
-  ): Promise<BusinessLine> {
-    const businessLine = await this.businessLineRepository.findOneOrFail({
-      id,
-    });
-    this.businessLineRepository.assign(businessLine, updateBusinessLineDto);
-    await this.businessLineRepository.getEntityManager().flush();
+  async update(id: string, dto: UpdateBusinessLineDto): Promise<BusinessLine> {
+    const businessLine = await this.findOne(id);
+    this.repo.assign(businessLine, dto);
+    await this.repo.getEntityManager().flush();
     return businessLine;
   }
 
   async remove(id: string): Promise<void> {
-    await this.businessLineRepository.nativeDelete({ id });
+    await this.repo.nativeDelete({ id });
+  }
+
+  async deleteBulk(ids: string[]): Promise<number> {
+    return this.repo.nativeDelete({ id: { $in: ids } });
   }
 }

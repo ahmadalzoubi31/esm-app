@@ -37,7 +37,6 @@ export class UsersController {
   @Post()
   @ApiOperation({
     summary: 'Create a user',
-    description: 'Create a new user.',
   })
   @ApiResponse({
     status: 201,
@@ -152,25 +151,25 @@ export class UsersController {
     return await this.usersService.remove(id);
   }
 
-  @Patch()
-  @ApiOperation({
-    summary: 'Update bulk users',
-    description: 'Update bulk users.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Bulk users have been successfully updated.',
-  })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @UseGuards(PoliciesGuard)
-  @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Update, User))
-  async updateBulk(@Body() bulkUpdateDto: BulkUpdateUserDto) {
-    return await this.usersService.updateBulk(
-      bulkUpdateDto.ids,
-      bulkUpdateDto.data,
-    );
-  }
+  // @Patch()
+  // @ApiOperation({
+  //   summary: 'Update bulk users',
+  //   description: 'Update bulk users.',
+  // })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'Bulk users have been successfully updated.',
+  // })
+  // @ApiResponse({ status: 400, description: 'Bad Request.' })
+  // @ApiResponse({ status: 403, description: 'Forbidden.' })
+  // @UseGuards(PoliciesGuard)
+  // @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Update, User))
+  // async updateBulk(@Body() bulkUpdateDto: BulkUpdateUserDto) {
+  //   return await this.usersService.updateBulk(
+  //     bulkUpdateDto.ids,
+  //     bulkUpdateDto.data,
+  //   );
+  // }
 
   @Delete()
   @ApiOperation({

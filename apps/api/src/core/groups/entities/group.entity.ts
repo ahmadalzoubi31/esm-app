@@ -30,23 +30,19 @@ export class Group extends TenantBaseEntity implements GroupSchema {
 
   @ManyToOne(() => BusinessLine, {
     fieldName: 'businessLineId',
+    inversedBy: 'groups',
   })
   businessLine: BusinessLine;
 
-  @ManyToOne(() => Department, { nullable: true })
-  department?: Department;
+  // OWNER: Group "owns" its members
+  @ManyToMany(() => User)
+  members = new Collection<User>(this);
 
-  @ManyToMany(() => Role, (role) => role.groups)
-  roles: Role[];
+  // OWNER: Group "owns" its roles
+  @ManyToMany(() => Role)
+  roles = new Collection<Role>(this);
 
-  @ManyToMany(() => Permission, (permission) => permission.groups)
-  permissions: Permission[];
-
-  @ManyToMany(() => User, (user) => user.groups, {
-    owner: true,
-    pivotTable: 'group_users',
-    joinColumn: 'groupId',
-    inverseJoinColumn: 'userId',
-  })
-  users: string[];
+  // OWNER: Group "owns" its specific permissions
+  @ManyToMany(() => Permission)
+  permissions = new Collection<Permission>(this);
 }

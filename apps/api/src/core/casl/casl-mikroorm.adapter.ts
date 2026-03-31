@@ -12,6 +12,12 @@ import { Permission } from '../permissions/entities/permission.entity';
 import { Group } from '../groups/entities/group.entity';
 import { BusinessLine } from '../business-lines/entities/business-line.entity';
 import { User } from '../users/entities/user.entity';
+import { Case } from 'src/esm/cases/entities/case.entity';
+import { CaseAttachment } from 'src/esm/cases/entities/case-attachment.entity';
+import { CaseComment } from 'src/esm/cases/entities/case-comment.entity';
+import { SlaTarget } from '../sla/entities/sla-target.entity';
+import { Department } from '../departments/entities/department.entity';
+import { Category } from '../categories/entities/category.entity';
 
 type Subjects =
   | InferSubjects<
@@ -20,6 +26,12 @@ type Subjects =
       | typeof Permission
       | typeof Group
       | typeof BusinessLine
+      | typeof Case
+      | typeof CaseAttachment
+      | typeof CaseComment
+      | typeof SlaTarget
+      | typeof Category
+      | typeof Department
     >
   | 'all';
 

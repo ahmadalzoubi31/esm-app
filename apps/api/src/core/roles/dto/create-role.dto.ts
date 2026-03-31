@@ -27,5 +27,5 @@ export class CreateRoleDto implements RoleDto {
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  permissionIds?: string[];
+  permissionIds: string[];
 }

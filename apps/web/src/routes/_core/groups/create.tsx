@@ -9,8 +9,7 @@ import { GroupPermissions } from '@/components/web/groups/group-form/group-permi
 import { GroupUsers } from '@/components/web/groups/group-form/group-users'
 import { SideBarForm } from '@/components/web/groups/group-form/sidebar-form'
 import { useCreateGroupMutation } from '@/lib/mutations/groups.mutation'
-import { GroupSchema, CreateGroupSchema } from '@/schemas/group.schema'
-import z from 'zod'
+import { GroupDto, GroupWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/groups/create')({
   component: CreateGroupPage,
@@ -33,7 +32,7 @@ function CreateGroupPage() {
       users: [],
     } as GroupDto,
     validators: {
-      onSubmit: CreateGroupSchema,
+      onSubmit: GroupWriteSchema,
     },
     onSubmit: async ({ value }) => {
       const submitData = { ...value }

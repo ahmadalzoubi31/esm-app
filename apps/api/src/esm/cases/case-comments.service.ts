@@ -42,6 +42,7 @@ export class CaseCommentsService {
       body: dto.body,
       isPrivate: dto.isPrivate,
       tenant: tenantRef,
+      isActive: true,
     });
 
     // 6: Persist comment to database

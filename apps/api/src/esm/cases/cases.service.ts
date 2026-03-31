@@ -1,52 +1,34 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import {
+  EntityRepository,
+  QueryOrder,
+  RequiredEntityData,
+} from '@mikro-orm/core';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CreateCaseDto } from './dto/create-case.dto';
-import { UpdateCaseDto } from './dto/update-case.dto';
 import { Case } from './entities/case.entity';
 import { Tenant } from '../../tenants/entities/tenant.entity';
 import { BusinessLine } from '../../core/business-lines/entities/business-line.entity';
 import { Category } from '../../core/categories/entities/category.entity';
 import { User } from '../../core/users/entities/user.entity';
-import { CasePriority } from './constants/case-priority.constant';
-import { CaseStatus } from './constants/case-status.constant';
-import { CASE_EVENTS } from './constants/case-events.constant';
 import { Group } from '../../core/groups/entities/group.entity';
 import { Service } from '../catalog/services/entities/service.entity';
-import {
-  CaseAssigneeUpdatedEvent,
-  CaseBusinessLineUpdatedEvent,
-  CaseCategoryUpdatedEvent,
-  CaseCreatedEvent,
-  CaseDeletedEvent,
-  CaseGroupUpdatedEvent,
-  CasePriorityUpdatedEvent,
-  CaseServiceUpdatedEvent,
-  CaseStatusUpdatedEvent,
-  CaseSubcategoryUpdatedEvent,
-} from './events/case.events';
+import { CaseStatus } from './constants/case-status.constant';
+import { CasePriority } from './constants/case-priority.constant';
+import { CASE_EVENTS } from './constants/case-events.constant';
+import { CreateCaseDto } from './dto/create-case.dto';
+import { UpdateCaseDto } from './dto/update-case.dto';
+import * as Events from './events/case.events';
 
 @Injectable()
 export class CasesService {
-  private async generateCaseNumber(): Promise<string> {
-    const result = await this.caseRepo
-      .getEntityManager()
-      .getConnection()
-      .execute("SELECT nextval('case_number_seq') as nextval");
-    const nextval = result[0].nextval;
-    return `CS-${String(nextval).padStart(6, '0')}`;
-  }
-
   constructor(
-    @InjectRepository(Case)
-    private readonly caseRepo: EntityRepository<Case>,
+    @InjectRepository(Case) private readonly caseRepo: EntityRepository<Case>,
     @InjectRepository(BusinessLine)
     private readonly businessLineRepo: EntityRepository<BusinessLine>,
     @InjectRepository(Category)
     private readonly categoryRepo: EntityRepository<Category>,
-    @InjectRepository(User)
-    private readonly userRepo: EntityRepository<User>,
+    @InjectRepository(User) private readonly userRepo: EntityRepository<User>,
     @InjectRepository(Group)
     private readonly groupRepo: EntityRepository<Group>,
     @InjectRepository(Service)
@@ -54,71 +36,46 @@ export class CasesService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
+  private async generateCaseNumber(): Promise<string> {
+    const [result] = await this.caseRepo
+      .getEntityManager()
+      .getConnection()
+      .execute("SELECT nextval('case_number_seq') as nextval");
+    return `CS-${String(result.nextval).padStart(6, '0')}`;
+  }
+
   async create(dto: CreateCaseDto): Promise<Case> {
-    // 1: Get EntityManager
     const em = this.caseRepo.getEntityManager();
 
-    // 2: Get Tenant ID from Filter
-    const tenantFilter = em.getFilterParams('tenant');
+    // 1. Parallel Validation
+    await this.validateReferences(dto);
 
-    // 3: Get Tenant Reference
+    // 2. Safe Tenant Handling
+    const tenantFilter = em.getFilterParams('tenant');
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
-    // 4: Set up reference validations
-    const validations: { id?: string; repo: any; name: string }[] = [
-      {
-        id: dto.businessLineId,
-        repo: this.businessLineRepo,
-        name: 'Business line',
-      },
-      { id: dto.categoryId, repo: this.categoryRepo, name: 'Category' },
-      {
-        id: dto.subcategoryId,
-        repo: this.categoryRepo,
-        name: 'Subcategory',
-      },
-      { id: dto.requesterId, repo: this.userRepo, name: 'Requester' },
-      { id: dto.assigneeId, repo: this.userRepo, name: 'Assignee' },
-      {
-        id: dto.assignmentGroupId,
-        repo: this.groupRepo,
-        name: 'Assignment group',
-      },
-    ];
-
-    // 5: Run parallel existence checks
-    await Promise.all(
-      validations
-        .filter((v) => v.id)
-        .map(async ({ id, repo, name }) => {
-          const exists = await repo.count({ id: id as string });
-          if (!exists) throw new NotFoundException(`${name} not found`);
-        }),
-    );
-
-    // 6: Create new case entity
+    // 3. Create Entity
     const newCase = this.caseRepo.create({
       ...dto,
-      tenant: tenantRef,
       number: await this.generateCaseNumber(),
       status: dto.status ?? CaseStatus.NEW,
       priority: dto.priority ?? CasePriority.LOW,
-      category: dto.categoryId,
-      subcategory: dto.subcategoryId,
-      requester: dto.requesterId,
-      assignee: dto.assigneeId,
-      assignmentGroup: dto.assignmentGroupId,
-      businessLine: dto.businessLineId,
-      affectedService: dto.affectedServiceId,
+      category: dto.categoryId as any,
+      subcategory: dto.subcategoryId as any,
+      requester: dto.requesterId as any,
+      assignee: dto.assigneeId as any,
+      assignmentGroup: dto.assignmentGroupId as any,
+      businessLine: dto.businessLineId as any,
+      affectedService: dto.affectedServiceId as any,
+      tenant: tenantRef,
+      isActive: false,
     });
+    await em.persist(newCase).flush();
 
-    // 7: Persist case to database
-    await this.caseRepo.getEntityManager().persist(newCase).flush();
-
-    // 8: Emit case.created event (after successful flush)
+    // 3. Emit Event
     this.eventEmitter.emit(
       CASE_EVENTS.CREATED,
-      new CaseCreatedEvent({
+      new Events.CaseCreatedEvent({
         caseId: newCase.id,
         businessLineId: dto.businessLineId,
         priority: newCase.priority,
@@ -126,102 +83,28 @@ export class CasesService {
         _event: CASE_EVENTS.CREATED,
       }),
     );
-    // this.eventEmitter.emit(CASE_EVENTS.CREATED, {
-    //   caseId: newCase.id,
-    //   businessLineId: dto.businessLineId,
-    //   priority: newCase.priority,
-    //   status: newCase.status,
-    //   _event: CASE_EVENTS.CREATED,
-    // });
 
     return newCase;
   }
 
-  async findAll(): Promise<Case[]> {
-    return this.caseRepo.findAll({
-      populate: [
-        'category',
-        'requester',
-        'assignee',
-        'assignmentGroup',
-        'businessLine',
-        'affectedService',
-      ],
-    });
-  }
-
-  async findOne(id: string): Promise<Case> {
-    const caseEntity = await this.caseRepo.findOne(
-      { id },
-      {
-        populate: [
-          'category',
-          'requester',
-          'assignee',
-          'assignmentGroup',
-          'businessLine',
-          'affectedService',
-        ],
-      },
-    );
-    if (!caseEntity) {
-      throw new NotFoundException(`Case with ID ${id} not found`);
-    }
-    return caseEntity;
-  }
-
   async update(id: string, dto: UpdateCaseDto): Promise<Case> {
-    // 1: Set up reference validations
-    const validations: { id?: string; repo: any; name: string }[] = [
-      { id: dto.categoryId, repo: this.categoryRepo, name: 'Category' },
-      {
-        id: dto.subcategoryId,
-        repo: this.categoryRepo,
-        name: 'Subcategory',
-      },
-      { id: dto.requesterId, repo: this.userRepo, name: 'Requester' },
-      { id: dto.assigneeId, repo: this.userRepo, name: 'Assignee' },
-      {
-        id: dto.assignmentGroupId,
-        repo: this.groupRepo,
-        name: 'Assignment group',
-      },
-      {
-        id: dto.businessLineId,
-        repo: this.businessLineRepo,
-        name: 'Business line',
-      },
-      {
-        id: dto.affectedServiceId,
-        repo: this.serviceRepo,
-        name: 'Affected service',
-      },
-    ];
-
-    // 2: Run parallel existence checks
-    await Promise.all(
-      validations
-        .filter((v) => v.id)
-        .map(async ({ id, repo, name }) => {
-          const exists = await repo.count({ id: id as string });
-          if (!exists) throw new NotFoundException(`${name} not found`);
-        }),
-    );
-
-    // 3: Fetch existing case entity
+    await this.validateReferences(dto);
     const caseEntity = await this.findOne(id);
+    const em = this.caseRepo.getEntityManager();
 
-    // 4: Snapshot fields that trigger events BEFORE mutation
-    const oldStatus = caseEntity.status;
-    const oldPriority = caseEntity.priority;
-    const oldAssigneeId = caseEntity.assignee?.id;
-    const oldGroupId = caseEntity.assignmentGroup?.id;
-    const oldCategoryId = caseEntity.category?.id;
-    const oldSubcategoryId = caseEntity.subcategory?.id;
-    const oldBusinessLineId = caseEntity.businessLine?.id;
-    const oldServiceId = caseEntity.affectedService?.id;
+    // 1. Snapshot for events
+    const snapshot = {
+      status: caseEntity.status,
+      priority: caseEntity.priority,
+      assigneeId: caseEntity.assignee?.id,
+      groupId: caseEntity.assignmentGroup?.id,
+      categoryId: caseEntity.category?.id,
+      subcategoryId: caseEntity.subcategory?.id,
+      businessLineId: caseEntity.businessLine?.id,
+      serviceId: caseEntity.affectedService?.id,
+    };
 
-    // 5: Destructure DTO properties
+    // 2. Map DTO to Entity structure
     const {
       categoryId: category,
       subcategoryId: subcategory,
@@ -234,128 +117,151 @@ export class CasesService {
       ...rest
     } = dto;
 
-    // 6: Construct updates object
-    const updates: Record<string, unknown> = { ...rest };
-    if (category !== undefined) updates.category = category;
-    if (subcategory !== undefined) updates.subcategory = subcategory;
-    if (requester !== undefined) updates.requester = requester;
-    if (assignee !== undefined) updates.assignee = assignee;
-    if (assignmentGroup !== undefined)
-      updates.assignmentGroup = assignmentGroup;
-    if (businessLine !== undefined) updates.businessLine = businessLine;
-    if (affectedService !== undefined)
-      updates.affectedService = affectedService;
-    if (requestCard !== undefined) updates.requestCard = requestCard;
+    this.caseRepo.assign(caseEntity, {
+      ...rest,
+      category,
+      subcategory,
+      requester,
+      assignee,
+      assignmentGroup,
+      businessLine,
+      affectedService,
+      requestCard,
+    });
 
-    // 7: Assign updates to case entity
-    this.caseRepo.assign(caseEntity, updates);
+    await em.flush();
 
-    // 8: Flush changes to database
-    await this.caseRepo.getEntityManager().flush();
-
-    // 9: Emit change events (only for fields that actually changed)
-    if (dto.status && dto.status !== oldStatus) {
-      this.eventEmitter.emit(
-        CASE_EVENTS.STATUS_UPDATED,
-        new CaseStatusUpdatedEvent({
-          caseId: id,
-          oldStatus,
-          newStatus: dto.status,
-        }),
-      );
-    }
-
-    if (dto.assigneeId && dto.assigneeId !== oldAssigneeId) {
-      this.eventEmitter.emit(
-        CASE_EVENTS.ASSIGNEE_UPDATED,
-        new CaseAssigneeUpdatedEvent({
-          caseId: id,
-          oldAssigneeId,
-          newAssigneeId: dto.assigneeId,
-        }),
-      );
-    }
-
-    if (dto.assignmentGroupId && dto.assignmentGroupId !== oldGroupId) {
-      this.eventEmitter.emit(
-        CASE_EVENTS.GROUP_UPDATED,
-        new CaseGroupUpdatedEvent({
-          caseId: id,
-          oldGroupId,
-          newGroupId: dto.assignmentGroupId,
-        }),
-      );
-    }
-
-    if (dto.priority && dto.priority !== oldPriority) {
-      this.eventEmitter.emit(
-        CASE_EVENTS.PRIORITY_UPDATED,
-        new CasePriorityUpdatedEvent({
-          caseId: id,
-          oldPriority,
-          newPriority: dto.priority,
-        }),
-      );
-    }
-
-    if (dto.categoryId && dto.categoryId !== oldCategoryId) {
-      this.eventEmitter.emit(
-        CASE_EVENTS.CATEGORY_UPDATED,
-        new CaseCategoryUpdatedEvent({
-          caseId: id,
-          oldCategoryId,
-          newCategoryId: dto.categoryId,
-        }),
-      );
-    }
-
-    if (dto.subcategoryId && dto.subcategoryId !== oldSubcategoryId) {
-      this.eventEmitter.emit(
-        CASE_EVENTS.SUBCATEGORY_UPDATED,
-        new CaseSubcategoryUpdatedEvent({
-          caseId: id,
-          oldSubcategoryId,
-          newSubcategoryId: dto.subcategoryId,
-        }),
-      );
-    }
-
-    if (dto.businessLineId && dto.businessLineId !== oldBusinessLineId) {
-      this.eventEmitter.emit(
-        CASE_EVENTS.BUSINESS_LINE_UPDATED,
-        new CaseBusinessLineUpdatedEvent({
-          caseId: id,
-          oldBusinessLineId,
-          newBusinessLineId: dto.businessLineId,
-        }),
-      );
-    }
-
-    if (dto.affectedServiceId && dto.affectedServiceId !== oldServiceId) {
-      this.eventEmitter.emit(
-        CASE_EVENTS.SERVICE_UPDATED,
-        new CaseServiceUpdatedEvent({
-          caseId: id,
-          oldServiceId,
-          newServiceId: dto.affectedServiceId,
-        }),
-      );
-    }
+    // 3. Trigger events dynamically
+    this.triggerUpdateEvents(id, dto, snapshot);
 
     return caseEntity;
+  }
+
+  async findAll(): Promise<Case[]> {
+    return this.caseRepo.find(
+      {},
+      {
+        orderBy: { createdAt: QueryOrder.DESC },
+      },
+    );
+  }
+
+  async findOne(id: string): Promise<Case> {
+    return this.caseRepo.findOneOrFail({ id });
   }
 
   async remove(id: string): Promise<void> {
     const caseEntity = await this.findOne(id);
     await this.caseRepo.getEntityManager().removeAndFlush(caseEntity);
-
-    // Emit case.deleted event
     this.eventEmitter.emit(
       CASE_EVENTS.DELETED,
-      new CaseDeletedEvent({
+      new Events.CaseDeletedEvent({
         caseId: id,
         number: caseEntity.number,
       }),
     );
+  }
+
+  // --- Helper Methods ---
+
+  private async validateReferences(
+    dto: Partial<CreateCaseDto | UpdateCaseDto>,
+  ): Promise<void> {
+    const checks = [
+      {
+        id: dto.businessLineId,
+        repo: this.businessLineRepo,
+        label: 'Business line',
+      },
+      { id: dto.categoryId, repo: this.categoryRepo, label: 'Category' },
+      { id: dto.subcategoryId, repo: this.categoryRepo, label: 'Subcategory' },
+      { id: dto.requesterId, repo: this.userRepo, label: 'Requester' },
+      { id: dto.assigneeId, repo: this.userRepo, label: 'Assignee' },
+      {
+        id: dto.assignmentGroupId,
+        repo: this.groupRepo,
+        label: 'Assignment group',
+      },
+      {
+        id: (dto as any).affectedServiceId,
+        repo: this.serviceRepo,
+        label: 'Service',
+      },
+    ].filter((c) => c.id);
+
+    await Promise.all(
+      checks.map(async ({ id, repo, label }) => {
+        const exists = await repo.count({ id: id as string });
+        if (!exists) throw new NotFoundException(`${label} not found`);
+      }),
+    );
+  }
+
+  private triggerUpdateEvents(id: string, dto: UpdateCaseDto, old: any): void {
+    const mapping = [
+      {
+        key: 'status',
+        event: CASE_EVENTS.STATUS_UPDATED,
+        class: Events.CaseStatusUpdatedEvent,
+        oldProp: 'status',
+      },
+      {
+        key: 'assigneeId',
+        event: CASE_EVENTS.ASSIGNEE_UPDATED,
+        class: Events.CaseAssigneeUpdatedEvent,
+        oldProp: 'assigneeId',
+      },
+      {
+        key: 'assignmentGroupId',
+        event: CASE_EVENTS.GROUP_UPDATED,
+        class: Events.CaseGroupUpdatedEvent,
+        oldProp: 'groupId',
+      },
+      {
+        key: 'priority',
+        event: CASE_EVENTS.PRIORITY_UPDATED,
+        class: Events.CasePriorityUpdatedEvent,
+        oldProp: 'priority',
+      },
+      {
+        key: 'categoryId',
+        event: CASE_EVENTS.CATEGORY_UPDATED,
+        class: Events.CaseCategoryUpdatedEvent,
+        oldProp: 'categoryId',
+      },
+      {
+        key: 'subcategoryId',
+        event: CASE_EVENTS.SUBCATEGORY_UPDATED,
+        class: Events.CaseSubcategoryUpdatedEvent,
+        oldProp: 'subcategoryId',
+      },
+      {
+        key: 'businessLineId',
+        event: CASE_EVENTS.BUSINESS_LINE_UPDATED,
+        class: Events.CaseBusinessLineUpdatedEvent,
+        oldProp: 'businessLineId',
+      },
+      {
+        key: 'affectedServiceId',
+        event: CASE_EVENTS.SERVICE_UPDATED,
+        class: Events.CaseServiceUpdatedEvent,
+        oldProp: 'serviceId',
+      },
+    ];
+
+    for (const m of mapping) {
+      const newVal = (dto as any)[m.key];
+      if (newVal && newVal !== old[m.oldProp]) {
+        this.eventEmitter.emit(
+          m.event,
+          new (m.class as any)({
+            caseId: id,
+            [`old${m.key.charAt(0).toUpperCase() + m.key.slice(1)}`]:
+              old[m.oldProp],
+            [`new${m.key.charAt(0).toUpperCase() + m.key.slice(1)}`]: newVal,
+          }),
+        );
+      }
+    }
   }
 }

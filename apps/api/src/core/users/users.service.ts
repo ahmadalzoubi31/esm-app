@@ -1,13 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityRepository, QueryOrder } from '@mikro-orm/core';
 import { User } from './entities/user.entity';
 import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
 import { Group } from '../groups/entities/group.entity';
 import { Tenant } from '../../tenants/entities/tenant.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -17,54 +17,128 @@ export class UsersService {
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
-    // 1: Get EntityManager
     const em = this.userRepository.getEntityManager();
+    const { roleIds, permissionIds, groupIds, ...userData } = dto;
 
-    // 2: Extract collection fields from DTO
-    const { roles, permissions, groups, ...userDataToCreate } = dto;
-
-    // 3: Get Tenant ID from Filter
+    // 1. Safe Tenant Handling
     const tenantFilter = em.getFilterParams('tenant');
-
-    // 3.1: Get Tenant Reference
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
-    // 4: Create user with non-collection fields
+    // 2. Create base user (Collections are initialized as empty by MikroORM)
     const user = this.userRepository.create({
-      ...userDataToCreate,
+      ...userData,
       tenant: tenantRef,
-      roles: '',
-      permissions: '',
-      groups: '',
     });
 
-    // 5: Handle roles collection
-    if (roles && roles.length > 0) {
-      const roleRefs = roles.map((roleId) => em.getReference(Role, roleId));
-      user.roles.push(...roleRefs);
+    // 3. Handle Collections using References (Fast, no extra SELECTs)
+    if (roleIds?.length) {
+      user.roles.set(roleIds.map((id) => em.getReference(Role, id)));
     }
-
-    // 5: Handle permissions collection
-    if (permissions && permissions.length > 0) {
-      const permRefs = permissions.map((permId) =>
-        em.getReference(Permission, permId),
+    if (permissionIds?.length) {
+      user.permissions.set(
+        permissionIds.map((id) => em.getReference(Permission, id)),
       );
-      user.permissions.push(...permRefs);
+    }
+    if (groupIds?.length) {
+      user.groups.set(groupIds.map((id) => em.getReference(Group, id)));
     }
 
-    // 6: Handle groups collection
-    if (groups && groups.length > 0) {
-      const groupRefs = groups.map((groupId) =>
-        em.getReference(Group, groupId),
-      );
-      user.groups.push(...groupRefs);
-    }
-
-    // 7: Save user and return
     await em.persist(user).flush();
-
-    // 8: Return user
     return user;
+  }
+
+  async findAll({
+    where = {},
+    search,
+  }: {
+    where?: any;
+    search?: string;
+  }): Promise<User[]> {
+    const query = { ...where };
+
+    if (search) {
+      query.$or = [
+        { firstName: { $ilike: `%${search}%` } },
+        { lastName: { $ilike: `%${search}%` } },
+        { username: { $ilike: `%${search}%` } },
+        { email: { $ilike: `%${search}%` } },
+      ];
+    }
+
+    return this.userRepository.find(query, {
+      populate: [
+        'roles.permissions',
+        'permissions',
+        'groups.roles.permissions',
+        'groups.permissions',
+        'department',
+      ],
+      limit: search ? 20 : undefined,
+      orderBy: { createdAt: QueryOrder.DESC },
+    });
+  }
+
+  async findOne(id: string): Promise<User> {
+    return this.userRepository.findOneOrFail(
+      { id },
+      {
+        populate: [
+          'roles.permissions',
+          'permissions',
+          'groups.roles.permissions',
+          'department',
+        ],
+        filters: { tenant: false },
+      },
+    );
+  }
+
+  async update(id: string, dto: UpdateUserDto): Promise<User> {
+    const user = await this.findOne(id);
+    const em = this.userRepository.getEntityManager();
+    const { roleIds, permissionIds, groupIds, ...userDataToUpdate } = dto;
+
+    // 1. Update basic fields
+    this.userRepository.assign(user, userDataToUpdate);
+
+    // 2. Handle Collections with .set() (Clears old, adds new)
+    if (roleIds !== undefined) {
+      user.roles.set(roleIds.map((id) => em.getReference(Role, id)));
+    }
+    if (permissionIds !== undefined) {
+      user.permissions.set(
+        permissionIds.map((id) => em.getReference(Permission, id)),
+      );
+    }
+    if (groupIds !== undefined) {
+      user.groups.set(groupIds.map((id) => em.getReference(Group, id)));
+    }
+
+    // 3. Business Rule: Licensing check
+    if (user.isLicensed === false) {
+      user.roles.removeAll();
+      user.permissions.removeAll();
+    }
+
+    await em.flush();
+    return user;
+  }
+
+  // --- Utility Methods ---
+
+  async findOneByUsername(username: string): Promise<User | null> {
+    return this.userRepository.findOne(
+      { username },
+      { filters: { tenant: false } },
+    );
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.userRepository.nativeDelete({ id });
+  }
+
+  async deleteBulk(ids: string[]): Promise<number> {
+    return this.userRepository.nativeDelete({ id: { $in: ids } });
   }
 
   async uploadAvatar(file: Express.Multer.File): Promise<string> {
@@ -79,11 +153,9 @@ export class UsersService {
 
     const { createClient } = await import('@supabase/supabase-js');
     const supabase = createClient(supabaseUrl, supabaseKey);
-
     const fileExt = file.originalname.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
     const filePath = `avatars/${fileName}`;
-
     const { data, error } = await supabase.storage
       .from('avatars')
       .upload(filePath, file.buffer, {
@@ -98,162 +170,6 @@ export class UsersService {
     const {
       data: { publicUrl },
     } = supabase.storage.from('avatars').getPublicUrl(filePath);
-
     return publicUrl;
-  }
-
-  async findAll({
-    where = {},
-    search,
-  }: {
-    where?: Record<string, unknown>;
-    search?: string;
-  }): Promise<User[]> {
-    const query: Record<string, unknown> = { ...where };
-
-    if (search) {
-      query['$or'] = [
-        { firstName: { $ilike: `%${search}%` } },
-        { lastName: { $ilike: `%${search}%` } },
-        { username: { $ilike: `%${search}%` } },
-        { email: { $ilike: `%${search}%` } },
-      ];
-    }
-
-    return await this.userRepository.find(query, {
-      populate: [
-        'roles',
-        'roles.permissions',
-        'permissions',
-        'groups',
-        'groups.roles',
-        'groups.roles.permissions',
-        'groups.permissions',
-        'department',
-      ],
-      limit: search ? 20 : undefined,
-      filters: { tenant: true },
-    });
-  }
-
-  async findOne(id: string): Promise<User | null> {
-    return await this.userRepository.findOne(
-      { id },
-      {
-        populate: [
-          'roles',
-          'roles.permissions',
-          'permissions',
-          'groups',
-          'groups.roles',
-          'groups.roles.permissions',
-          'groups.permissions',
-          'department',
-        ],
-        filters: { tenant: false },
-      },
-    );
-  }
-
-  async findOneByUsername(username: string): Promise<User | null> {
-    return await this.userRepository.findOne(
-      { username },
-      {
-        populate: [
-          'roles',
-          'roles.permissions',
-          'permissions',
-          'groups',
-          'groups.roles',
-          'groups.roles.permissions',
-          'groups.permissions',
-          'department',
-        ],
-        filters: { tenant: false },
-      },
-    );
-  }
-
-  async findOneByUsernameForAuth(username: string): Promise<User | null> {
-    return await this.userRepository.findOne(
-      { username },
-      { filters: { tenant: false } },
-    );
-  }
-
-  async update(id: string, dto: UpdateUserDto): Promise<User> {
-    // 1: Find user
-    const user = await this.userRepository.findOneOrFail(
-      { id },
-      {
-        populate: ['roles', 'permissions', 'groups', 'department'],
-        filters: { tenant: false },
-      },
-    );
-
-    // 2: Get EntityManager
-    const em = this.userRepository.getEntityManager();
-
-    // 3: Extract collection fields from DTO
-    const { roles, permissions, groups, ...userDataToUpdate } = dto;
-
-    // 4: Explicitly handle roles collection
-    if (roles !== undefined) {
-      if (roles.length > 0) {
-        const roleRefs = roles.map((roleId) => em.getReference(Role, roleId));
-        user.roles.push(...roleRefs);
-      } else {
-        user.roles = [];
-      }
-    }
-
-    // 5: Explicitly handle permissions collection
-    if (permissions !== undefined) {
-      if (permissions.length > 0) {
-        const permRefs = permissions.map((permId) =>
-          em.getReference(Permission, permId),
-        );
-        user.permissions.push(...permRefs);
-      } else {
-        user.permissions = [];
-      }
-    }
-
-    // 6: Explicitly handle groups collection
-    if (groups !== undefined) {
-      if (groups.length > 0) {
-        const groupRefs = groups.map((groupId) =>
-          em.getReference(Group, groupId),
-        );
-        user.groups.push(...groupRefs);
-      } else {
-        user.groups = [];
-      }
-    }
-
-    // 7: Update user with remaining fields (no collection fields)
-    this.userRepository.assign(user, userDataToUpdate);
-
-    // 8: If isLicensed is set to false (or remains false), ensure roles/permissions are removed
-    if (user.isLicensed === false) {
-      user.roles = [];
-      user.permissions = [];
-    }
-
-    // 9: Save user
-    await em.flush();
-    return user;
-  }
-
-  async remove(id: string): Promise<void> {
-    await this.userRepository.nativeDelete({ id });
-  }
-
-  async updateBulk(ids: string[], dto: UpdateUserDto): Promise<number> {
-    return await this.userRepository.nativeUpdate({ id: { $in: ids } }, dto);
-  }
-
-  async deleteBulk(ids: string[]): Promise<number> {
-    return await this.userRepository.nativeDelete({ id: { $in: ids } });
   }
 }

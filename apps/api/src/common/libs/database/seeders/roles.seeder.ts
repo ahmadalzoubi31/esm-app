@@ -179,7 +179,7 @@ export class RoleSeeder extends Seeder {
       // 4: Check if any roles already exist for this tenant
       const existingRoles = await roleRepo.find(
         {
-          key: { $in: this.data.map((d) => this.generateKey(d.name)) },
+          name: { $in: this.data.map((d) => d.name) },
           tenant: tenantId,
         },
         { filters: { tenant: false } },
@@ -213,13 +213,13 @@ export class RoleSeeder extends Seeder {
 
         // 6.3. Create role
         roleRepo.create({
-          id: crypto.randomUUID(),
           name: roleData.name,
-          key: this.generateKey(roleData.name),
           description: roleData.description,
           permissions: permissions,
           permissionCount: permissions.length,
+          userCount: 0,
           tenant: tenantRef,
+          isActive: false,
         });
 
         console.log(

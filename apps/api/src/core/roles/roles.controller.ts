@@ -115,22 +115,6 @@ export class RolesController {
     return await this.rolesService.remove(id);
   }
 
-  @Get(':id/permissions')
-  @ApiOperation({
-    summary: 'Find permissions of a role',
-    description: 'Find permissions of a role',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Return permissions of a role.',
-    type: [Permission],
-  })
-  @ApiResponse({ status: 404, description: 'Role not found.' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
-  async findPermissions(@Param('id') id: string) {
-    return await this.rolesService.findPermissions(id);
-  }
-
   @Post(':id/permissions')
   @ApiOperation({
     summary: 'Assign permissions to a role',

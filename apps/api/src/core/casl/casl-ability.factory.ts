@@ -12,6 +12,8 @@ import { Case } from '../../esm/cases/entities/case.entity';
 import { CaseAttachment } from '../../esm/cases/entities/case-attachment.entity';
 import { CaseComment } from '../../esm/cases/entities/case-comment.entity';
 import { SlaTarget } from '../sla/entities/sla-target.entity';
+import { Category } from '../categories/entities/category.entity';
+import { Department } from '../departments/entities/department.entity';
 
 type Subjects =
   | InferSubjects<
@@ -24,6 +26,8 @@ type Subjects =
       | typeof CaseAttachment
       | typeof CaseComment
       | typeof SlaTarget
+      | typeof Category
+      | typeof Department
     >
   | 'all';
 

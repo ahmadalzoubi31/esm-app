@@ -50,6 +50,8 @@ export class UserSeeder extends Seeder {
       isLicensed: true,
       roles: [systemAdminRole],
       tenant,
+      permissions: '',
+      groups: '',
     });
 
     await em.flush();

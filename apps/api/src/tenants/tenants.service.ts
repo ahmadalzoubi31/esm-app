@@ -1,46 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, RequiredEntityData } from '@mikro-orm/core';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { Tenant } from './entities/tenant.entity';
+import { randomBytes } from 'crypto';
+import { User } from '../core/users/entities/user.entity';
+import { AuthSourceEnum } from '@repo/shared';
 
 @Injectable()
 export class TenantsService {
   constructor(private readonly em: EntityManager) {}
 
-  async create(createTenantDto: CreateTenantDto) {
-    const tenant = this.em.create(Tenant, createTenantDto);
-    this.em.persist(tenant); // Persist first, flush later
-
-    // Import needed dynamically to avoid circular issues or just at top level.
-    const { User } = await import('../core/users/entities/user.entity');
-    const { randomBytes } = await import('crypto');
-    const { AuthSource } =
-      await import('../core/users/constants/auth-source.constant');
+  async create(dto: CreateTenantDto) {
+    // 1. Create the Tenant first
+    const tenant = this.em.create(Tenant, dto as RequiredEntityData<Tenant>);
+    this.em.persist(tenant);
 
     const rawPassword = randomBytes(8).toString('hex');
 
+    // 3. Create the Activation User
     const activationUser = this.em.create(User, {
       username: `admin@${tenant.slug}`,
       email: `admin@${tenant.slug}.local`,
       firstName: 'Activation',
       lastName: 'User',
-      authSource: AuthSource.LOCAL,
+      authSource: AuthSourceEnum.local,
       isActive: true,
       isLicensed: true,
       password: rawPassword,
       tenant: tenant,
-    });
+    } as any); // Using 'as any' here only because User is dynamically imported and TS can't verify the shape
 
-    tenant.preferences = tenant.preferences || {};
-    tenant.preferences.activationCredentials = {
-      username: activationUser.username,
-      password: rawPassword,
+    // 4. Update tenant preferences
+    tenant.preferences = {
+      ...(tenant.preferences || {}),
+      activationCredentials: {
+        username: activationUser.username,
+        password: rawPassword,
+      },
     };
 
     this.em.persist(activationUser);
 
-    // Flush both tenant and activation user changes together
+    // 5. Atomic flush for both entities
     await this.em.flush();
 
     return {
@@ -52,23 +54,23 @@ export class TenantsService {
     };
   }
 
-  findAll() {
+  async findAll(): Promise<Tenant[]> {
     return this.em.find(Tenant, {});
   }
 
-  findOne(id: string) {
+  async findOne(id: string): Promise<Tenant> {
     return this.em.findOneOrFail(Tenant, { id });
   }
 
-  async update(id: string, updateTenantDto: UpdateTenantDto) {
-    const tenant = await this.em.findOneOrFail(Tenant, { id });
-    this.em.assign(tenant, updateTenantDto);
+  async update(id: string, dto: UpdateTenantDto): Promise<Tenant> {
+    const tenant = await this.findOne(id);
+    this.em.assign(tenant, dto);
     await this.em.flush();
     return tenant;
   }
 
-  async remove(id: string) {
-    const tenant = await this.em.findOneOrFail(Tenant, { id });
+  async remove(id: string): Promise<{ success: boolean }> {
+    const tenant = await this.findOne(id);
     await this.em.removeAndFlush(tenant);
     return { success: true };
   }

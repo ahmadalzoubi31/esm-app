@@ -16,11 +16,11 @@ export class GroupSeeder extends Seeder {
 
     // Get dependencies
     const itBusinessLine = await businessLineRepo.findOne(
-      { key: 'it', tenant: tenantId },
+      { name: 'it', tenant: tenantId },
       { filters: { tenant: false } },
     );
     const itDepartment = await departmentRepo.findOne(
-      { key: 'information-technology', tenant: tenantId },
+      { name: 'Information Technology', tenant: tenantId },
       { filters: { tenant: false } },
     );
 

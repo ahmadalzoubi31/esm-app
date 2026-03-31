@@ -20,8 +20,6 @@ function CreateRolePage() {
     defaultValues: {
       name: '',
       description: '',
-      permissionCount: 0,
-      userCount: 0,
       permissionIds: [],
     } as RoleDto,
     validators: {
