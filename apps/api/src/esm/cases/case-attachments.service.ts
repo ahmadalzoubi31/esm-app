@@ -14,10 +14,7 @@ export class CaseAttachmentsService {
     private readonly caseRepo: EntityRepository<Case>,
   ) {}
 
-  async uploadAttachment(
-    caseId: string,
-    file: Express.Multer.File,
-  ): Promise<CaseAttachment> {
+  async uploadAttachment(caseId: string, file: File): Promise<CaseAttachment> {
     // 1: Get EntityManager
     const em = this.attachmentRepo.getEntityManager();
 
@@ -48,15 +45,15 @@ export class CaseAttachmentsService {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // 7: Generate unique file path
-    const fileExt = file.originalname.split('.').pop();
+    const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
     const filePath = `case-attachments/${caseId}/${fileName}`;
 
     // 8: Upload file to Supabase storage
     const { error: uploadError } = await supabase.storage
       .from('attachments') // or whatever your bucket name is, assuming 'attachments'
-      .upload(filePath, file.buffer, {
-        contentType: file.mimetype,
+      .upload(filePath, file, {
+        contentType: file.type,
         upsert: false,
       });
 
@@ -74,11 +71,14 @@ export class CaseAttachmentsService {
       case: caseId,
       tenant: tenantRef,
       filename: fileName,
-      originalName: file.originalname,
-      mimeType: file.mimetype,
+      originalName: file.name,
+      mimeType: file.type,
       size: file.size,
       storagePath: publicUrl,
       isActive: true,
+
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     // 11: Persist attachment to database

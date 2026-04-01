@@ -107,7 +107,7 @@ export class SlaRulesEngineService {
           Object.prototype.hasOwnProperty.call(value, part)) ||
         (Array.isArray(value) && !Number.isNaN(Number(part)))
       ) {
-        value = value[part as any];
+        value = value[part];
         continue;
       }
 

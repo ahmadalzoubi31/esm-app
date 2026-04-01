@@ -11,11 +11,11 @@ import {
 } from '@/components/ui/card'
 import { z } from 'zod'
 import { FormInstance } from '@/types'
-import { CategorySchema } from '@/schemas/category.schema'
 import { CategoryMenu } from '@/components/web/common/menus/category-menu'
+import { CategoryWriteSchema } from '@repo/shared'
 
 interface CategoryBasicInfoProps {
-  form: FormInstance<z.infer<typeof CategorySchema>>
+  form: FormInstance<z.infer<typeof CategoryWriteSchema>>
 }
 
 export function CategoryBasicInfo({ form }: CategoryBasicInfoProps) {

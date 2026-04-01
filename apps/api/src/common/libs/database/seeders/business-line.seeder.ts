@@ -56,6 +56,9 @@ export class BusinessLineSeeder extends Seeder {
           description: blData.description,
           isActive: true,
           tenant: tenantRef,
+
+          createdAt: new Date(),
+          updatedAt: new Date(),
         });
         console.log(
           `✔ Created business line: ${blData.name} for tenant ${tenantId}`,

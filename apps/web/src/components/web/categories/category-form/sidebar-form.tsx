@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { CategorySchema } from '@/schemas/category.schema'
 import {
   Card,
   CardContent,
@@ -12,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Loader2, FolderIcon, ShieldIcon } from 'lucide-react'
 import { FieldError } from '@/components/ui/field'
 import { SideBarFormProps } from '@/types/form'
+import { CategoryDto } from '@repo/shared'
 
 export function SideBarForm({ form }: SideBarFormProps) {
   return (
@@ -25,17 +25,15 @@ export function SideBarForm({ form }: SideBarFormProps) {
         })}
       >
         {({ values, errors, isSubmitting, isValid }: any) => {
-          const category = values as z.infer<typeof CategorySchema>
+          const category = values as CategoryDto
           const hasErrors = errors.length > 0 || !isValid
 
           return (
             <Card className="sticky top-6 border-muted bg-muted/20">
               <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-base font-medium">
-                    Category Preview
-                  </CardTitle>
-                </div>
+                <CardTitle className="text-base font-medium">
+                  Category Preview
+                </CardTitle>
                 <CardDescription>
                   Live preview of category details
                 </CardDescription>

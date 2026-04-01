@@ -4,9 +4,9 @@ import { IsString, IsStrongPassword, IsUUID } from 'class-validator';
 export class ResetPasswordDto {
   @ApiProperty({ example: 'userId' })
   @IsUUID()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({ example: 'password' })
   @IsStrongPassword()
-  password: string;
+  password!: string;
 }

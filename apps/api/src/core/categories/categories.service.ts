@@ -34,13 +34,19 @@ export class CategoriesService {
     const category = this.repo.create({
       ...dto,
       tenant: tenantRef,
+      parent: dto.parentId
+        ? em.getReference(Category, dto.parentId)
+        : undefined,
     });
     await em.persist(category).flush();
     return category;
   }
 
   async findAll(where: any = {}): Promise<Category[]> {
-    return this.repo.find(where, { orderBy: { name: QueryOrder.ASC } });
+    return this.repo.find(where, {
+      orderBy: { name: QueryOrder.ASC },
+      populate: ['parent'],
+    });
   }
 
   async findOne(id: string): Promise<Category> {

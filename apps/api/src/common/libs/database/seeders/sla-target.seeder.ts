@@ -85,7 +85,18 @@ export class SlaTargetSeeder extends Seeder {
           ...targetData,
           tenant: tenantRef,
           isActive: true,
-        } as any);
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          type: 'respond',
+          name: '',
+          goalMs: 0,
+          rules: {
+            startTriggers: [],
+            stopTriggers: [],
+            pauseTriggers: [],
+            resumeTriggers: [],
+          },
+        });
         console.log(`✔ Created SLA target: ${targetData.name}`);
       } else {
         console.log(

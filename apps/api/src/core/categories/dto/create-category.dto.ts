@@ -8,8 +8,9 @@ import {
   IsBoolean,
 } from 'class-validator';
 import { CategoryDto } from '@repo/shared';
+import { TenantBaseDto } from 'src/common/dtos/tenant-base.dto';
 
-export class CreateCategoryDto implements CategoryDto {
+export class CreateCategoryDto extends TenantBaseDto implements CategoryDto {
   @ApiProperty()
   @IsString()
   @MaxLength(100)
@@ -28,14 +29,8 @@ export class CreateCategoryDto implements CategoryDto {
   @IsNumber()
   tier: number = 1;
 
-  @ApiPropertyOptional({
-    description: 'UUID of the parent category if tier > 1',
-  })
-  @IsUUID()
+  @ApiPropertyOptional()
+  @IsString()
   @IsOptional()
   parentId?: string;
-
-  @ApiProperty({ example: true })
-  @IsBoolean()
-  isActive: boolean = true;
 }

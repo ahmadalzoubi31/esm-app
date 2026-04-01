@@ -18,13 +18,7 @@ export const SlaActionEnumSchema = z.enum(["start", "stop", "pause", "resume"]);
 export type SlaAction = z.infer<typeof SlaActionEnumSchema>;
 export const SlaActionEnum = SlaActionEnumSchema.enum;
 
-export const SlaOperatorEnumSchema = z.enum([
-  "equals",
-  "not_equals",
-  "in",
-  "not_in",
-  "contains",
-]);
+export const SlaOperatorEnumSchema = z.enum(["equals", "not_equals", "in", "not_in", "contains"]);
 export type SlaOperator = z.infer<typeof SlaOperatorEnumSchema>;
 export const SlaOperatorEnum = SlaOperatorEnumSchema.enum;
 
@@ -119,7 +113,7 @@ export type DepartmentSchema = z.infer<typeof DepartmentReadSchema>;
 export const RoleWriteSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   description: z.string().optional(),
-  permissionIds: z.array(z.uuid()).optional(),
+  permissionIds: z.array(z.union([z.uuid(), z.literal("")])).optional(),
 });
 export type RoleDto = z.infer<typeof RoleWriteSchema>;
 
@@ -147,9 +141,7 @@ export type RoleSchema = z.infer<typeof RoleReadSchema>;
 export const RoleAssignPermissionsSchema = z.object({
   permissionIds: z.array(z.uuid()),
 });
-export type RoleAssignPermissionsDto = z.infer<
-  typeof RoleAssignPermissionsSchema
->;
+export type RoleAssignPermissionsDto = z.infer<typeof RoleAssignPermissionsSchema>;
 
 export const RoleAssignRolesSchema = z.object({
   roleIds: z.array(z.uuid()),
@@ -189,17 +181,13 @@ export type PermissionSchema = z.infer<typeof PermissionReadSchema>;
 export const AssignUserPermissionsSchema = z.object({
   permissionIds: z.array(z.uuid()),
 });
-export type AssignUserPermissionsDto = z.infer<
-  typeof AssignUserPermissionsSchema
->;
+export type AssignUserPermissionsDto = z.infer<typeof AssignUserPermissionsSchema>;
 
 export const RevokePermissionsFromUserSchema = z.object({
   permissionIds: z.array(z.uuid()),
   metadata: z.record(z.string(), z.any()),
 });
-export type RevokePermissionsFromUserDto = z.infer<
-  typeof RevokePermissionsFromUserSchema
->;
+export type RevokePermissionsFromUserDto = z.infer<typeof RevokePermissionsFromUserSchema>;
 
 // *************************
 // ** users **
@@ -234,15 +222,15 @@ export const UserWriteSchema = z.object({
   phone: z.string().optional(),
   manager: z.string().optional(),
   authSource: AuthSourceEnumSchema,
-  departmentId: z.uuid().optional(),
+  departmentId: z.union([z.uuid(), z.literal("")]).optional(),
   externalId: z.string().optional(),
   password: z.string().optional(),
   isActive: z.boolean(),
   isLicensed: z.boolean(),
   metadata: UserMetadataSchema.optional(),
-  roleIds: z.array(z.uuid()).optional(),
-  permissionIds: z.array(z.uuid()).optional(),
-  groupIds: z.array(z.uuid()).optional(),
+  roleIds: z.array(z.union([z.uuid(), z.literal("")])).optional(),
+  permissionIds: z.array(z.union([z.uuid(), z.literal("")])).optional(),
+  groupIds: z.array(z.union([z.uuid(), z.literal("")])).optional(),
 });
 export type UserDto = z.infer<typeof UserWriteSchema>;
 
@@ -253,7 +241,6 @@ export const UserReadSchema = UserWriteSchema.omit({
 }).extend({
   id: z.uuid(),
   displayName: z.string().optional(),
-  department: DepartmentReadSchema.optional(),
 
   lastLoginAt: z.coerce.date().nullable().optional(),
   // Use .coerce to turn ISO strings from the API back into JS Dates
@@ -295,12 +282,7 @@ export type BusinessLineSchema = z.infer<typeof BusinessLineReadSchema>;
 // Enums
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const GroupTypeEnumSchema = z.enum([
-  "help-desk",
-  "tier-1",
-  "tier-2",
-  "vendor",
-]);
+export const GroupTypeEnumSchema = z.enum(["help-desk", "tier-1", "tier-2", "vendor"]);
 export type GroupType = z.infer<typeof GroupTypeEnumSchema>;
 export const GroupTypeEnum = GroupTypeEnumSchema.enum;
 
@@ -309,13 +291,10 @@ export const GroupTypeEnum = GroupTypeEnumSchema.enum;
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const GroupWriteSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required.")
-    .max(120, "Name must be at most 120 characters."),
+  name: z.string().min(1, "Name is required.").max(120, "Name must be at most 120 characters."),
   type: GroupTypeEnumSchema,
   description: z.string().optional(),
-  teamLeaderId: z.uuid().optional(),
+  teamLeaderId: z.union([z.uuid(), z.literal("")]).optional(),
   businessLineId: z.uuid(),
   roleIds: z.array(z.uuid()).default([]).optional(),
   permissionIds: z.array(z.uuid()).default([]).optional(),
@@ -343,11 +322,13 @@ export const GroupReadSchema = GroupWriteSchema.omit({
   id: z.uuid(),
   teamLeader: UserReadSchema.optional(),
   businessLine: BusinessLineReadSchema,
+
   // Use .coerce to turn ISO strings from the API back into JS Dates
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 });
 export type GroupSchema = z.infer<typeof GroupReadSchema>;
+export type Group = GroupSchema;
 
 // *************************
 // ** categories **
@@ -356,8 +337,8 @@ export type GroupSchema = z.infer<typeof GroupReadSchema>;
 export const CategoryWriteSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
-  tier: z.number().default(1),
-  parentId: z.uuid().optional(),
+  tier: z.number(),
+  parentId: z.union([z.uuid(), z.literal("")]).optional(),
   isActive: z.boolean(),
 });
 export type CategoryDto = z.infer<typeof CategoryWriteSchema>;

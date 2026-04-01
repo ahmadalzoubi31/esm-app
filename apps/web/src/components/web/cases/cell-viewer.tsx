@@ -1,16 +1,6 @@
+import { CellViewer } from '@/components/web/common/cell-viewer'
 import { Link } from '@tanstack/react-router'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { Case } from '@/types/cases'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
 import {
   Card,
   CardContent,
@@ -18,9 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { formatDate } from '@/lib/format-date'
 import {
   AlertCircleIcon,
@@ -69,174 +57,146 @@ function InfoItem({
 }
 
 export function TableCellViewer({ item }: { item: Case }) {
-  const isMobile = useIsMobile()
-
   return (
-    <Drawer direction={isMobile ? 'bottom' : 'right'}>
-      <DrawerTrigger asChild>
-        <Button
-          variant="link"
-          className="font-medium hover:underline text-primary whitespace-nowrap w-fit px-0 text-left"
-        >
-          {item.number}
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent className="h-[95vh] sm:h-auto sm:max-w-xl">
-        <DrawerHeader className="gap-4 border-b pb-4">
-          <div className="space-y-3 text-left">
-            <DrawerTitle className="text-xl font-bold tracking-tight">
-              {item.title}
-            </DrawerTitle>
-            <DrawerDescription className="flex flex-wrap items-center gap-2 mt-2">
-              <Badge variant="outline" className="font-mono bg-background">
-                {item.number}
-              </Badge>
-              <Badge variant="outline" className="capitalize">
-                {item.status?.toLowerCase()}
-              </Badge>
-              <Badge className={`gap-1 ${getPriorityColor(item.priority)}`}>
-                <AlertCircleIcon className="h-3 w-3" />
-                <span className="capitalize">
-                  {item.priority?.toLowerCase()}
-                </span>{' '}
-                Priority
-              </Badge>
-            </DrawerDescription>
+    <CellViewer
+      triggerLabel={item.number}
+      triggerClassName="font-medium hover:underline text-primary whitespace-nowrap w-fit px-0 text-left"
+      icon={null}
+      title={
+        <span className="text-xl font-bold tracking-tight">{item.title}</span>
+      }
+      description={
+        <span className="flex flex-wrap items-center gap-2 mt-2">
+          <Badge variant="outline" className="font-mono bg-background">
+            {item.number}
+          </Badge>
+          <Badge variant="outline" className="capitalize">
+            {item.status?.toLowerCase()}
+          </Badge>
+          <Badge className={`gap-1 ${getPriorityColor(item.priority)}`}>
+            <AlertCircleIcon className="h-3 w-3" />
+            <span className="capitalize">{item.priority?.toLowerCase()}</span>{' '}
+            Priority
+          </Badge>
+        </span>
+      }
+      editAction={
+        <Link to={`/cases/$caseId`} params={{ caseId: item.id }}>
+          View Full Details
+        </Link>
+      }
+    >
+      {/* Case Details */}
+      <Card className="border shadow-sm">
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-2">
+            <FileTextIcon className="h-4 w-4 text-primary" />
+            <CardTitle className="text-lg">Case Details</CardTitle>
           </div>
-        </DrawerHeader>
-
-        <ScrollArea className="flex-1 overflow-y-auto">
-          <div className="flex flex-col gap-6 p-6">
-            {/* Case Details Card */}
-            <Card className="border shadow-sm">
-              <CardHeader className="pb-3">
-                <div className="flex items-center gap-2">
-                  <FileTextIcon className="h-4 w-4 text-primary" />
-                  <CardTitle className="text-lg">Case Details</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="h-1 w-1 rounded-full bg-primary" />
-                    <h4 className="text-sm font-semibold text-foreground">
-                      Description
-                    </h4>
-                  </div>
-                  <p className="text-sm leading-relaxed text-muted-foreground pl-3 border-l-2 border-muted whitespace-pre-wrap">
-                    {item.description || 'No description provided'}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="h-1 w-1 rounded-full bg-primary" />
-                    <h4 className="text-sm font-semibold text-foreground">
-                      Categorization
-                    </h4>
-                  </div>
-                  <div className="text-sm leading-relaxed text-muted-foreground pl-3 border-l-2 border-muted">
-                    {item.category?.name && (
-                      <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1 border-b border-border/50">
-                        <span className="text-sm text-foreground font-medium">
-                          Category
-                        </span>
-                        <span className="text-sm text-muted-foreground font-mono">
-                          {item.category.name}
-                        </span>
-                      </div>
-                    )}
-                    {item.subcategory?.name && (
-                      <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1 border-b border-border/50">
-                        <span className="text-sm text-foreground font-medium">
-                          Subcategory
-                        </span>
-                        <span className="text-sm text-muted-foreground font-mono">
-                          {item.subcategory.name}
-                        </span>
-                      </div>
-                    )}
-                    {!item.category?.name && !item.subcategory?.name && (
-                      <span className="text-sm">Uncategorized</span>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Information Card */}
-            <Card className="border shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Information</CardTitle>
-                <CardDescription className="text-xs">
-                  Case metadata and details
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <InfoItem
-                    icon={<UserIcon className="h-4 w-4 text-primary" />}
-                    label="Requester"
-                    value={
-                      item.requester
-                        ? `${item.requester.firstName || ''} ${item.requester.lastName || ''}`.trim() ||
-                          undefined
-                        : undefined
-                    }
-                  />
-                  <InfoItem
-                    icon={<UserIcon className="h-4 w-4 text-primary" />}
-                    label="Assignee"
-                    value={
-                      item.assignee
-                        ? `${item.assignee.firstName || ''} ${item.assignee.lastName || ''}`.trim() ||
-                          'Unassigned'
-                        : 'Unassigned'
-                    }
-                  />
-                  <InfoItem
-                    icon={<UsersIcon className="h-4 w-4 text-primary" />}
-                    label="Assignment Group"
-                    value={item.assignmentGroup?.name}
-                  />
-                  <InfoItem
-                    icon={<CalendarIcon className="h-4 w-4 text-primary" />}
-                    label="Created"
-                    value={formatDate(item.createdAt)}
-                  />
-                  <InfoItem
-                    icon={<ClockIcon className="h-4 w-4 text-primary" />}
-                    label="Last Updated"
-                    value={formatDate(item.updatedAt)}
-                  />
-                  {item.businessLine && (
-                    <InfoItem
-                      icon={<FolderOpenIcon className="h-4 w-4 text-primary" />}
-                      label="Business Line"
-                      value={item.businessLine.name}
-                    />
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="h-1 w-1 rounded-full bg-primary" />
+              <h4 className="text-sm font-semibold text-foreground">
+                Description
+              </h4>
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground pl-3 border-l-2 border-muted whitespace-pre-wrap">
+              {item.description || 'No description provided'}
+            </p>
           </div>
-        </ScrollArea>
-
-        <DrawerFooter className="border-t pt-4">
-          <div className="flex gap-2">
-            <Button className="flex-1" asChild>
-              <Link to={`/cases/$caseId`} params={{ caseId: item.id }}>
-                View Full Details
-              </Link>
-            </Button>
-            <DrawerClose asChild>
-              <Button variant="outline" className="flex-1">
-                Close
-              </Button>
-            </DrawerClose>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="h-1 w-1 rounded-full bg-primary" />
+              <h4 className="text-sm font-semibold text-foreground">
+                Categorization
+              </h4>
+            </div>
+            <div className="text-sm leading-relaxed text-muted-foreground pl-3 border-l-2 border-muted">
+              {item.category?.name && (
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1 border-b border-border/50">
+                  <span className="text-sm text-foreground font-medium">
+                    Category
+                  </span>
+                  <span className="text-sm text-muted-foreground font-mono">
+                    {item.category.name}
+                  </span>
+                </div>
+              )}
+              {item.subcategory?.name && (
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1 border-b border-border/50">
+                  <span className="text-sm text-foreground font-medium">
+                    Subcategory
+                  </span>
+                  <span className="text-sm text-muted-foreground font-mono">
+                    {item.subcategory.name}
+                  </span>
+                </div>
+              )}
+              {!item.category?.name && !item.subcategory?.name && (
+                <span className="text-sm">Uncategorized</span>
+              )}
+            </div>
           </div>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+        </CardContent>
+      </Card>
+
+      {/* Information */}
+      <Card className="border shadow-sm">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg">Information</CardTitle>
+          <CardDescription className="text-xs">
+            Case metadata and details
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <InfoItem
+              icon={<UserIcon className="h-4 w-4 text-primary" />}
+              label="Requester"
+              value={
+                item.requester
+                  ? `${item.requester.firstName || ''} ${item.requester.lastName || ''}`.trim() ||
+                    undefined
+                  : undefined
+              }
+            />
+            <InfoItem
+              icon={<UserIcon className="h-4 w-4 text-primary" />}
+              label="Assignee"
+              value={
+                item.assignee
+                  ? `${item.assignee.firstName || ''} ${item.assignee.lastName || ''}`.trim() ||
+                    'Unassigned'
+                  : 'Unassigned'
+              }
+            />
+            <InfoItem
+              icon={<UsersIcon className="h-4 w-4 text-primary" />}
+              label="Assignment Group"
+              value={item.assignmentGroup?.name}
+            />
+            <InfoItem
+              icon={<CalendarIcon className="h-4 w-4 text-primary" />}
+              label="Created"
+              value={formatDate(item.createdAt)}
+            />
+            <InfoItem
+              icon={<ClockIcon className="h-4 w-4 text-primary" />}
+              label="Last Updated"
+              value={formatDate(item.updatedAt)}
+            />
+            {item.businessLine && (
+              <InfoItem
+                icon={<FolderOpenIcon className="h-4 w-4 text-primary" />}
+                label="Business Line"
+                value={item.businessLine.name}
+              />
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </CellViewer>
   )
 }
-

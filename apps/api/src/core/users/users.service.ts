@@ -8,6 +8,7 @@ import { Group } from '../groups/entities/group.entity';
 import { Tenant } from '../../tenants/entities/tenant.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { populate } from 'dotenv';
 
 @Injectable()
 export class UsersService {
@@ -118,7 +119,7 @@ export class UsersService {
   async findOneByUsername(username: string): Promise<User | null> {
     return this.userRepository.findOne(
       { username },
-      { filters: { tenant: false } },
+      { populate: ['roles'], filters: { tenant: false } },
     );
   }
 
@@ -130,7 +131,7 @@ export class UsersService {
     return this.userRepository.nativeDelete({ id: { $in: ids } });
   }
 
-  async uploadAvatar(file: Express.Multer.File): Promise<string> {
+  async uploadAvatar(file: File): Promise<string> {
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -142,13 +143,13 @@ export class UsersService {
 
     const { createClient } = await import('@supabase/supabase-js');
     const supabase = createClient(supabaseUrl, supabaseKey);
-    const fileExt = file.originalname.split('.').pop();
+    const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
     const filePath = `avatars/${fileName}`;
     const { data, error } = await supabase.storage
       .from('avatars')
-      .upload(filePath, file.buffer, {
-        contentType: file.mimetype,
+      .upload(filePath, file, {
+        contentType: file.type,
         upsert: false,
       });
 

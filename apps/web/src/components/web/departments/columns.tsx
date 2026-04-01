@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react'
 import { DepartmentSchema } from '@repo/shared'
 import { formatDate } from '@/lib/format-date'
-import { format } from 'path/win32'
+import { TableCellViewer } from './cell-viewer'
 
 export const columns: ColumnDef<DepartmentSchema>[] = [
   {
@@ -48,7 +48,7 @@ export const columns: ColumnDef<DepartmentSchema>[] = [
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ row }) => <div className="font-medium">{row.original.name}</div>,
+    cell: ({ row }) => <TableCellViewer item={row.original} />,
     enableSorting: true,
     enableHiding: false,
   },
@@ -66,7 +66,7 @@ export const columns: ColumnDef<DepartmentSchema>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'active',
+    accessorKey: 'isActive',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Status" />
     ),
@@ -91,6 +91,19 @@ export const columns: ColumnDef<DepartmentSchema>[] = [
     cell: ({ row }) => (
       <div className="text-sm">
         {formatDate(new Date(row.original.createdAt))}
+      </div>
+    ),
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'updatedAt',
+    header: ({ column }) => (
+      <AppDataTableColumnHeader column={column} title="Updated At" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm">
+        {formatDate(new Date(row.original.updatedAt))}
       </div>
     ),
     enableSorting: true,

@@ -9,6 +9,7 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -49,7 +50,7 @@ export class CaseAttachmentsController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadAttachment(
     @Param('caseId') caseId: string,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: File,
   ) {
     if (!file) {
       throw new Error('File is required');

@@ -64,7 +64,7 @@ export class UsersController {
   @UseGuards(PoliciesGuard)
   @CheckPolicies((ability: AppAbility) => ability.can(ACTION_ENUM.Create, User))
   @UseInterceptors(FileInterceptor('file'))
-  async uploadAvatar(@UploadedFile() file: Express.Multer.File) {
+  async uploadAvatar(@UploadedFile() file: File) {
     // 1: Check if file is uploaded
     if (!file) {
       throw new Error('File is required');

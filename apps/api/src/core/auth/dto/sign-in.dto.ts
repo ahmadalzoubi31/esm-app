@@ -4,9 +4,9 @@ import { IsNotEmpty } from 'class-validator';
 export class SignInDto {
   @ApiProperty({ example: 'system' })
   @IsNotEmpty()
-  username: string;
+  username!: string;
 
   @ApiProperty({ example: 'P@ssw0rd' })
   @IsNotEmpty()
-  password: string;
+  password!: string;
 }

@@ -1,10 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { AppDataTableColumnHeader } from '@/components/web/common/app-table'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Category } from '@/types'
 import { TableCellViewer } from './cell-viewer'
+import { CategorySchema } from '@repo/shared'
+import { formatDate } from '@/lib/format-date'
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<CategorySchema>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -108,13 +109,20 @@ export const columns: ColumnDef<Category>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-sm">
-        {new Date(row.original.createdAt).toLocaleString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-        })}
+        {formatDate(new Date(row.original.createdAt))}
+      </div>
+    ),
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'updatedAt',
+    header: ({ column }) => (
+      <AppDataTableColumnHeader column={column} title="Updated At" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm">
+        {formatDate(new Date(row.original.updatedAt))}
       </div>
     ),
     enableSorting: true,

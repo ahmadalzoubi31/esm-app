@@ -1,6 +1,5 @@
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Switch } from '@/components/ui/switch'
 import {
   Card,
   CardContent,
@@ -58,27 +57,7 @@ export function DepartmentBasicInfo({ form }: DepartmentBasicInfoProps) {
               )
             }}
           />
-          <form.Field
-            name="active"
-            children={(field: any) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid
-              return (
-                <Field
-                  data-invalid={isInvalid}
-                  className="flex flex-row items-center space-x-2 space-y-0 pt-8"
-                >
-                  <Switch
-                    id={field.name}
-                    checked={field.state.value}
-                    onCheckedChange={(checked) => field.handleChange(checked)}
-                  />
-                  <FieldLabel htmlFor={field.name}>Active</FieldLabel>
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              )
-            }}
-          />
+
           <form.Field
             name="description"
             children={(field: any) => {

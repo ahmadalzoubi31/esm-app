@@ -1,16 +1,14 @@
 import { Building2, UsersIcon } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Department } from '@repo/shared'
+import { DepartmentSchema } from '@repo/shared'
 
 interface DepartmentsStatsProps {
-  departments: Department[]
+  departments: DepartmentSchema[]
 }
-
-
 
 export function DepartmentsStats({ departments }: DepartmentsStatsProps) {
   const totalDepartments = departments.length
-  const activeDepartments = departments.filter((d) => d.active).length
+  const activeDepartments = departments.filter((d) => d.isActive).length
 
   return (
     <div className="grid gap-4 md:grid-cols-4 lg:grid-cols-8">

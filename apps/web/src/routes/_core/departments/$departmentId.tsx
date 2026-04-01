@@ -27,21 +27,15 @@ function EditDepartmentPage() {
     defaultValues: {
       name: department?.name || '',
       description: department?.description || '',
-      active: department?.active ?? true,
+      isActive: department?.isActive ?? true,
     } as DepartmentDto,
     validators: {
       onSubmit: DepartmentWriteSchema,
     },
     onSubmit: async ({ value }) => {
-      const departmentData = {
-        name: value.name,
-        description: value.description,
-        active: value.active,
-      }
-
       await updateMutation.mutateAsync({
         id: departmentId,
-        data: departmentData,
+        data: value,
       })
 
       navigate({ to: '/departments' })

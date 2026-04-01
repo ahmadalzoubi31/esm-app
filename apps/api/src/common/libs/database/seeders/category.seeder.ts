@@ -96,7 +96,10 @@ export class CategorySeeder extends Seeder {
           description: catData.description,
           tenant: tenantRef,
           tier: 1,
-        } as any);
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          isActive: true,
+        });
         console.log(`✔ Created category: ${catData.name}`);
       } else {
         console.log(`✔ Category ${catData.name} already exists, skipping.`);
@@ -122,7 +125,10 @@ export class CategorySeeder extends Seeder {
               tenant: tenantRef,
               tier: 2,
               parent: parent,
-            } as any);
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              isActive: true,
+            });
             console.log(`  └─ ✔ Created subcategory: ${subCatData.name}`);
           } else {
             console.log(

@@ -52,6 +52,8 @@ export class UserSeeder extends Seeder {
       tenant,
       permissions: '',
       groups: '',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     await em.flush();

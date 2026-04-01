@@ -1,7 +1,7 @@
 import type { DataTableConfig } from '@/components/web/common/app-table'
-import { Category } from '@/types'
+import { CategorySchema } from '@repo/shared'
 
-export const tableConfig: DataTableConfig<Category> = {
+export const tableConfig: DataTableConfig<CategorySchema> = {
   emptyMessage: 'No categories found.',
 
   defaultColumnVisibility: {

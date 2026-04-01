@@ -29,7 +29,9 @@ export class TenantsService {
       isLicensed: true,
       password: rawPassword,
       tenant: tenant,
-    } as any); // Using 'as any' here only because User is dynamically imported and TS can't verify the shape
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }); // Using 'as any' here only because User is dynamically imported and TS can't verify the shape
 
     // 4. Update tenant preferences
     tenant.preferences = {

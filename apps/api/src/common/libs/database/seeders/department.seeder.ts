@@ -46,12 +46,13 @@ export class DepartmentSeeder extends Seeder {
 
       em.create(Department, {
         id: crypto.randomUUID(),
-        key,
         name: deptData.name,
         description: deptData.description,
-        active: true,
         tenant: tenantRef,
-      } as any);
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isActive: true,
+      });
 
       console.log(`✔ Created department: ${deptData.name}`);
     }

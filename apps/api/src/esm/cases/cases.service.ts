@@ -66,9 +66,9 @@ export class CasesService {
       businessLine: '',
       affectedService: '',
       tenant: tenantRef,
-      createdAt: '',
-      updatedAt: '',
-      isActive: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isActive: true,
     });
     await em.persist(newCase).flush();
 
@@ -183,7 +183,7 @@ export class CasesService {
         label: 'Assignment group',
       },
       {
-        id: (dto as any).affectedServiceId,
+        id: dto.affectedServiceId,
         repo: this.serviceRepo,
         label: 'Service',
       },
@@ -250,11 +250,11 @@ export class CasesService {
     ];
 
     for (const m of mapping) {
-      const newVal = (dto as any)[m.key];
+      const newVal = dto[m.key];
       if (newVal && newVal !== old[m.oldProp]) {
         this.eventEmitter.emit(
           m.event,
-          new (m.class as any)({
+          new m.class({
             caseId: id,
             [`old${m.key.charAt(0).toUpperCase() + m.key.slice(1)}`]:
               old[m.oldProp],

@@ -410,7 +410,7 @@ export class PermissionSeeder extends Seeder {
       em.create(Permission, {
         id: crypto.randomUUID(),
         ...permissionData,
-      } as any);
+      });
     }
     await em.flush();
 

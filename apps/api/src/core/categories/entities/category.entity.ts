@@ -10,7 +10,7 @@ import { CategorySchema } from '@repo/shared';
 
 @Entity({ tableName: 'categories' })
 export class Category extends TenantBaseEntity implements CategorySchema {
-  @Property()
+  @Property({ unique: true })
   name!: string;
 
   @Property()

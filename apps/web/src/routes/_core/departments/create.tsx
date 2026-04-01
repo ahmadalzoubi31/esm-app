@@ -19,20 +19,13 @@ function CreateDepartmentPage() {
     defaultValues: {
       name: '',
       description: '',
-      active: true,
+      isActive: true,
     } as DepartmentDto,
     validators: {
       onSubmit: DepartmentWriteSchema,
     },
     onSubmit: async ({ value }) => {
-      const departmentData = {
-        name: value.name,
-        description: value.description,
-        active: value.active,
-      }
-
-      await createMutation.mutateAsync(departmentData as any)
-
+      await createMutation.mutateAsync(value)
       navigate({ to: '/departments' })
     },
   })

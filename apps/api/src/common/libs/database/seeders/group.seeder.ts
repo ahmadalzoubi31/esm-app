@@ -72,9 +72,11 @@ export class GroupSeeder extends Seeder {
           type: groupData.type,
           description: groupData.description,
           businessLine: itBusinessLine,
-          department: itDepartment,
           tenant: tenantRef,
-        } as any);
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          isActive: true,
+        });
 
         console.log(`✔ Created group: ${groupData.name}`);
       }

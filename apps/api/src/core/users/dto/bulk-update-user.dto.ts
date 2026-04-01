@@ -12,7 +12,7 @@ export class BulkUpdateUserDto implements BulkUserDto {
   })
   @IsArray()
   @IsNotEmpty()
-  ids: string[];
+  ids!: string[];
 
   @ApiProperty({
     description: 'Data to update for all specified users',
@@ -21,5 +21,5 @@ export class BulkUpdateUserDto implements BulkUserDto {
   @ValidateNested()
   @Type(() => UpdateUserDto)
   @IsNotEmpty()
-  data: UpdateUserDto;
+  data!: UpdateUserDto;
 }

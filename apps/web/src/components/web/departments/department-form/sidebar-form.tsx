@@ -1,4 +1,3 @@
-import { z } from 'zod'
 import { DepartmentDto } from '@repo/shared'
 import {
   Card,
@@ -36,7 +35,7 @@ export function SideBarForm({ form }: SideBarFormProps) {
                   <CardTitle className="text-base font-medium">
                     Department Preview
                   </CardTitle>
-                  {department.active && (
+                  {department.isActive && (
                     <Badge
                       variant="outline"
                       className="bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20"
@@ -44,14 +43,15 @@ export function SideBarForm({ form }: SideBarFormProps) {
                       Active
                     </Badge>
                   )}
-                  {!department.active && department.active !== undefined && (
-                    <Badge
-                      variant="outline"
-                      className="bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border-rose-500/20"
-                    >
-                      Inactive
-                    </Badge>
-                  )}
+                  {!department.isActive &&
+                    department.isActive !== undefined && (
+                      <Badge
+                        variant="outline"
+                        className="bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border-rose-500/20"
+                      >
+                        Inactive
+                      </Badge>
+                    )}
                 </div>
                 <CardDescription>
                   Live preview of department details

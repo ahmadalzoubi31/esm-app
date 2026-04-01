@@ -5,8 +5,7 @@ import { ArrowLeft } from 'lucide-react'
 import { CategoryBasicInfo } from '@/components/web/categories/category-form/category-basic-info'
 import { SideBarForm } from '@/components/web/categories/category-form/sidebar-form'
 import { useCreateCategoryMutation } from '@/lib/mutations'
-import { CategorySchema } from '@/schemas/category.schema'
-import z from 'zod'
+import { CategoryDto, CategoryWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/categories/create')({
   component: CreateCategoryPage,
@@ -20,26 +19,21 @@ function CreateCategoryPage() {
     defaultValues: {
       name: '',
       description: '',
+      tier: 1,
       parentId: '',
-    } as z.infer<typeof CategorySchema>,
+      isActive: true,
+    } as CategoryDto,
     validators: {
-      onSubmit: CategorySchema,
+      onSubmit: CategoryWriteSchema,
     },
     onSubmit: async ({ value }) => {
-      const categoryData: any = {
-        name: value.name,
-        description: value.description,
-      }
       if (value.parentId) {
-        categoryData.parentId = value.parentId
-        categoryData.tier = 2
+        value.tier = 2
       } else {
-        categoryData.tier = 1
-        categoryData.parentId = null
+        value.tier = 1
+        delete value.parentId
       }
-
-      await createMutation.mutateAsync(categoryData as any)
-
+      await createMutation.mutateAsync(value)
       navigate({ to: '/categories' })
     },
   })

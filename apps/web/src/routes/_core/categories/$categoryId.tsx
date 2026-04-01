@@ -6,8 +6,7 @@ import { CategoryBasicInfo } from '@/components/web/categories/category-form/cat
 import { SideBarForm } from '@/components/web/categories/category-form/sidebar-form'
 import { useCategoryQuery } from '@/lib/queries/categories.query'
 import { useUpdateCategoryMutation } from '@/lib/mutations/categories.mutation'
-import { CategorySchema } from '@/schemas/category.schema'
-import z from 'zod'
+import { CategoryDto, CategoryWriteSchema } from '@repo/shared'
 
 export const Route = createFileRoute('/_core/categories/$categoryId')({
   component: EditCategoryPage,
@@ -26,28 +25,18 @@ function EditCategoryPage() {
       name: category?.name || '',
       description: category?.description || '',
       parentId: category?.parent?.id || '',
-    } as z.infer<typeof CategorySchema>,
+    } as CategoryDto,
     validators: {
-      onSubmit: CategorySchema,
+      onSubmit: CategoryWriteSchema,
     },
     onSubmit: async ({ value }) => {
-      const categoryData: any = {
-        name: value.name,
-        description: value.description,
+      if (value.parentId === '') {
+        delete value.parentId
       }
-      if (value.parentId) {
-        categoryData.parentId = value.parentId
-        categoryData.tier = 2
-      } else {
-        categoryData.tier = 1
-        categoryData.parentId = null
-      }
-
       await updateMutation.mutateAsync({
         id: categoryId,
-        data: categoryData,
+        data: value,
       })
-
       navigate({ to: '/categories' })
     },
   })

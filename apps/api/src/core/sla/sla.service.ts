@@ -54,8 +54,8 @@ export class SlaService {
 
       // Check existence to prevent duplicate timers
       const exists = await this.timerRepo.findOne({
-        case: caseRow.id as any,
-        target: target.id as any,
+        case: caseRow.id,
+        target: target.id,
       });
 
       if (exists) {
@@ -72,8 +72,8 @@ export class SlaService {
 
       if (startTriggers.length > 0) {
         const timer = this.timerRepo.create({
-          case: caseRow.id as any,
-          target: target.id as any,
+          case: caseRow.id,
+          target: target.id,
           startedAt: now,
           lastTickAt: now,
           remainingMs: target.goalMs,
@@ -119,8 +119,8 @@ export class SlaService {
   ) {
     const em = this.timerRepo.getEntityManager();
     const timer = await this.timerRepo.findOne({
-      case: caseId as any,
-      target: target.id as any,
+      case: caseId,
+      target: target.id,
     });
 
     if (!timer || ['Met', 'Stopped', 'Breached'].includes(timer.status)) {

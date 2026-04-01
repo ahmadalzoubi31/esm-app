@@ -219,7 +219,9 @@ export class RoleSeeder extends Seeder {
           permissionCount: permissions.length,
           userCount: 0,
           tenant: tenantRef,
-          isActive: false,
+          isActive: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
         });
 
         console.log(

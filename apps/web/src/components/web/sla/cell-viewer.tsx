@@ -1,21 +1,9 @@
+import { CellViewer } from '@/components/web/common/cell-viewer'
+import { DetailItem } from '@/components/web/common/cell-viewer-detail-item'
 import { Link } from '@tanstack/react-router'
-import { useIsMobile } from '@/hooks/use-mobile'
-import { SlaTarget, SlaTrigger } from '@repo/shared'
-
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
-import { Button } from '@/components/ui/button'
+import { SlaTargetSchema, SlaTrigger } from '@repo/shared'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { formatDate } from '@/lib/format-date'
 import {
   TimerIcon,
@@ -26,127 +14,90 @@ import {
   ActivityIcon,
 } from 'lucide-react'
 
-export function TableCellViewer({ item }: { item: SlaTarget }) {
-  const isMobile = useIsMobile()
-
+export function TableCellViewer({ item }: { item: SlaTargetSchema }) {
   return (
-    <Drawer direction={isMobile ? 'bottom' : 'right'}>
-      <DrawerTrigger asChild>
-        <Button variant="link" className="text-foreground w-fit px-0 text-left">
-          {item.name}
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent className="h-[95vh] sm:h-auto sm:max-w-xl">
-        <DrawerHeader className="gap-1 border-b pb-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg border bg-primary/10 text-primary">
-              <TimerIcon className="h-6 w-6" />
-            </div>
-            <div>
-              <DrawerTitle>{item.name}</DrawerTitle>
-              <DrawerDescription className="flex items-center gap-1 font-mono text-xs">
-                {item.type}
-              </DrawerDescription>
-            </div>
-          </div>
-        </DrawerHeader>
+    <CellViewer
+      triggerLabel={item.name}
+      icon={
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg border bg-primary/10 text-primary">
+          <TimerIcon className="h-6 w-6" />
+        </div>
+      }
+      title={item.name}
+      description={
+        <span className="font-mono text-xs">{item.type}</span>
+      }
+      editAction={
+        <Link to="/sla/$slaId" params={{ slaId: item.id }}>
+          Edit SLA Target
+        </Link>
+      }
+    >
+      {/* General Information */}
+      <section className="space-y-3">
+        <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
+          <ActivityIcon className="h-4 w-4 text-muted-foreground" />
+          General Information
+        </h4>
+        <div className="grid grid-cols-2 gap-4 rounded-lg border p-3 bg-muted/30">
+          <DetailItem label="Name" value={item.name} />
+          <DetailItem label="Type" value={item.type} className="font-mono" />
+          <DetailItem label="Goal" value={formatMs(item.goalMs)} />
+          <DetailItem label="Status">
+            <Badge
+              variant={item.isActive ? 'secondary' : 'destructive'}
+              className={`h-5 px-1.5 text-[10px] ${
+                item.isActive
+                  ? 'bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400'
+                  : ''
+              }`}
+            >
+              {item.isActive ? 'Active' : 'Inactive'}
+            </Badge>
+          </DetailItem>
+        </div>
+      </section>
 
-        <ScrollArea className="flex-1 overflow-y-auto">
-          <div className="flex flex-col gap-6 p-6">
-            {/* General Information */}
-            <section className="space-y-3">
-              <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <ActivityIcon className="h-4 w-4 text-muted-foreground" />
-                General Information
-              </h4>
-              <div className="grid grid-cols-2 gap-4 rounded-lg border p-3 bg-muted/30">
-                <DetailItem label="Name" value={item.name} />
-                <DetailItem
-                  label="Key"
-                  value={item.type}
-                  className="font-mono"
-                />
-                <DetailItem label="Goal" value={formatMs(item.goalMs)} />
-                <DetailItem label="Status">
-                  <Badge
-                    variant={item.isActive ? 'secondary' : 'destructive'}
-                    className={`h-5 px-1.5 text-[10px] ${
-                      item.isActive
-                        ? 'bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400'
-                        : ''
-                    }`}
-                  >
-                    {item.isActive ? 'Active' : 'Inactive'}
-                  </Badge>
-                </DetailItem>
-              </div>
-            </section>
+      <Separator />
 
-            <Separator />
+      <TriggerSection
+        title="Start Triggers"
+        icon={<PlayIcon className="h-4 w-4 text-green-500" />}
+        triggers={item.rules?.startTriggers}
+      />
+      <Separator />
+      <TriggerSection
+        title="Stop Triggers"
+        icon={<SquareIcon className="h-4 w-4 text-red-500" />}
+        triggers={item.rules?.stopTriggers}
+      />
+      <Separator />
+      <TriggerSection
+        title="Pause Triggers"
+        icon={<PauseIcon className="h-4 w-4 text-orange-500" />}
+        triggers={item.rules?.pauseTriggers}
+      />
+      <Separator />
+      <TriggerSection
+        title="Resume Triggers"
+        icon={<PlayIcon className="h-4 w-4 text-blue-500" />}
+        triggers={item.rules?.resumeTriggers}
+      />
 
-            {/* Triggers */}
-            <TriggerSection
-              title="Start Triggers"
-              icon={<PlayIcon className="h-4 w-4 text-green-500" />}
-              triggers={item.rules?.startTriggers}
-            />
-            <Separator />
-            <TriggerSection
-              title="Stop Triggers"
-              icon={<SquareIcon className="h-4 w-4 text-red-500" />}
-              triggers={item.rules?.stopTriggers}
-            />
-            <Separator />
-            <TriggerSection
-              title="Pause Triggers"
-              icon={<PauseIcon className="h-4 w-4 text-orange-500" />}
-              triggers={item.rules?.pauseTriggers}
-            />
-            <Separator />
-            <TriggerSection
-              title="Resume Triggers"
-              icon={<PlayIcon className="h-4 w-4 text-blue-500" />}
-              triggers={item.rules?.resumeTriggers}
-            />
+      <Separator />
 
-            <Separator />
-
-            {/* System Metadata */}
-            <section className="space-y-3">
-              <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                System Data
-              </h4>
-              <div className="grid grid-cols-2 gap-4 text-xs">
-                <DetailItem
-                  label="Created At"
-                  value={formatDate(item.createdAt)}
-                />
-                <DetailItem
-                  label="Updated At"
-                  value={formatDate(item.updatedAt)}
-                />
-              </div>
-            </section>
-          </div>
-        </ScrollArea>
-
-        <DrawerFooter className="border-t pt-4">
-          <div className="flex gap-2">
-            <Button className="flex-1" asChild>
-              <Link to="/sla/$slaId" params={{ slaId: item.id }}>
-                Edit SLA Target
-              </Link>
-            </Button>
-            <DrawerClose asChild>
-              <Button variant="outline" className="flex-1">
-                Close
-              </Button>
-            </DrawerClose>
-          </div>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+      {/* System Data */}
+      <section className="space-y-3">
+        <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
+          <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+          System Data
+        </h4>
+        <div className="grid grid-cols-2 gap-4 text-xs">
+          <DetailItem label="Created At" value={formatDate(item.createdAt)} />
+          <DetailItem label="Updated At" value={formatDate(item.updatedAt)} />
+        </div>
+      </section>
+    </CellViewer>
   )
 }
 
@@ -227,27 +178,4 @@ function formatMs(ms: number) {
   if (seconds > 0) parts.push(`${seconds}s`)
 
   return parts.join(' ') || '0s'
-}
-
-function DetailItem({
-  label,
-  value,
-  children,
-  className,
-}: {
-  label: string
-  value?: string | number | null
-  children?: React.ReactNode
-  className?: string
-}) {
-  return (
-    <div className={`space-y-1 ${className}`}>
-      <span className="text-xs font-medium text-muted-foreground tracking-tight">
-        {label}
-      </span>
-      <div className="text-xs font-semibold text-foreground">
-        {children || value || '-'}
-      </div>
-    </div>
-  )
 }
