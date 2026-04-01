@@ -5,7 +5,6 @@ export const tableConfig: DataTableConfig<any> = {
 
   defaultColumnVisibility: {
     id: false,
-    code: true,
     name: true,
     description: true,
     active: true,

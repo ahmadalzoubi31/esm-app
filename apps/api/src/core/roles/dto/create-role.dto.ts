@@ -1,16 +1,17 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString, IsArray } from 'class-validator';
 import { RoleDto } from '@repo/shared';
+import { TenantBaseDto } from '../../../common/dtos/tenant-base.dto';
 
-export class CreateRoleDto implements RoleDto {
+export class CreateRoleDto extends TenantBaseDto implements RoleDto {
   @ApiProperty({
     description: 'Role name',
     example: 'Admin',
   })
   @IsString()
-  name: string;
+  name!: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Role description',
     example: 'Admin role',
     required: false,
@@ -19,7 +20,7 @@ export class CreateRoleDto implements RoleDto {
   @IsOptional()
   description?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Array of permission IDs',
     example: ['123', '456'],
     required: false,
@@ -27,5 +28,5 @@ export class CreateRoleDto implements RoleDto {
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  permissionIds: string[];
+  permissionIds?: string[];
 }

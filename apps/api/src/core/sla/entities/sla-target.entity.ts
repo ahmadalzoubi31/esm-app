@@ -20,7 +20,4 @@ export class SlaTarget extends TenantBaseEntity implements SlaTargetSchema {
   // Dynamic SLA Rules Configuration
   @Property({ type: 'jsonb' })
   rules!: SlaTargetRules;
-
-  @Property({ default: true })
-  isActive: boolean = true;
 }

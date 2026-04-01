@@ -11,19 +11,20 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 import { AuthSource, UserDto } from '@repo/shared';
+import { TenantBaseDto } from '../../../common/dtos/tenant-base.dto';
 
-export class CreateUserDto implements UserDto {
+export class CreateUserDto extends TenantBaseDto implements UserDto {
   @ApiProperty({ example: 'John' })
   @IsString()
-  firstName: string;
+  firstName!: string;
 
   @ApiProperty({ example: 'Doe' })
   @IsString()
-  lastName: string;
+  lastName!: string;
 
   @ApiProperty({ example: 'johndoe' })
   @IsString()
-  username: string;
+  username!: string;
 
   @ApiProperty({ example: 'johndoe@example.com' })
   @IsEmail()
@@ -47,7 +48,7 @@ export class CreateUserDto implements UserDto {
 
   @ApiProperty({ example: 'ldap' })
   @IsString()
-  authSource: AuthSource;
+  authSource!: AuthSource;
 
   @ApiProperty({ example: 'IT' })
   @IsString()
@@ -66,11 +67,7 @@ export class CreateUserDto implements UserDto {
 
   @ApiProperty({ example: true })
   @IsBoolean()
-  isActive: boolean;
-
-  @ApiProperty({ example: true })
-  @IsBoolean()
-  isLicensed: boolean;
+  isLicensed!: boolean;
 
   @ApiProperty({ example: { phone: '1234567890' } })
   @IsObject()

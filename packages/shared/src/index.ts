@@ -80,8 +80,8 @@ export type SlaTargetDto = z.infer<typeof SlaTargetWriteSchema>;
 export const SlaTargetReadSchema = SlaTargetWriteSchema.extend({
   id: z.uuid(),
   // Use .coerce to turn ISO strings from the API back into JS Dates
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 export type SlaTargetSchema = z.infer<typeof SlaTargetReadSchema>;
 
@@ -103,8 +103,8 @@ export type DepartmentDto = z.infer<typeof DepartmentWriteSchema>;
 export const DepartmentReadSchema = DepartmentWriteSchema.extend({
   id: z.uuid(),
   // Use .coerce to turn ISO strings from the API back into JS Dates
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 export type DepartmentSchema = z.infer<typeof DepartmentReadSchema>;
 
@@ -135,8 +135,8 @@ export const RoleReadSchema = RoleWriteSchema.omit({
   userCount: z.number().nonnegative().optional(),
 
   // Use .coerce to turn ISO strings from the API back into JS Dates
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 export type RoleSchema = z.infer<typeof RoleReadSchema>;
 
@@ -181,8 +181,8 @@ export type PermissionDto = z.infer<typeof PermissionWriteSchema>;
 export const PermissionReadSchema = PermissionWriteSchema.extend({
   id: z.uuid(),
   // Use .coerce to turn ISO strings from the API back into JS Dates
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 export type PermissionSchema = z.infer<typeof PermissionReadSchema>;
 
@@ -257,8 +257,8 @@ export const UserReadSchema = UserWriteSchema.omit({
 
   lastLoginAt: z.coerce.date().nullable().optional(),
   // Use .coerce to turn ISO strings from the API back into JS Dates
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 export type UserSchema = z.infer<typeof UserReadSchema>;
 
@@ -282,8 +282,8 @@ export type BusinessLineDto = z.infer<typeof BusinessLineWriteSchema>;
 export const BusinessLineReadSchema = BusinessLineWriteSchema.extend({
   id: z.uuid(),
   // Use .coerce to turn ISO strings from the API back into JS Dates
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 export type BusinessLineSchema = z.infer<typeof BusinessLineReadSchema>;
 
@@ -344,8 +344,8 @@ export const GroupReadSchema = GroupWriteSchema.omit({
   teamLeader: UserReadSchema.optional(),
   businessLine: BusinessLineReadSchema,
   // Use .coerce to turn ISO strings from the API back into JS Dates
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 export type GroupSchema = z.infer<typeof GroupReadSchema>;
 
@@ -371,7 +371,7 @@ export const CategoryReadSchema: z.ZodType<any> = CategoryWriteSchema.omit({
   parent: z.lazy(() => CategoryReadSchema).optional(),
   children: z.lazy(() => z.array(CategoryReadSchema)).optional(),
   // Use .coerce to turn ISO strings from the API back into JS Dates
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 export type CategorySchema = z.infer<typeof CategoryReadSchema>;

@@ -30,7 +30,6 @@ export class RolesService {
     const role = this.roleRepo.create({
       ...dto,
       tenant: tenantRef,
-      isActive: true,
     });
     await em.persist(role).flush();
 

@@ -22,7 +22,7 @@ import {
 } from '@/lib/queries/case-attachments.query'
 import { useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
-import { formatDistanceToNow } from 'date-fns'
+import { formatDate } from '@/lib/format-date'
 import { Button } from '@/components/ui/button'
 
 export function CaseAttachments() {
@@ -85,16 +85,28 @@ export function CaseAttachments() {
           </CardDescription>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-background text-xs font-medium">
+          <Badge
+            variant="outline"
+            className="bg-background text-xs font-medium"
+          >
             PDF
           </Badge>
-          <Badge variant="outline" className="bg-background text-xs font-medium">
+          <Badge
+            variant="outline"
+            className="bg-background text-xs font-medium"
+          >
             DOCX
           </Badge>
-          <Badge variant="outline" className="bg-background text-xs font-medium">
+          <Badge
+            variant="outline"
+            className="bg-background text-xs font-medium"
+          >
             EXCEL
           </Badge>
-          <Badge variant="outline" className="bg-background text-xs font-medium">
+          <Badge
+            variant="outline"
+            className="bg-background text-xs font-medium"
+          >
             IMAGE
           </Badge>
           {/* <Badge
@@ -181,9 +193,7 @@ export function CaseAttachments() {
                         <span>{formatFileSize(attachment.size)}</span>
                         <span>•</span>
                         <span>
-                          {formatDistanceToNow(new Date(attachment.createdAt), {
-                            addSuffix: true,
-                          })}
+                          {formatDate(new Date(attachment.createdAt))}
                         </span>
                       </div>
                     </div>

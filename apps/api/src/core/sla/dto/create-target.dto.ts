@@ -12,8 +12,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import type { SlaTargetDto, SlaType } from '@repo/shared';
 import { SlaTargetRulesDto } from './sla-target-rules.dto';
+import { TenantBaseDto } from '../../../common/dtos/tenant-base.dto';
 
-export class CreateSlaTargetDto implements SlaTargetDto {
+export class CreateSlaTargetDto extends TenantBaseDto implements SlaTargetDto {
   @ApiProperty({ example: 'respond' })
   @IsEnum(['respond', 'resolution'])
   type!: SlaType;
@@ -68,8 +69,4 @@ export class CreateSlaTargetDto implements SlaTargetDto {
   @ValidateNested()
   @Type(() => SlaTargetRulesDto)
   rules!: SlaTargetRulesDto;
-
-  @ApiProperty({ example: true, default: true })
-  @IsBoolean()
-  isActive: boolean = true;
 }

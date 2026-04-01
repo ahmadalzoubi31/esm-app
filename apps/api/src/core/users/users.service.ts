@@ -16,6 +16,8 @@ export class UsersService {
     private readonly userRepository: EntityRepository<User>,
   ) {}
 
+  // ---- Core CRUD Methods ----
+
   async create(dto: CreateUserDto): Promise<User> {
     const em = this.userRepository.getEntityManager();
     const { roleIds, permissionIds, groupIds, ...userData } = dto;
@@ -66,13 +68,6 @@ export class UsersService {
     }
 
     return this.userRepository.find(query, {
-      populate: [
-        'roles.permissions',
-        'permissions',
-        'groups.roles.permissions',
-        'groups.permissions',
-        'department',
-      ],
       limit: search ? 20 : undefined,
       orderBy: { createdAt: QueryOrder.DESC },
     });
@@ -82,12 +77,6 @@ export class UsersService {
     return this.userRepository.findOneOrFail(
       { id },
       {
-        populate: [
-          'roles.permissions',
-          'permissions',
-          'groups.roles.permissions',
-          'department',
-        ],
         filters: { tenant: false },
       },
     );

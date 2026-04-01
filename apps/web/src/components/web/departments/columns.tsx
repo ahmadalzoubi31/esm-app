@@ -2,13 +2,12 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/ui/badge'
 import { AppDataTableColumnHeader } from '@/components/web/common/app-table'
 import { Checkbox } from '@/components/ui/checkbox'
-import { TableCellViewer } from './cell-viewer'
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react'
-import { Department } from '@repo/shared'
+import { DepartmentSchema } from '@repo/shared'
+import { formatDate } from '@/lib/format-date'
+import { format } from 'path/win32'
 
-export const columns: ColumnDef<Department>[] = [
-
-
+export const columns: ColumnDef<DepartmentSchema>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -45,15 +44,6 @@ export const columns: ColumnDef<Department>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'code',
-    header: ({ column }) => (
-      <AppDataTableColumnHeader column={column} title="Code" />
-    ),
-    cell: ({ row }) => <TableCellViewer item={row.original} />,
-    enableSorting: true,
-    enableHiding: false,
-  },
-  {
     accessorKey: 'name',
     header: ({ column }) => (
       <AppDataTableColumnHeader column={column} title="Name" />
@@ -82,12 +72,12 @@ export const columns: ColumnDef<Department>[] = [
     ),
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
-        {row.original.active ? (
+        {row.original.isActive ? (
           <CheckCircleIcon className="fill-green-500 dark:fill-green-400" />
         ) : (
           <XCircleIcon className="fill-red-500 dark:fill-red-400" />
         )}
-        {row.original.active ? 'Active' : 'Inactive'}
+        {row.original.isActive ? 'Active' : 'Inactive'}
       </Badge>
     ),
     enableSorting: true,
@@ -100,13 +90,7 @@ export const columns: ColumnDef<Department>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-sm">
-        {new Date(row.original.createdAt).toLocaleString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-        })}
+        {formatDate(new Date(row.original.createdAt))}
       </div>
     ),
     enableSorting: true,

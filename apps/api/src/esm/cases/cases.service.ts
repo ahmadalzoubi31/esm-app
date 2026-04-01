@@ -57,17 +57,17 @@ export class CasesService {
     // 3. Create Entity
     const newCase = this.caseRepo.create({
       ...dto,
-      number: await this.generateCaseNumber(),
-      status: dto.status ?? CaseStatus.NEW,
-      priority: dto.priority ?? CasePriority.LOW,
-      category: dto.categoryId as any,
-      subcategory: dto.subcategoryId as any,
-      requester: dto.requesterId as any,
-      assignee: dto.assigneeId as any,
-      assignmentGroup: dto.assignmentGroupId as any,
-      businessLine: dto.businessLineId as any,
-      affectedService: dto.affectedServiceId as any,
+      number: '',
+      status: CaseStatus.NEW,
+      priority: CasePriority.LOW,
+      category: '',
+      requester: '',
+      assignmentGroup: '',
+      businessLine: '',
+      affectedService: '',
       tenant: tenantRef,
+      createdAt: '',
+      updatedAt: '',
       isActive: false,
     });
     await em.persist(newCase).flush();

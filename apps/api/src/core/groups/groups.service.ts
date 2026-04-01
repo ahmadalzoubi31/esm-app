@@ -32,7 +32,6 @@ export class GroupsService {
       ...dto,
       businessLine: dto.businessLineId,
       tenant: tenantRef,
-      isActive: true,
     });
     await em.persist(group).flush();
 

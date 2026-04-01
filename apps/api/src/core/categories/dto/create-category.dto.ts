@@ -35,8 +35,7 @@ export class CreateCategoryDto implements CategoryDto {
   @IsOptional()
   parentId?: string;
 
-  @ApiPropertyOptional({ example: true })
+  @ApiProperty({ example: true })
   @IsBoolean()
-  @IsOptional()
   isActive: boolean = true;
 }

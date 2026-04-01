@@ -26,7 +26,7 @@ export class DepartmentsService {
     const tenantFilter = em.getFilterParams('tenant');
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
-    // 2. Create base user (Collections are initialized as empty by MikroORM)
+    // 2. Create Department
     const department = this.repo.create({
       ...dto,
       tenant: tenantRef,

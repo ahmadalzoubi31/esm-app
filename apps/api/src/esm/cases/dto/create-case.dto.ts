@@ -8,8 +8,9 @@ import {
 } from 'class-validator';
 import { CaseStatus } from '../constants/case-status.constant';
 import { CasePriority } from '../constants/case-priority.constant';
+import { TenantBaseDto } from '../../../common/dtos/tenant-base.dto';
 
-export class CreateCaseDto {
+export class CreateCaseDto extends TenantBaseDto {
   @ApiProperty({ maxLength: 50 })
   @IsString()
   @MaxLength(50)

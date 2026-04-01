@@ -1,17 +1,20 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsOptional } from 'class-validator';
+import { TenantBaseDto } from '../../../common/dtos/tenant-base.dto';
 import { BusinessLineDto } from '@repo/shared';
-import { IsString, IsOptional, IsBoolean } from 'class-validator';
 
-export class CreateBusinessLineDto implements BusinessLineDto {
+export class CreateBusinessLineDto
+  extends TenantBaseDto
+  implements BusinessLineDto
+{
+  @ApiProperty({
+    description: 'Name of the business line',
+  })
   @IsString()
-  key: string;
+  name!: string;
 
-  @IsString()
-  name: string;
-
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   description?: string;
-
-  @IsBoolean()
-  isActive: boolean;
 }

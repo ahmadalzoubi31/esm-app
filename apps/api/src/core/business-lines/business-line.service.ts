@@ -9,6 +9,7 @@ import {
   RequiredEntityData,
 } from '@mikro-orm/core';
 import { Tenant } from '../../tenants/entities/tenant.entity';
+import { TenantBaseEntity } from 'src/common/entities/tenant-base.entity';
 
 @Injectable()
 export class BusinessLineService {
@@ -27,12 +28,12 @@ export class BusinessLineService {
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
     // 2. Create and persist
-    const category = this.repo.create({
+    const businessLine = this.repo.create({
       ...dto,
       tenant: tenantRef,
     });
-    await em.persist(category).flush();
-    return category;
+    await em.persist(businessLine).flush();
+    return businessLine;
   }
 
   async findAll(where: any = {}): Promise<BusinessLine[]> {

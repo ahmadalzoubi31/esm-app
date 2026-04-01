@@ -23,14 +23,14 @@ export abstract class TenantBaseEntity {
     type: 'datetime',
     defaultRaw: 'CURRENT_TIMESTAMP',
   })
-  createdAt?: Date = new Date();
+  createdAt: Date = new Date();
 
   @Property({
     type: 'datetime',
     defaultRaw: 'CURRENT_TIMESTAMP',
     onUpdate: () => new Date(),
   })
-  updatedAt?: Date = new Date();
+  updatedAt: Date = new Date();
 
   @Property({ default: true })
   isActive: boolean = true;

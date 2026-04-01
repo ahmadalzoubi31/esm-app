@@ -32,6 +32,8 @@ export class AuditService {
       event: params.event,
       payload: params.payload,
       tenant: tenantRef,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       isActive: true,
     });
 

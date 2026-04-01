@@ -6,6 +6,7 @@ import {
   Collection,
   OneToMany,
   Index,
+  Cascade,
 } from '@mikro-orm/core';
 import { TenantBaseEntity } from '../../../common/entities/tenant-base.entity';
 
@@ -24,6 +25,8 @@ export class BusinessLine
   @Property({ nullable: true })
   description?: string;
 
-  @OneToMany(() => Group, (group) => group.businessLine)
+  @OneToMany(() => Group, (group) => group.businessLine, {
+    cascade: [Cascade.REMOVE],
+  })
   groups = new Collection<Group>(this);
 }

@@ -32,7 +32,7 @@ export class Group extends TenantBaseEntity implements GroupSchema {
     fieldName: 'businessLineId',
     inversedBy: 'groups',
   })
-  businessLine: BusinessLine;
+  businessLine!: BusinessLine;
 
   // OWNER: Group "owns" its members
   @ManyToMany(() => User)

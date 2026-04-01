@@ -6,8 +6,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Clock, CheckCircle2, History } from 'lucide-react'
-import { format } from 'date-fns'
 import { Separator } from '@/components/ui/separator'
+import { formatDate } from '@/lib/format-date'
 
 interface CaseActivityLogProps {
   caseRecord: {
@@ -80,7 +80,7 @@ export function CaseActivityLog({ caseRecord }: CaseActivityLogProps) {
                       {event.description}
                     </p>
                     <p className="text-[10.5px] font-medium text-muted-foreground/60 uppercase tracking-tight italic">
-                      {format(new Date(event.timestamp), 'PPpp')}
+                      {formatDate(new Date(event.timestamp))}
                     </p>
                   </div>
                 </div>

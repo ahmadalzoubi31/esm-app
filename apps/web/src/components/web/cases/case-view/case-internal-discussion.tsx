@@ -14,17 +14,20 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { MessageSquare, Send, Lock, Globe } from 'lucide-react'
 import { useCaseCommentsQuery } from '@/lib/queries/case-comments.query'
 import { useCreateCaseCommentMutation } from '@/lib/mutations/cases.mutation'
-import { User } from '@/types'
-import { formatDistanceToNow } from 'date-fns'
 import { Separator } from '@/components/ui/separator'
+import { UserSchema } from '@repo/shared'
+import { formatDate } from '@/lib/format-date'
 
 interface CaseInternalDiscussionProps {
   caseId: string
-  requester?: User
+  requester?: UserSchema
 }
 
 function getInitials(
-  user?: Pick<User, 'firstName' | 'lastName' | 'username' | 'displayName'>,
+  user?: Pick<
+    UserSchema,
+    'firstName' | 'lastName' | 'username' | 'displayName'
+  >,
 ): string {
   if (!user) return '??'
   if (user.firstName && user.lastName) {
@@ -35,7 +38,10 @@ function getInitials(
 }
 
 function getDisplayName(
-  user?: Pick<User, 'firstName' | 'lastName' | 'username' | 'displayName'>,
+  user?: Pick<
+    UserSchema,
+    'firstName' | 'lastName' | 'username' | 'displayName'
+  >,
 ): string {
   if (!user) return 'Unknown'
   if (user.displayName) return user.displayName
@@ -149,9 +155,7 @@ export function CaseInternalDiscussion({
                         {getDisplayName(requester)}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {formatDistanceToNow(new Date(comment.createdAt), {
-                          addSuffix: true,
-                        })}
+                        {formatDate(new Date(comment.createdAt))}
                       </span>
                       {comment.isPrivate ? (
                         <span className="inline-flex items-center gap-1 text-[10px] font-medium text-amber-600 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-full px-1.5 py-0.5">
@@ -239,4 +243,3 @@ export function CaseInternalDiscussion({
     </Card>
   )
 }
-

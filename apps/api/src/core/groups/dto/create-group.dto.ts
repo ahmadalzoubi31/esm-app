@@ -12,15 +12,16 @@ import {
   type GroupDto,
   type GroupType,
 } from '@repo/shared';
+import { TenantBaseDto } from '../../../common/dtos/tenant-base.dto';
 
-export class CreateGroupDto implements GroupDto {
+export class CreateGroupDto extends TenantBaseDto implements GroupDto {
   @ApiProperty({ example: 'Network' })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ example: 'TIER_1' })
   @IsEnum(GroupTypeEnumSchema)
-  type: GroupType;
+  type!: GroupType;
 
   @ApiProperty({ example: 'Network Team Description' })
   @IsString()
@@ -39,7 +40,7 @@ export class CreateGroupDto implements GroupDto {
 
   @ApiProperty({ example: 'Business Line ID' })
   @IsString()
-  businessLineId: string;
+  businessLineId!: string;
 
   @ApiProperty({ example: ['uuid-1', 'uuid-2'] })
   @IsOptional()
@@ -58,8 +59,4 @@ export class CreateGroupDto implements GroupDto {
   @IsArray()
   @IsString({ each: true })
   memberIds?: string[];
-
-  @ApiProperty({ example: true })
-  @IsBoolean()
-  isActive: boolean;
 }
