@@ -38,7 +38,6 @@
     "cache:clear": "npx mikro-orm cache:clear"
   },
   "dependencies": {
-    "@repo/shared": "workspace:*",
     "@apollo/server": "^5.4.0",
     "@as-integrations/express5": "^1.1.2",
     "@casl/ability": "^6.8.0",
@@ -61,6 +60,7 @@
     "@nestjs/platform-express": "^11.1.13",
     "@nestjs/schedule": "^6.1.1",
     "@nestjs/swagger": "^11.2.6",
+    "@repo/shared": "workspace:*",
     "@supabase/supabase-js": "^2.98.0",
     "argon2": "^0.44.0",
     "class-transformer": "^0.5.1",

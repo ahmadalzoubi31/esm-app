@@ -7,6 +7,7 @@ import { SideBarForm } from '@/components/web/departments/department-form/sideba
 import { useDepartmentQuery } from '@/lib/queries/departments.query'
 import { useUpdateDepartmentMutation } from '@/lib/mutations/departments.mutation'
 import { DepartmentDto, DepartmentWriteSchema } from '@repo/shared'
+import { error } from 'console'
 
 export const Route = createFileRoute('/_core/departments/$departmentId')({
   component: EditDepartmentPage,
@@ -16,12 +17,11 @@ function EditDepartmentPage() {
   const { departmentId } = Route.useParams()
   const navigate = useNavigate()
 
-  const { data: departmentResponse, isLoading: departmentLoading } =
-    useDepartmentQuery(departmentId)
+  const { data, isLoading, error } = useDepartmentQuery(departmentId)
   const updateMutation = useUpdateDepartmentMutation()
 
   // Handle case where API response format might differ
-  const department = departmentResponse?.data || departmentResponse
+  const department = data?.data || data
 
   const form = useForm({
     defaultValues: {
@@ -42,7 +42,7 @@ function EditDepartmentPage() {
     },
   })
 
-  if (departmentLoading) {
+  if (isLoading) {
     return (
       <div className="flex h-[200px] w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -50,6 +50,17 @@ function EditDepartmentPage() {
     )
   }
 
+  if (error || !department) {
+    return (
+      <div className="flex h-[50vh] w-full items-center justify-center flex-col gap-2">
+        <div className="text-lg font-semibold">Department not found</div>
+        <div className="text-muted-foreground">
+          The department you are looking for does not exist or you don't have
+          permission to view it.
+        </div>
+      </div>
+    )
+  }
   return (
     <>
       <div className="flex flex-row items-center gap-4">

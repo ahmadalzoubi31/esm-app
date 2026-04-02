@@ -9,6 +9,8 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { queryClient } from '@/lib/query-client'
+import { TanStackDevtools } from '@tanstack/react-devtools'
+import { formDevtoolsPlugin } from '@tanstack/react-form-devtools'
 
 import appCss from '../styles.css?url'
 
@@ -59,7 +61,8 @@ function RootDocument() {
             <Outlet />
           </ThemeProvider>
           <Toaster position="top-right" richColors style={{ width: '600px' }} />
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+          <TanStackDevtools plugins={[formDevtoolsPlugin()]} />
         </QueryClientProvider>
 
         <Scripts />

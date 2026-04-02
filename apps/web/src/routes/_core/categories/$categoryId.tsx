@@ -4,33 +4,47 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { CategoryBasicInfo } from '@/components/web/categories/category-form/category-basic-info'
 import { SideBarForm } from '@/components/web/categories/category-form/sidebar-form'
-import { useCategoryQuery } from '@/lib/queries/categories.query'
 import { useUpdateCategoryMutation } from '@/lib/mutations/categories.mutation'
 import { CategoryDto, CategoryWriteSchema } from '@repo/shared'
+import { error } from 'console'
+import { getCategoryFn } from '@/server/category'
 
 export const Route = createFileRoute('/_core/categories/$categoryId')({
+  // checking if the user has access to view/edit the category can be done here in the future
+  loader: async ({ params }) => {
+    const category = await getCategoryFn({ data: { id: params.categoryId } })
+    return { category }
+  },
   component: EditCategoryPage,
 })
 
 function EditCategoryPage() {
   const { categoryId } = Route.useParams()
+  const { category } = Route.useLoaderData()
   const navigate = useNavigate()
 
-  const { data: category, isLoading: categoryLoading } =
-    useCategoryQuery(categoryId)
+  // const {
+  //   data: category,
+  //   isLoading: categoryLoading,
+  //   error,
+  // } = useCategoryQuery(categoryId)
   const updateMutation = useUpdateCategoryMutation()
 
   const form = useForm({
     defaultValues: {
-      name: category?.name || '',
-      description: category?.description || '',
-      parentId: category?.parent?.id || '',
+      name: category.name || '',
+      description: category.description || '',
+      parentId: category.parent?.id || '',
+      isActive: category.isActive,
     } as CategoryDto,
     validators: {
       onSubmit: CategoryWriteSchema,
     },
     onSubmit: async ({ value }) => {
-      if (value.parentId === '') {
+      if (value.parentId) {
+        value.tier = 2
+      } else {
+        value.tier = 1
         delete value.parentId
       }
       await updateMutation.mutateAsync({
@@ -45,6 +59,18 @@ function EditCategoryPage() {
     return (
       <div className="flex h-[200px] w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
+
+  if (error || !category) {
+    return (
+      <div className="flex h-[50vh] w-full items-center justify-center flex-col gap-2">
+        <div className="text-lg font-semibold">Category not found</div>
+        <div className="text-muted-foreground">
+          The category you are looking for does not exist or you don't have
+          permission to view it.
+        </div>
       </div>
     )
   }

@@ -45,13 +45,16 @@ export class CategoriesService {
   async findAll(where: any = {}): Promise<Category[]> {
     return this.repo.find(where, {
       orderBy: { name: QueryOrder.ASC },
-      populate: ['parent'],
+      populate: ['parent', 'children'],
     });
   }
 
   async findOne(id: string): Promise<Category> {
     // Standardizing on findOneOrFail for consistent 404 behavior
-    return this.repo.findOneOrFail({ id });
+    return this.repo.findOneOrFail(
+      { id },
+      { populate: ['parent', 'children'] },
+    );
   }
 
   async update(id: string, dto: UpdateCategoryDto): Promise<Category> {
