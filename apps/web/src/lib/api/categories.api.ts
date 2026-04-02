@@ -3,17 +3,15 @@
  */
 
 import type { ApiResponse } from '@/types/api'
-import type {
-  CreateCategoryDto,
-  UpdateCategoryDto,
-  BulkUpdateCategoryDto,
-  Category,
-} from '@/types/categories'
 import { apiFetch } from '../api-client'
 import { API_ENDPOINTS } from '../api-config'
+import { CategoryDto, CategorySchema } from '@repo/shared'
 
 export const categoriesApi = {
-  findAll: async (tier?: number, parentId?: string): Promise<ApiResponse<Category[]>> => {
+  findAll: async (
+    tier?: number,
+    parentId?: string,
+  ): Promise<ApiResponse<CategorySchema[]>> => {
     let url = API_ENDPOINTS.CATEGORIES.LIST
     const queryParams = new URLSearchParams()
     if (tier !== undefined) queryParams.append('tier', tier.toString())
@@ -21,7 +19,7 @@ export const categoriesApi = {
     const queryString = queryParams.toString()
     if (queryString) url += `?${queryString}`
 
-    return await apiFetch<Category[]>(url, {
+    return await apiFetch<CategorySchema[]>(url, {
       method: 'GET',
     })
   },
@@ -34,7 +32,7 @@ export const categoriesApi = {
           search?: string
           limit?: string
         },
-  ): Promise<ApiResponse<Category[]>> => {
+  ): Promise<ApiResponse<CategorySchema[]>> => {
     let url = API_ENDPOINTS.CATEGORIES.LIST
     const queryParams = new URLSearchParams()
 
@@ -51,17 +49,17 @@ export const categoriesApi = {
       url += `?${queryString}`
     }
 
-    return await apiFetch<Category[]>(url, { method: 'GET' })
+    return await apiFetch<CategorySchema[]>(url, { method: 'GET' })
   },
 
-  findOne: async (id: string): Promise<ApiResponse<Category>> => {
-    return await apiFetch<Category>(API_ENDPOINTS.CATEGORIES.DETAIL(id), {
+  findOne: async (id: string): Promise<ApiResponse<CategorySchema>> => {
+    return await apiFetch<CategorySchema>(API_ENDPOINTS.CATEGORIES.DETAIL(id), {
       method: 'GET',
     })
   },
 
-  create: async (data: CreateCategoryDto): Promise<ApiResponse<Category>> => {
-    return await apiFetch<Category>(API_ENDPOINTS.CATEGORIES.CREATE, {
+  create: async (data: CategoryDto): Promise<ApiResponse<CategorySchema>> => {
+    return await apiFetch<CategorySchema>(API_ENDPOINTS.CATEGORIES.CREATE, {
       method: 'POST',
       body: JSON.stringify(data),
     })
@@ -69,9 +67,9 @@ export const categoriesApi = {
 
   update: async (
     id: string,
-    data: UpdateCategoryDto,
-  ): Promise<ApiResponse<Category>> => {
-    return await apiFetch<Category>(API_ENDPOINTS.CATEGORIES.UPDATE(id), {
+    data: CategoryDto,
+  ): Promise<ApiResponse<CategorySchema>> => {
+    return await apiFetch<CategorySchema>(API_ENDPOINTS.CATEGORIES.UPDATE(id), {
       method: 'PATCH',
       body: JSON.stringify(data),
     })

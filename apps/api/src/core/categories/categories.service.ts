@@ -22,21 +22,10 @@ export class CategoriesService {
     const tenantFilter = em.getFilterParams('tenant');
     const tenantRef = em.getReference(Tenant, tenantFilter.tenantId);
 
-    // 2. Validate parent id
-    if (dto.parentId) {
-      const parent = await this.findOne(dto.parentId);
-      if (!parent) {
-        throw new NotFoundException('Parent category not found');
-      }
-    }
-
     // 2. Create and persist
     const category = this.repo.create({
       ...dto,
       tenant: tenantRef,
-      parent: dto.parentId
-        ? em.getReference(Category, dto.parentId)
-        : undefined,
     });
     await em.persist(category).flush();
     return category;
@@ -45,16 +34,12 @@ export class CategoriesService {
   async findAll(where: any = {}): Promise<Category[]> {
     return this.repo.find(where, {
       orderBy: { name: QueryOrder.ASC },
-      populate: ['parent', 'children'],
     });
   }
 
   async findOne(id: string): Promise<Category> {
     // Standardizing on findOneOrFail for consistent 404 behavior
-    return this.repo.findOneOrFail(
-      { id },
-      { populate: ['parent', 'children'] },
-    );
+    return this.repo.findOneOrFail({ id });
   }
 
   async update(id: string, dto: UpdateCategoryDto): Promise<Category> {

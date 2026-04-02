@@ -8,10 +8,13 @@ import {
   IsBoolean,
   IsArray,
 } from 'class-validator';
-import { CategoryDto } from '@repo/shared';
+import { SubCategoryDto } from '@repo/shared';
 import { TenantBaseDto } from 'src/common/dtos/tenant-base.dto';
 
-export class CreateCategoryDto extends TenantBaseDto implements CategoryDto {
+export class CreateSubCategoryDto
+  extends TenantBaseDto
+  implements SubCategoryDto
+{
   @ApiProperty()
   @IsString()
   @MaxLength(100)
@@ -22,10 +25,4 @@ export class CreateCategoryDto extends TenantBaseDto implements CategoryDto {
   @IsOptional()
   @MaxLength(500)
   description?: string;
-
-  @ApiProperty({ example: ['uuid-1', 'uuid-2'] })
-  @IsOptional()
-  @IsArray({ each: true })
-  @IsString({ each: true })
-  subCategoryIds?: string[];
 }

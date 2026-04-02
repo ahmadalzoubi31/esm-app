@@ -84,7 +84,6 @@ export class CategorySeeder extends Seeder {
         {
           name: catData.name,
           tenant: tenantId,
-          tier: 1,
         },
         { filters: { tenant: false } },
       );
@@ -95,7 +94,6 @@ export class CategorySeeder extends Seeder {
           name: catData.name,
           description: catData.description,
           tenant: tenantRef,
-          tier: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
           isActive: true,
@@ -110,9 +108,7 @@ export class CategorySeeder extends Seeder {
           const subExisting = await categoryRepo.findOne(
             {
               name: subCatData.name,
-              parent: parent.id,
               tenant: tenantId,
-              tier: 2,
             },
             { filters: { tenant: false } },
           );
@@ -123,8 +119,6 @@ export class CategorySeeder extends Seeder {
               name: subCatData.name,
               description: subCatData.description,
               tenant: tenantRef,
-              tier: 2,
-              parent: parent,
               createdAt: new Date(),
               updatedAt: new Date(),
               isActive: true,

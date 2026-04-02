@@ -3,6 +3,7 @@ import { createRouter } from '@tanstack/react-router'
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 import {
+  DefaultErrorComponent,
   DefaultNotFoundComponent,
   DefaultPendingComponent,
 } from './components/web/common/default-components'
@@ -22,6 +23,7 @@ export const getRouter = () => {
 
     defaultNotFoundComponent: DefaultNotFoundComponent,
     defaultPendingComponent: DefaultPendingComponent,
+    defaultErrorComponent: DefaultErrorComponent,
   })
 
   return router

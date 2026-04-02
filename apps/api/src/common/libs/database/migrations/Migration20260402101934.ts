@@ -1,6 +1,6 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20260401185714 extends Migration {
+export class Migration20260402101934 extends Migration {
 
   override async up(): Promise<void> {
     this.addSql(`create table "permissions" ("id" uuid not null, "key" varchar(255) not null, "subject" varchar(255) not null, "action" varchar(255) not null, "conditions" jsonb null, "category" varchar(255) not null, "description" varchar(255) null, "createdAt" timestamptz null, "updatedAt" timestamptz null, constraint "permissions_pkey" primary key ("id"));`);
@@ -19,6 +19,10 @@ export class Migration20260401185714 extends Migration {
     this.addSql(`alter table "tenants" add constraint "tenants_name_unique" unique ("name");`);
     this.addSql(`alter table "tenants" add constraint "tenants_slug_unique" unique ("slug");`);
 
+    this.addSql(`create table "sub_categories" ("id" varchar(255) not null, "tenantId" varchar(255) not null, "createdAt" timestamptz not null default CURRENT_TIMESTAMP, "updatedAt" timestamptz not null default CURRENT_TIMESTAMP, "isActive" boolean not null default true, "name" varchar(255) not null, "description" varchar(255) null, constraint "sub_categories_pkey" primary key ("id"));`);
+    this.addSql(`create index "sub_categories_tenantId_index" on "sub_categories" ("tenantId");`);
+    this.addSql(`alter table "sub_categories" add constraint "sub_categories_name_unique" unique ("name");`);
+
     this.addSql(`create table "sla_targets" ("id" varchar(255) not null, "tenantId" varchar(255) not null, "createdAt" timestamptz not null default CURRENT_TIMESTAMP, "updatedAt" timestamptz not null default CURRENT_TIMESTAMP, "isActive" boolean not null default true, "type" varchar(255) not null, "name" varchar(255) not null, "description" text null, "goalMs" int not null, "rules" jsonb not null, constraint "sla_targets_pkey" primary key ("id"));`);
     this.addSql(`create index "sla_targets_tenantId_index" on "sla_targets" ("tenantId");`);
     this.addSql(`create index "sla_targets_name_index" on "sla_targets" ("name");`);
@@ -33,8 +37,11 @@ export class Migration20260401185714 extends Migration {
     this.addSql(`create index "departments_tenantId_index" on "departments" ("tenantId");`);
     this.addSql(`alter table "departments" add constraint "departments_name_tenantId_unique" unique ("name", "tenantId");`);
 
-    this.addSql(`create table "categories" ("id" varchar(255) not null, "tenantId" varchar(255) not null, "createdAt" timestamptz not null default CURRENT_TIMESTAMP, "updatedAt" timestamptz not null default CURRENT_TIMESTAMP, "isActive" boolean not null default true, "name" varchar(255) not null, "description" varchar(255) null, "tier" int not null default 1, "parentId" varchar(255) null, constraint "categories_pkey" primary key ("id"));`);
+    this.addSql(`create table "categories" ("id" varchar(255) not null, "tenantId" varchar(255) not null, "createdAt" timestamptz not null default CURRENT_TIMESTAMP, "updatedAt" timestamptz not null default CURRENT_TIMESTAMP, "isActive" boolean not null default true, "name" varchar(255) not null, "description" varchar(255) null, constraint "categories_pkey" primary key ("id"));`);
     this.addSql(`create index "categories_tenantId_index" on "categories" ("tenantId");`);
+    this.addSql(`alter table "categories" add constraint "categories_name_unique" unique ("name");`);
+
+    this.addSql(`create table "categories_subCategories" ("category" varchar(255) not null, "subCategory" varchar(255) not null, constraint "categories_subCategories_pkey" primary key ("category", "subCategory"));`);
 
     this.addSql(`create table "business_lines" ("id" varchar(255) not null, "tenantId" varchar(255) not null, "createdAt" timestamptz not null default CURRENT_TIMESTAMP, "updatedAt" timestamptz not null default CURRENT_TIMESTAMP, "isActive" boolean not null default true, "name" varchar(255) not null, "description" varchar(255) null, constraint "business_lines_pkey" primary key ("id"));`);
     this.addSql(`create index "business_lines_tenantId_index" on "business_lines" ("tenantId");`);
@@ -86,6 +93,8 @@ export class Migration20260401185714 extends Migration {
 
     this.addSql(`alter table "service_form_schemas" add constraint "service_form_schemas_card_foreign" foreign key ("card") references "service_cards" ("id") on update cascade;`);
 
+    this.addSql(`alter table "sub_categories" add constraint "sub_categories_tenantId_foreign" foreign key ("tenantId") references "tenants" ("id") on update cascade on delete cascade;`);
+
     this.addSql(`alter table "sla_targets" add constraint "sla_targets_tenantId_foreign" foreign key ("tenantId") references "tenants" ("id") on update cascade on delete cascade;`);
 
     this.addSql(`alter table "roles" add constraint "roles_tenantId_foreign" foreign key ("tenantId") references "tenants" ("id") on update cascade on delete cascade;`);
@@ -96,7 +105,9 @@ export class Migration20260401185714 extends Migration {
     this.addSql(`alter table "departments" add constraint "departments_tenantId_foreign" foreign key ("tenantId") references "tenants" ("id") on update cascade on delete cascade;`);
 
     this.addSql(`alter table "categories" add constraint "categories_tenantId_foreign" foreign key ("tenantId") references "tenants" ("id") on update cascade on delete cascade;`);
-    this.addSql(`alter table "categories" add constraint "categories_parentId_foreign" foreign key ("parentId") references "categories" ("id") on update cascade on delete set null;`);
+
+    this.addSql(`alter table "categories_subCategories" add constraint "categories_subCategories_category_foreign" foreign key ("category") references "categories" ("id") on update cascade on delete cascade;`);
+    this.addSql(`alter table "categories_subCategories" add constraint "categories_subCategories_subCategory_foreign" foreign key ("subCategory") references "sub_categories" ("id") on update cascade on delete cascade;`);
 
     this.addSql(`alter table "business_lines" add constraint "business_lines_tenantId_foreign" foreign key ("tenantId") references "tenants" ("id") on update cascade on delete cascade;`);
 
