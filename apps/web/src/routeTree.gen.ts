@@ -41,6 +41,13 @@ import { Route as CoreCategoriesCategoryIdRouteImport } from './routes/_core/cat
 import { Route as EsmCasesCaseIdIndexRouteImport } from './routes/_esm/cases/$caseId/index'
 import { Route as CoreSettingsLdapIndexRouteImport } from './routes/_core/settings/ldap/index'
 import { Route as EsmCasesCaseIdEditIndexRouteImport } from './routes/_esm/cases/$caseId/edit/index'
+import { Route as EsmServiceCategoriesManagementIndexRouteImport } from './routes/_esm/service-categories-management/index'
+import { Route as EsmCatalogIndexRouteImport } from './routes/_esm/catalog/index'
+import { Route as EsmCatalogCardIdIndexRouteImport } from './routes/_esm/catalog/$cardId/index'
+import { Route as EsmCatalogCardIdRequestRouteImport } from './routes/_esm/catalog/$cardId/request'
+import { Route as EsmServiceManagementIndexRouteImport } from './routes/_esm/service-management/index'
+import { Route as EsmServiceManagementCreateRouteImport } from './routes/_esm/service-management/create'
+import { Route as EsmServiceManagementServiceIdEditRouteImport } from './routes/_esm/service-management/$serviceId/edit'
 
 const SessionTimeoutRoute = SessionTimeoutRouteImport.update({
   id: '/session-timeout',
@@ -201,6 +208,45 @@ const EsmCasesCaseIdEditIndexRoute = EsmCasesCaseIdEditIndexRouteImport.update({
   path: '/cases/$caseId/edit/',
   getParentRoute: () => EsmRouteRoute,
 } as any)
+const EsmServiceCategoriesManagementIndexRoute =
+  EsmServiceCategoriesManagementIndexRouteImport.update({
+    id: '/service-categories-management/',
+    path: '/service-categories-management/',
+    getParentRoute: () => EsmRouteRoute,
+  } as any)
+const EsmCatalogIndexRoute = EsmCatalogIndexRouteImport.update({
+  id: '/catalog/',
+  path: '/catalog/',
+  getParentRoute: () => EsmRouteRoute,
+} as any)
+const EsmCatalogCardIdIndexRoute = EsmCatalogCardIdIndexRouteImport.update({
+  id: '/catalog/$cardId/',
+  path: '/catalog/$cardId/',
+  getParentRoute: () => EsmRouteRoute,
+} as any)
+const EsmCatalogCardIdRequestRoute = EsmCatalogCardIdRequestRouteImport.update({
+  id: '/catalog/$cardId/request',
+  path: '/catalog/$cardId/request',
+  getParentRoute: () => EsmRouteRoute,
+} as any)
+const EsmServiceManagementIndexRoute =
+  EsmServiceManagementIndexRouteImport.update({
+    id: '/service-management/',
+    path: '/service-management/',
+    getParentRoute: () => EsmRouteRoute,
+  } as any)
+const EsmServiceManagementCreateRoute =
+  EsmServiceManagementCreateRouteImport.update({
+    id: '/service-management/create',
+    path: '/service-management/create',
+    getParentRoute: () => EsmRouteRoute,
+  } as any)
+const EsmServiceManagementServiceIdEditRoute =
+  EsmServiceManagementServiceIdEditRouteImport.update({
+    id: '/service-management/$serviceId/edit',
+    path: '/service-management/$serviceId/edit',
+    getParentRoute: () => EsmRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -232,6 +278,13 @@ export interface FileRoutesByFullPath {
   '/settings/ldap/': typeof CoreSettingsLdapIndexRoute
   '/cases/$caseId/': typeof EsmCasesCaseIdIndexRoute
   '/cases/$caseId/edit/': typeof EsmCasesCaseIdEditIndexRoute
+  '/service-categories-management/': typeof EsmServiceCategoriesManagementIndexRoute
+  '/catalog/': typeof EsmCatalogIndexRoute
+  '/catalog/$cardId/': typeof EsmCatalogCardIdIndexRoute
+  '/catalog/$cardId/request': typeof EsmCatalogCardIdRequestRoute
+  '/service-management/': typeof EsmServiceManagementIndexRoute
+  '/service-management/create': typeof EsmServiceManagementCreateRoute
+  '/service-management/$serviceId/edit': typeof EsmServiceManagementServiceIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -263,6 +316,13 @@ export interface FileRoutesByTo {
   '/settings/ldap': typeof CoreSettingsLdapIndexRoute
   '/cases/$caseId': typeof EsmCasesCaseIdIndexRoute
   '/cases/$caseId/edit': typeof EsmCasesCaseIdEditIndexRoute
+  '/service-categories-management': typeof EsmServiceCategoriesManagementIndexRoute
+  '/catalog': typeof EsmCatalogIndexRoute
+  '/catalog/$cardId': typeof EsmCatalogCardIdIndexRoute
+  '/catalog/$cardId/request': typeof EsmCatalogCardIdRequestRoute
+  '/service-management': typeof EsmServiceManagementIndexRoute
+  '/service-management/create': typeof EsmServiceManagementCreateRoute
+  '/service-management/$serviceId/edit': typeof EsmServiceManagementServiceIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -298,6 +358,13 @@ export interface FileRoutesById {
   '/_core/settings/ldap/': typeof CoreSettingsLdapIndexRoute
   '/_esm/cases/$caseId/': typeof EsmCasesCaseIdIndexRoute
   '/_esm/cases/$caseId/edit/': typeof EsmCasesCaseIdEditIndexRoute
+  '/_esm/service-categories-management/': typeof EsmServiceCategoriesManagementIndexRoute
+  '/_esm/catalog/': typeof EsmCatalogIndexRoute
+  '/_esm/catalog/$cardId/': typeof EsmCatalogCardIdIndexRoute
+  '/_esm/catalog/$cardId/request': typeof EsmCatalogCardIdRequestRoute
+  '/_esm/service-management/': typeof EsmServiceManagementIndexRoute
+  '/_esm/service-management/create': typeof EsmServiceManagementCreateRoute
+  '/_esm/service-management/$serviceId/edit': typeof EsmServiceManagementServiceIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -331,6 +398,13 @@ export interface FileRouteTypes {
     | '/settings/ldap/'
     | '/cases/$caseId/'
     | '/cases/$caseId/edit/'
+    | '/service-categories-management/'
+    | '/catalog/'
+    | '/catalog/$cardId/'
+    | '/catalog/$cardId/request'
+    | '/service-management/'
+    | '/service-management/create'
+    | '/service-management/$serviceId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -362,6 +436,13 @@ export interface FileRouteTypes {
     | '/settings/ldap'
     | '/cases/$caseId'
     | '/cases/$caseId/edit'
+    | '/service-categories-management'
+    | '/catalog'
+    | '/catalog/$cardId'
+    | '/catalog/$cardId/request'
+    | '/service-management'
+    | '/service-management/create'
+    | '/service-management/$serviceId/edit'
   id:
     | '__root__'
     | '/'
@@ -396,6 +477,13 @@ export interface FileRouteTypes {
     | '/_core/settings/ldap/'
     | '/_esm/cases/$caseId/'
     | '/_esm/cases/$caseId/edit/'
+    | '/_esm/service-categories-management/'
+    | '/_esm/catalog/'
+    | '/_esm/catalog/$cardId/'
+    | '/_esm/catalog/$cardId/request'
+    | '/_esm/service-management/'
+    | '/_esm/service-management/create'
+    | '/_esm/service-management/$serviceId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -632,6 +720,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EsmCasesCaseIdEditIndexRouteImport
       parentRoute: typeof EsmRouteRoute
     }
+    '/_esm/service-categories-management/': {
+      id: '/_esm/service-categories-management/'
+      path: '/service-categories-management'
+      fullPath: '/service-categories-management/'
+      preLoaderRoute: typeof EsmServiceCategoriesManagementIndexRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/catalog/': {
+      id: '/_esm/catalog/'
+      path: '/catalog'
+      fullPath: '/catalog/'
+      preLoaderRoute: typeof EsmCatalogIndexRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/catalog/$cardId/': {
+      id: '/_esm/catalog/$cardId/'
+      path: '/catalog/$cardId'
+      fullPath: '/catalog/$cardId/'
+      preLoaderRoute: typeof EsmCatalogCardIdIndexRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/catalog/$cardId/request': {
+      id: '/_esm/catalog/$cardId/request'
+      path: '/catalog/$cardId/request'
+      fullPath: '/catalog/$cardId/request'
+      preLoaderRoute: typeof EsmCatalogCardIdRequestRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/service-management/': {
+      id: '/_esm/service-management/'
+      path: '/service-management'
+      fullPath: '/service-management/'
+      preLoaderRoute: typeof EsmServiceManagementIndexRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/service-management/create': {
+      id: '/_esm/service-management/create'
+      path: '/service-management/create'
+      fullPath: '/service-management/create'
+      preLoaderRoute: typeof EsmServiceManagementCreateRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
+    '/_esm/service-management/$serviceId/edit': {
+      id: '/_esm/service-management/$serviceId/edit'
+      path: '/service-management/$serviceId/edit'
+      fullPath: '/service-management/$serviceId/edit'
+      preLoaderRoute: typeof EsmServiceManagementServiceIdEditRouteImport
+      parentRoute: typeof EsmRouteRoute
+    }
   }
 }
 
@@ -706,6 +843,13 @@ interface EsmRouteRouteChildren {
   EsmCasesIndexRoute: typeof EsmCasesIndexRoute
   EsmCasesCaseIdIndexRoute: typeof EsmCasesCaseIdIndexRoute
   EsmCasesCaseIdEditIndexRoute: typeof EsmCasesCaseIdEditIndexRoute
+  EsmServiceCategoriesManagementIndexRoute: typeof EsmServiceCategoriesManagementIndexRoute
+  EsmCatalogIndexRoute: typeof EsmCatalogIndexRoute
+  EsmCatalogCardIdIndexRoute: typeof EsmCatalogCardIdIndexRoute
+  EsmCatalogCardIdRequestRoute: typeof EsmCatalogCardIdRequestRoute
+  EsmServiceManagementIndexRoute: typeof EsmServiceManagementIndexRoute
+  EsmServiceManagementCreateRoute: typeof EsmServiceManagementCreateRoute
+  EsmServiceManagementServiceIdEditRoute: typeof EsmServiceManagementServiceIdEditRoute
 }
 
 const EsmRouteRouteChildren: EsmRouteRouteChildren = {
@@ -713,6 +857,14 @@ const EsmRouteRouteChildren: EsmRouteRouteChildren = {
   EsmCasesIndexRoute: EsmCasesIndexRoute,
   EsmCasesCaseIdIndexRoute: EsmCasesCaseIdIndexRoute,
   EsmCasesCaseIdEditIndexRoute: EsmCasesCaseIdEditIndexRoute,
+  EsmServiceCategoriesManagementIndexRoute:
+    EsmServiceCategoriesManagementIndexRoute,
+  EsmCatalogIndexRoute: EsmCatalogIndexRoute,
+  EsmCatalogCardIdIndexRoute: EsmCatalogCardIdIndexRoute,
+  EsmCatalogCardIdRequestRoute: EsmCatalogCardIdRequestRoute,
+  EsmServiceManagementIndexRoute: EsmServiceManagementIndexRoute,
+  EsmServiceManagementCreateRoute: EsmServiceManagementCreateRoute,
+  EsmServiceManagementServiceIdEditRoute: EsmServiceManagementServiceIdEditRoute,
 }
 
 const EsmRouteRouteWithChildren = EsmRouteRoute._addFileChildren(
