@@ -17,6 +17,9 @@ import { caseCommentsApi } from './case-comments.api'
 import { caseAttachmentsApi } from './case-attachments.api'
 import { categoriesApi } from './categories.api'
 import { slaApi } from './sla.api'
+import { serviceCategoriesApi } from './service-categories.api'
+import { servicesApi } from './services.api'
+import { serviceCardsApi } from './service-cards.api'
 
 /**
  * Unified API client
@@ -37,6 +40,9 @@ export const api = {
   caseAttachments: caseAttachmentsApi,
   categories: categoriesApi,
   sla: slaApi,
+  serviceCategories: serviceCategoriesApi,
+  services: servicesApi,
+  serviceCards: serviceCardsApi,
 }
 
 // Re-export individual modules for direct imports if needed
@@ -54,6 +60,9 @@ export { caseCommentsApi } from './case-comments.api'
 export { caseAttachmentsApi } from './case-attachments.api'
 export { categoriesApi } from './categories.api'
 export { slaApi } from './sla.api'
+export { serviceCategoriesApi } from './service-categories.api'
+export { servicesApi } from './services.api'
+export { serviceCardsApi } from './service-cards.api'
 
 // Re-export the core client for advanced use cases
 export { apiFetch } from '../api-client'

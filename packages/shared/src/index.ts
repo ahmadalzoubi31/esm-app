@@ -391,3 +391,95 @@ export const SubCategoryReadSchema = CategoryWriteSchema.extend({
   updatedAt: z.coerce.date(),
 });
 export type SubCategorySchema = z.infer<typeof CategoryReadSchema>;
+
+// *************************
+// ** service categories (catalog) **
+// *************************
+
+export const ServiceCategoryWriteSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(150),
+  description: z.string().optional(),
+  parentCategoryId: z.uuid().optional().nullable(),
+});
+export type ServiceCategoryDto = z.infer<typeof ServiceCategoryWriteSchema>;
+
+export const ServiceCategoryReadSchema: z.ZodType<any> = z.lazy(() =>
+  ServiceCategoryWriteSchema.extend({
+    id: z.uuid(),
+    children: z.array(ServiceCategoryReadSchema).optional(),
+    parent: ServiceCategoryReadSchema.optional().nullable(),
+  }),
+);
+export type ServiceCategorySchema = {
+  id: string;
+  name: string;
+  description?: string;
+  parentCategoryId?: string | null;
+  children?: ServiceCategorySchema[];
+  parent?: ServiceCategorySchema | null;
+};
+
+// *************************
+// ** services (catalog) **
+// *************************
+
+export const ServiceLifecycleStatusEnumSchema = z.enum([
+  'DRAFT',
+  'ACTIVE',
+  'RETIRED',
+]);
+export type ServiceLifecycleStatus = z.infer<
+  typeof ServiceLifecycleStatusEnumSchema
+>;
+export const ServiceLifecycleStatusEnum = ServiceLifecycleStatusEnumSchema.enum;
+
+export const ServiceWriteSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(200),
+  description: z.string().optional(),
+  longDescription: z.string().optional(),
+  lifecycleStatus: ServiceLifecycleStatusEnumSchema.optional().default('ACTIVE'),
+});
+export type ServiceDto = z.infer<typeof ServiceWriteSchema>;
+
+export const ServiceReadSchema = ServiceWriteSchema.extend({
+  id: z.uuid(),
+  code: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+});
+export type ServiceSchema = z.infer<typeof ServiceReadSchema>;
+
+// *************************
+// ** service cards (catalog) **
+// *************************
+
+export const ServiceCardExpectedSlaSchema = z.object({
+  responseMinutes: z.number().int().positive().optional(),
+  resolutionMinutes: z.number().int().positive().optional(),
+});
+
+export const ServiceCardVisibilityRulesSchema = z.object({
+  roles: z.array(z.string()).optional(),
+  groups: z.array(z.string()).optional(),
+  businessLines: z.array(z.string()).optional(),
+});
+
+export const ServiceCardWriteSchema = z.object({
+  serviceId: z.uuid().optional(),
+  displayTitle: z.string().min(1, 'Display title is required').max(200),
+  shortDescription: z.string().optional(),
+  icon: z.string().optional(),
+  colorTheme: z.string().optional(),
+  displayOrder: z.number().int().min(0).optional().default(0),
+  badges: z.array(z.string()).optional(),
+  isRequestable: z.boolean().optional().default(true),
+  workflowId: z.string().optional(),
+  expectedSla: ServiceCardExpectedSlaSchema.optional(),
+  visibilityRules: ServiceCardVisibilityRulesSchema.optional(),
+});
+export type ServiceCardDto = z.infer<typeof ServiceCardWriteSchema>;
+
+export const ServiceCardReadSchema = ServiceCardWriteSchema.extend({
+  id: z.uuid(),
+});
+export type ServiceCardSchema = z.infer<typeof ServiceCardReadSchema>;

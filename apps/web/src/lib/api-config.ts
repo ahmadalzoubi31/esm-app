@@ -147,4 +147,28 @@ export const API_ENDPOINTS = {
     UPDATE: (id: string) => `/sla/targets/${id}`,
     DELETE: (id: string) => `/sla/targets/${id}`,
   },
+  // Service Categories endpoints (catalog)
+  SERVICE_CATEGORIES: {
+    LIST: '/service-categories',
+    DETAIL: (id: string) => `/service-categories/${id}`,
+    CREATE: '/service-categories',
+    UPDATE: (id: string) => `/service-categories/${id}`,
+    DELETE: (id: string) => `/service-categories/${id}`,
+  },
+  // Services endpoints (catalog)
+  SERVICES: {
+    LIST: '/services',
+    DETAIL: (id: string) => `/services/${id}`,
+    CREATE: '/services',
+    UPDATE: (id: string) => `/services/${id}`,
+    DELETE: (id: string) => `/services/${id}`,
+  },
+  // Service Cards endpoints (catalog)
+  SERVICE_CARDS: {
+    LIST: '/service-cards',
+    DETAIL: (id: string) => `/service-cards/${id}`,
+    CREATE: '/service-cards',
+    UPDATE: (id: string) => `/service-cards/${id}`,
+    DELETE: (id: string) => `/service-cards/${id}`,
+  },
 } as const

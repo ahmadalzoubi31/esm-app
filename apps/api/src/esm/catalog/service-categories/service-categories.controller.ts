@@ -29,7 +29,7 @@ export class ServiceCategoriesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.serviceCategoriesService.findOne(+id);
+    return this.serviceCategoriesService.findOne(id);
   }
 
   @Patch(':id')
@@ -37,11 +37,11 @@ export class ServiceCategoriesController {
     @Param('id') id: string,
     @Body() updateServiceCategoryDto: UpdateServiceCategoryDto,
   ) {
-    return this.serviceCategoriesService.update(+id, updateServiceCategoryDto);
+    return this.serviceCategoriesService.update(id, updateServiceCategoryDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.serviceCategoriesService.remove(+id);
+    return this.serviceCategoriesService.remove(id);
   }
 }

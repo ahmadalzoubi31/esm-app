@@ -5,7 +5,7 @@ import { FormSchemasModule } from './form-schemas/form-schemas.module';
 import { ServiceCardsModule } from './service-cards/service-cards.module';
 
 @Module({
-  imports: [ServicesModule, ServiceCategoriesModule],
+  imports: [ServicesModule, ServiceCategoriesModule, ServiceCardsModule, FormSchemasModule],
   controllers: [],
   providers: [],
   exports: [],

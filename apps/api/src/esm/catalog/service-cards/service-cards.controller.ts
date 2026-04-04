@@ -27,7 +27,7 @@ export class ServiceCardsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.serviceCardsService.findOne(+id);
+    return this.serviceCardsService.findOne(id);
   }
 
   @Patch(':id')
@@ -35,11 +35,11 @@ export class ServiceCardsController {
     @Param('id') id: string,
     @Body() updateServiceCardDto: UpdateServiceCardDto,
   ) {
-    return this.serviceCardsService.update(+id, updateServiceCardDto);
+    return this.serviceCardsService.update(id, updateServiceCardDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.serviceCardsService.remove(+id);
+    return this.serviceCardsService.remove(id);
   }
 }
